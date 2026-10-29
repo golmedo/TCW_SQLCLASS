@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Template SQLClass (Motor MariaDB)</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Guía</div><h1>Template SQLClass (Motor MariaDB)</h1></div>
+<div class="content">
+<p>El template global <b>SQLClass</b> ("Utilizacion de SQL class para Clarion6", <code>sqlclass6.tpl</code>) declara los objetos SQL de la aplicación. Esta versión agrega dos opciones; todo lo demás queda como estaba.</p>
+<h2>Opción Motor (por objeto)</h2>
+<p>En las extensiones globales de la aplicación, <b>SQLClass &gt; Objetos SQL Globales</b>, cada objeto tiene ahora:</p>
+<table><tr><th>Prompt</th><th>Valores</th></tr><tr><td>Motor</td><td><code>Driver de la app</code> (como hasta ahora: SQLOdbcClass / SQLMsClass / SQLIfxClass / SQLOraClass según la base elegida) o <code>MariaDB directo</code></td></tr></table>
+<p>Un objeto con <b>MariaDB directo</b> (por ejemplo <code>SQLM</code>) se genera así:</p>
+<pre class="code">SQLM                 &amp;SQLMariaClass
+Hide:SQLM            <span class="k">CLASS</span>(SQLMariaClass)</pre>
+<p>Los embeds de métodos del objeto funcionan igual (con su llamada a <code>PARENT</code>). Si al menos un objeto usa MariaDB, el template agrega también <code>INCLUDE('SQLClass6Maria.inc')</code> y <code>libmariadb.lib</code> al proyecto.</p>
+<h3>Pasar a MariaDB de a poco</h3>
+<ol><li>Dejar el objeto <code>SQL</code> como está (Motor = <i>Driver de la app</i>).</li><li>Agregar un objeto <code>SQLM</code> con Motor = <i>MariaDB directo</i>.</li><li>Inicializarlo con la misma cadena: <code>SQLM.Init(sqlclass,uSQL:Record,GLO:Conexion)</code>.</li><li>En cada procedimiento que se quiera pasar, cambiar <code>SQL.</code> por <code>SQLM.</code>.</li><li>En los procedimientos con <b>TCW_Display</b>, poner <code>SQLM</code> en <i>Instancia SQLClass</i>.</li></ol>
+<p>Los dos objetos conviven en la misma aplicación. Así se compara el resultado antes de cambiar todo.</p>
+<div class="nota">TCW_Display llama a <code>Exec</code>, que pasa la consulta a minúsculas. Si la base está en Linux (los nombres de tabla distinguen mayúsculas), poner <code>SQLM.KeepCase = True</code> después del <code>Init</code>.</div>
+<h2>Opción Usar StringTheory</h2>
+<p>En <b>Configuración</b>, el check <b>Usar StringTheory (log de la SQLClass)</b> viene tildado. Destildado, el template agrega <code>SQLClass6SinStringTheory=&gt;1</code> al proyecto: la SQLClass6 no incluye StringTheory y <code>WriteLog</code> escribe el log con la API de Windows (mismo formato). Sirve para aplicaciones que no usan StringTheory.</p>
+<h2>Aplicaciones existentes</h2>
+<p>Una aplicación que no usa <i>MariaDB directo</i> y deja tildado <i>Usar StringTheory</i> genera <b>exactamente el mismo código</b> que con el template original (verificado archivo por archivo).</p>
+<h2>Ejemplo: los dos motores con el mismo código</h2>
+<pre class="code">  SQL.SilentMode  = True
+  SQLM.SilentMode = True
+  <span class="k">IF</span> SQL.Init(sqlclass,uSQL:Record,L:Conn) = Level:Benign       <span class="c">! driver de la app (ODBC)</span>
+    <span class="k">IF</span> SQL.Exec(<span class="s">&#x27;SELECT COUNT(*) FROM cbtes WHERE Fecha &gt;= &#x27;&#x27;2026-01-01&#x27;&#x27;&#x27;</span>) = Level:Benign <span class="k">AND</span> SQL.Next() = Level:Benign
+      <span class="k">MESSAGE</span>(<span class="s">&#x27;ODBC: &#x27;</span> &amp; SQL.Col(1))
+    <span class="k">END</span>
+  <span class="k">END</span>
+  <span class="k">IF</span> SQLM.Init(sqlclass,uSQL:Record,L:Conn) = Level:Benign      <span class="c">! MariaDB directo, misma cadena</span>
+    <span class="k">IF</span> SQLM.Exec(<span class="s">&#x27;SELECT COUNT(*) FROM cbtes WHERE Fecha &gt;= &#x27;&#x27;2026-01-01&#x27;&#x27;&#x27;</span>) = Level:Benign <span class="k">AND</span> SQLM.Next() = Level:Benign
+      <span class="k">MESSAGE</span>(<span class="s">&#x27;MariaDB: &#x27;</span> &amp; SQLM.Col(1) &amp; <span class="s">&#x27; - servidor &#x27;</span> &amp; SQLM.ServerVersion())
+    <span class="k">END</span>
+  <span class="k">END</span></pre>
+<h2>Ver también</h2><p class="vt"><a href="instalacion.html">Instalación</a> <a href="conexion.html">Cadena de conexión</a> <a href="m-exec.html">Exec</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

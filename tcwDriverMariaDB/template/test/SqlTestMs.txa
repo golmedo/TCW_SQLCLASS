@@ -1,0 +1,116 @@
+[APPLICATION]
+VERSION 34
+TODO ABC ToDo
+PROCEDURE Main
+[COMMON]
+FROM ABC
+MODIFIED '2026/10/28' '12:00:00'
+[ADDITION]
+NAME SqlClass SQLClass
+[INSTANCE]
+INSTANCE 1
+[PROMPTS]
+%QDriver DEFAULT  ('MsSQL')
+%QDriverFromAppOpt LONG  (0)
+%QDriverLocal DEFAULT  ('MsSQL')
+%QTablaSQL DEFAULT  ('sqlclass')
+%QMaxFields DEFAULT  ('20')
+%QFieldSize DEFAULT  ('50')
+%QMaxRegistros LONG  (0)
+%QCantMaxRegistros DEFAULT  ('500')
+%QTodosLosSQL MULTI LONG  (1, 2)
+%QMiSQL DEPEND %QTodosLosSQL DEFAULT TIMES 2
+WHEN  (1) ('SQL')
+WHEN  (2) ('SQLS')
+%QMiSQLMotor DEPEND %QTodosLosSQL DEFAULT TIMES 2
+WHEN  (1) ('Driver de la app')
+WHEN  (2) ('SQL Server directo')
+%QMiSQLConexion DEPEND %QTodosLosSQL DEFAULT TIMES 2
+WHEN  (1) ('')
+WHEN  (2) ('GETINI(''Conexion'',''Cadena'','''',LONGPATH() & ''\SqlTest.ini'')')
+
+[PROJECT]
+#noedit
+#system win32 exe
+#model clarion dll
+#compile "SqlTest.clw" -- GENERATED
+#compile "SqlTest001.clw" -- GENERATED
+#pragma define(StringTheoryLinkMode=>1)
+#pragma define(StringTheoryDLLMode=>0)
+#link "SqlTest.exe"
+[PROGRAM]
+NAME 'SqlTest.clw'
+[COMMON]
+FROM ABC ABC
+MODIFIED '2026/10/28' '12:00:00'
+[END]
+[MODULE]
+NAME 'SqlTest001.clw'
+[COMMON]
+FROM ABC GENERATED
+MODIFIED '2026/10/28' '12:00:00'
+[PROCEDURE]
+NAME Main
+[COMMON]
+FROM ABC Source
+MODIFIED '2026/10/28' '12:00:00'
+[EMBED]
+EMBED %DataSection
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+L:Conn               CSTRING(1024)
+L:Q                  CSTRING(500)
+[END]
+EMBED %ProcessedCode
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  ! Prueba del template: SQL = driver MSSQL de la app (SQLMsClass), SQLS = SQL Server directo. Mismo codigo para las dos.
+  L:Conn = GETINI('Conexion','Cadena','',LONGPATH() & '\SqlTest.ini')
+  SQLS.LogFile = LONGPATH() & '\resultado.txt'
+  SQL.SilentMode = True
+  SQLS.SilentMode = True
+  IF SQL.Init(sqlclass,uSQL:Record,L:Conn)
+    SQLS.WriteLog('SQL  Init ERROR')
+  ELSE
+    L:Q = 'SELECT COUNT(*) FROM Cbtes WHERE Fecha >= ''2026-01-01'''
+    IF SQL.ExecEx(L:Q,1) = 0 AND SQL.Next() = 0
+      SQLS.WriteLog('SQL  cantidad 2026: ' & SQL.Col(1))
+    ELSE
+      SQLS.WriteLog('SQL  ERROR en la consulta')
+    END
+    L:Q = 'SELECT COUNT(*) FROM Cbtes'
+    IF SQL.ExecEx(L:Q,1) = 0 AND SQL.Next() = 0
+      SQLS.WriteLog('SQL  cantidad total: ' & SQL.Col(1))
+    END
+    SQL.Kill()
+  END
+  IF SQLS.State <> SQL:Ready                    ! lo conecto el template global (Conexion del objeto)
+    SQLS.WriteLog('SQLS Init ERROR: ' & SQLS.ErrorText())
+  ELSE
+    L:Q = 'SELECT COUNT(*) FROM Cbtes WHERE Fecha >= ''2026-01-01'''
+    IF SQLS.ExecEx(L:Q,1) = 0 AND SQLS.Next() = 0
+      SQLS.WriteLog('SQLS cantidad 2026: ' & SQLS.Col(1))
+    ELSE
+      SQLS.WriteLog('SQLS ERROR en la consulta: ' & SQLS.ErrorText())
+    END
+    L:Q = 'SELECT COUNT(*) FROM Cbtes'
+    IF SQLS.ExecEx(L:Q,1) = 0 AND SQLS.Next() = 0
+      SQLS.WriteLog('SQLS cantidad total: ' & SQLS.Col(1))
+    END
+    SQLS.AddParam('2026-01-01')
+    IF SQLS.ExecEx('SELECT COUNT(*) FROM Cbtes WHERE Fecha >= ?',1) = 0 AND SQLS.Next() = 0
+      SQLS.WriteLog('SQLS con parametro: ' & SQLS.Col(1))
+    END
+    SQLS.WriteLog('SQLS es SQLMsDirectClass: servidor ' & SQLS.ServerVersion())
+    SQLS.Kill()
+  END
+  SQLS.WriteLog('FIN')
+[END]
+[END]
+[END]

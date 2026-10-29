@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.ColByName</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Leer resultados</div><h1>SQLMariaClass.ColByName</h1></div>
+<div class="content">
+<span class="tag nuevo">nuevo</span><pre class="sig">ColByName(STRING Nombre),STRING</pre><p>Devuelve el valor de una columna por su nombre (o por el alias del <code>AS</code>). No distingue mayúsculas. Hace que el código no dependa del orden de las columnas en el SELECT.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>Nombre</code></td><td>nombre de la columna.</td></tr></table><h2>Devuelve</h2><p>El valor como texto. <code>''</code> si la columna no existe o es NULL.</p><h2>Ejemplo</h2><pre class="code">  <span class="k">IF</span> SQLM.ExecEx(<span class="s">&#x27;SELECT IdCliente, SUM(ImporteTotal) AS Total FROM cbtes GROUP BY IdCliente&#x27;</span>,1) = Level:Benign
+    <span class="k">LOOP</span> <span class="k">UNTIL</span> SQLM.Next()
+      Q:Cliente = SQLM.ColByName(<span class="s">&#x27;IdCliente&#x27;</span>)
+      Q:Total   = SQLM.ColByName(<span class="s">&#x27;total&#x27;</span>)
+      <span class="k">ADD</span>(Q)
+    <span class="k">END</span>
+  <span class="k">END</span></pre><h2>Respecto de SQLClass6</h2><div class="dif">Método nuevo: no existe en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-col.html">Col</a> <a href="m-field.html">Field</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

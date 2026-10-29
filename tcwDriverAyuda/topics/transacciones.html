@@ -1,0 +1,3 @@
+<pre><code>  SQL.BeginTransaction()
+  ... Exec / Insertar / InsertarLote ...
+  IF error THEN SQL.Rollback() ELSE SQL.Commit().</code></pre><ul><li>Equivale a <code>LOGOUT</code> / <code>COMMIT</code> / <code>ROLLBACK</code> del driver de Clarion.</li><li>SQL Server: con la API de ODBC (autocommit apagado hasta <code>Commit</code> / <code>Rollback</code>). Dentro de una transacción no se reconecta solo.</li><li>MariaDB: la tabla tiene que ser <strong>InnoDB</strong> (en MyISAM no hay transacciones).</li><li>Verificado: <code>BeginTransaction</code> + <code>DELETE</code> de 2.000 filas + <code>Rollback</code> deja las 2.000.</li></ul>

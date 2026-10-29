@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Instalación y requisitos</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Guía</div><h1>Instalación y requisitos</h1></div>
+<div class="content">
+<h2>Archivos</h2>
+<table><tr><th>Archivo</th><th>Dónde va</th></tr><tr><td><code>SQLClass6Maria.inc</code>, <code>SQLClass6Maria.clw</code></td><td><code>accessory\libsrc\win</code></td></tr><tr><td><code>TCWMariaDB.inc</code>, <code>TCWMariaDB.clw</code></td><td><code>accessory\libsrc\win</code></td></tr><tr><td><code>libmariadb.lib</code></td><td><code>accessory\lib</code> (se agrega a las <i>Libraries</i> del proyecto)</td></tr><tr><td><code>libmariadb.dll</code></td><td><code>accessory\bin</code> y <b>junto al .exe</b> al distribuir</td></tr><tr><td><code>sqlclass6.tpl</code> (con la opción Motor)</td><td><code>accessory\template\win</code> (respaldar el original antes)</td></tr></table>
+<h2>Requisitos</h2>
+<ul><li><b>SQLClass6 extendida</b> (octubre de 2026: <code>ExecEx</code>, <code>ExecSP</code>, <code>LogFile</code>, <code>ShowProgress</code>, <code>WriteLog</code>). <code>SQLMariaClass</code> hereda de ella. Con la SQLClass6 original de 2011 <b>no compila</b>.</li><li><b>StringTheory</b>: la usa la SQLClass6 extendida para el log. Es opcional desde el 28/10/2026: en el template, destildar <i>Usar StringTheory</i> (ver <a href="template.html">Template SQLClass</a>).</li><li><b>Clarion 11 o superior</b>, aplicación de 32 bits (la DLL es de 32 bits).</li><li><b>Servidor</b>: MySQL 5.0 o superior, o cualquier MariaDB. Probado con MySQL 5.0.67.</li></ul>
+<h2>Proyecto</h2>
+<ul><li>Con el template, <code>libmariadb.lib</code> y el <code>INCLUDE('SQLClass6Maria.inc')</code> se agregan solos cuando algún objeto tiene Motor = <i>MariaDB directo</i>.</li><li>Sin el template: agregar <code>libmariadb.lib</code> a <i>Libraries</i> e incluir <code>SQLClass6Maria.inc</code> en <i>Global Includes</i> (incluye a su vez <code>SQLClass6.INC</code> y <code>TCWMariaDB.inc</code>).</li><li>Los fuentes se compilan como parte de la aplicación (<code>LINK('SQLClass6Maria.clw')</code> y <code>LINK('TCWMariaDB.clw')</code>): no hay DLL de la clase.</li></ul>
+<div class="nota">Si el programa no encuentra <code>libmariadb.dll</code> no arranca (Windows avisa que falta la DLL). Distribuirla en la misma carpeta que el .exe.</div>
+<h2>Seguridad de la conexión</h2>
+<p>La cadena de conexión tiene usuario y clave: guardarla en un INI o en la configuración de la aplicación, <b>no en el código</b>. Los ejemplos de esta ayuda la leen con <code>GETINI('Conexion','Cadena',...)</code>.</p>
+<h2>Ver también</h2><p class="vt"><a href="conexion.html">Cadena de conexión</a> <a href="template.html">Template SQLClass</a> <a href="problemas.html">Problemas frecuentes</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

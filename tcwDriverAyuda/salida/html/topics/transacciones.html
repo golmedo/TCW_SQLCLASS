@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transacciones - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="transacciones.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Transacciones</h1>
+<pre><code>  SQL.BeginTransaction()
+  ... Exec / Insertar / InsertarLote ...
+  IF error THEN SQL.Rollback() ELSE SQL.Commit().</code></pre><ul><li>Equivale a <code>LOGOUT</code> / <code>COMMIT</code> / <code>ROLLBACK</code> del driver de Clarion.</li><li>SQL Server: con la API de ODBC (autocommit apagado hasta <code>Commit</code> / <code>Rollback</code>). Dentro de una transacción no se reconecta solo.</li><li>MariaDB: la tabla tiene que ser <strong>InnoDB</strong> (en MyISAM no hay transacciones).</li><li>Verificado: <code>BeginTransaction</code> + <code>DELETE</code> de 2.000 filas + <code>Rollback</code> deja las 2.000.</li></ul>
+</article>
+<footer class="pager"><a class="prev" href="preparadas.html">&larr; Sentencias preparadas</a><a class="next" href="migrar.html">Pasar un INSERT de PROP:SQL a Campo/Insertar &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

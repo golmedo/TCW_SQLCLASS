@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Escape</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Grabar datos</div><h1>SQLMariaClass.Escape</h1></div>
+<div class="content">
+<span class="tag nuevo">nuevo</span><pre class="sig">Escape(STRING Texto),STRING</pre><p>Escapa un texto para ponerlo entre comillas en una consulta: comillas, barra invertida, saltos de línea y el carácter 0. Usa el juego de caracteres de la conexión. Quita los espacios del final.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>Texto</code></td><td>el valor.</td></tr></table><h2>Devuelve</h2><p>El texto escapado, sin comillas alrededor.</p><h2>Ejemplo</h2><pre class="code">  L:Sql = <span class="s">&#x27;SELECT * FROM clientes WHERE Nombre LIKE &#x27;&#x27;&#x27;</span> &amp; SQLM.Escape(L:Buscar) &amp; <span class="s">&#x27;&lt;37&gt;&#x27;&#x27;&#x27;</span></pre><h2>Observaciones</h2><p>Normalmente es más cómodo <code>Quote</code>, que además agrega las comillas.</p><h2>Respecto de SQLClass6</h2><div class="dif">Método nuevo: no existe en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-quote.html">Quote</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

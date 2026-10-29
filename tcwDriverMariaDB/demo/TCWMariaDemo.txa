@@ -1,0 +1,1612 @@
+[APPLICATION]
+VERSION 34
+TODO ABC ToDo
+PROCEDURE Main
+[COMMON]
+FROM ABC
+MODIFIED '2026/10/28' '10:00:00'
+[PROJECT]
+#noedit
+#system win32 exe
+#model clarion dll
+#compile "TCWMariaDemo.clw" -- GENERATED
+#compile "TCWMariaDemo001.clw" -- GENERATED
+#compile "TCWMariaDemo002.clw" -- GENERATED
+#compile "TCWMariaDemo003.clw" -- GENERATED
+#compile "TCWMariaDemo004.clw" -- GENERATED
+#compile "TCWMariaDemo005.clw" -- GENERATED
+#compile "TCWMariaDemo006.clw" -- GENERATED
+#pragma link("libmariadb.lib")
+#pragma define(StringTheoryLinkMode=>1)
+#pragma define(StringTheoryDLLMode=>0)
+#link "TCWMariaDemo.exe"
+[PROGRAM]
+NAME 'TCWMariaDemo.clw'
+[COMMON]
+FROM ABC ABC
+MODIFIED '2026/10/28' '10:00:00'
+[EMBED]
+EMBED %AfterGlobalIncludes
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  INCLUDE('SQLClass6Maria.inc'),ONCE
+[END]
+EMBED %GlobalData
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+SQLOdbcFile          FILE,DRIVER('ODBC'),NAME('sqlclass'),PRE(SQF),THREAD
+Record                 RECORD
+F1                    CSTRING(50)
+F2                    CSTRING(50)
+F3                    CSTRING(50)
+F4                    CSTRING(50)
+F5                    CSTRING(50)
+F6                    CSTRING(50)
+F7                    CSTRING(50)
+F8                    CSTRING(50)
+F9                    CSTRING(50)
+F10                   CSTRING(50)
+F11                   CSTRING(50)
+F12                   CSTRING(50)
+F13                   CSTRING(50)
+F14                   CSTRING(50)
+F15                   CSTRING(50)
+F16                   CSTRING(50)
+F17                   CSTRING(50)
+F18                   CSTRING(50)
+F19                   CSTRING(50)
+F20                   CSTRING(50)
+F21                   CSTRING(50)
+F22                   CSTRING(50)
+F23                   CSTRING(50)
+F24                   CSTRING(50)
+F25                   CSTRING(50)
+                       END
+                     END
+[END]
+[END]
+[END]
+[MODULE]
+NAME 'TCWMariaDemo001.clw'
+[COMMON]
+FROM ABC GENERATED
+MODIFIED '2026/10/28' '10:00:00'
+[PROCEDURE]
+NAME Main
+[COMMON]
+FROM ABC Frame
+CATEGORY 'Frame'
+MODIFIED '2026/10/28' '10:00:00'
+[PROMPTS]
+%ButtonAction DEPEND %Control DEFAULT TIMES 5
+WHEN  ('?Ejemplos') ('Call a Procedure')
+WHEN  ('?Maria') ('Call a Procedure')
+WHEN  ('?Paginas') ('Call a Procedure')
+WHEN  ('?Odbc') ('Call a Procedure')
+WHEN  ('?Comparar') ('Call a Procedure')
+
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 5
+WHEN  ('?Ejemplos') (Ejemplos)
+WHEN  ('?Maria') (Comprobantes)
+WHEN  ('?Paginas') (ComprobantesPaginas)
+WHEN  ('?Odbc') (ComprobantesOdbc)
+WHEN  ('?Comparar') (Comparar)
+
+%ButtonThread DEPEND %Control LONG TIMES 5
+WHEN  ('?Ejemplos') (0)
+WHEN  ('?Maria') (0)
+WHEN  ('?Paginas') (0)
+WHEN  ('?Odbc') (0)
+WHEN  ('?Comparar') (0)
+[EMBED]
+EMBED %WindowEventHandling
+[INSTANCES]
+WHEN 'OpenWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 8000
+PROPERTY:END
+  IF INSTRING('COMPARAR',UPPER(COMMAND()),1,1)
+    Comparar()
+    POST(EVENT:CloseWindow)
+  ELSIF INSTRING('PAGINAS',UPPER(COMMAND()),1,1)
+    ComprobantesPaginas()
+    POST(EVENT:CloseWindow)
+  ELSIF INSTRING('MARIA',UPPER(COMMAND()),1,1)
+    Comprobantes()
+    POST(EVENT:CloseWindow)
+  ELSIF INSTRING('EJEMPLOS',UPPER(COMMAND()),1,1)
+    Ejemplos()
+    POST(EVENT:CloseWindow)
+  END
+[END]
+[END]
+[END]
+[WINDOW]
+AppFrame APPLICATION('TCWMariaDemo - SQLClass: MariaDB directo vs ODBC'),AT(,,420,250),CENTER,MASK,SYSTEM,MAX,RESIZE,FONT('Segoe UI',9)
+       MENUBAR,USE(?Menubar)
+         MENU('&Comprobantes'),USE(?ComprobantesMenu)
+           ITEM('&MariaDB directo (SQLMariaClass)'),USE(?Maria)
+           ITEM('MariaDB por &paginas (carga al bajar)'),USE(?Paginas)
+           ITEM('&ODBC (SQLClass6 + MySQL ODBC 5.1)'),USE(?Odbc)
+           ITEM,SEPARATOR,USE(?Sep1)
+           ITEM('C&omparar tiempos'),USE(?Comparar)
+           ITEM('&Ejemplos de uso (parametros, Insertar, lotes, transacciones...)'),USE(?Ejemplos)
+           ITEM,SEPARATOR,USE(?Sep2)
+           ITEM('&Salir'),USE(?Exit),STD(STD:Close)
+         END
+       END
+     END
+[END]
+[MODULE]
+NAME 'TCWMariaDemo002.clw'
+[COMMON]
+FROM ABC GENERATED
+MODIFIED '2026/10/28' '10:00:00'
+[PROCEDURE]
+NAME Comprobantes
+[COMMON]
+FROM ABC Window
+MODIFIED '2026/10/28' '10:00:00'
+[EMBED]
+EMBED %DataSection
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+SQL                  SQLMariaClass
+CbtesQ               QUEUE,PRE(CBQ)
+IdTransaccion          LONG
+Fecha                  LONG
+TipoCbte               STRING(3)
+Letra                  STRING(1)
+NroCbte                LONG
+IdCliente              LONG
+Cliente                STRING(70)
+Total                  DECIMAL(17,2)
+Saldo                  DECIMAL(12,2)
+                     END
+L:Desde              LONG
+L:Hasta              LONG
+L:Tipo               STRING(3)
+L:Texto              STRING(40)
+L:TextoE             STRING(90)
+L:Max                LONG(30000)
+L:Estado             STRING(250)
+L:Query              CSTRING(4000)
+L:Conn               CSTRING(1024)
+L:T0                 LONG
+L:T1                 LONG
+L:T2                 LONG
+L:Total              DECIMAL(19,2)
+L:I                  LONG
+L:Ok                 BYTE
+[END]
+EMBED %WindowEventHandling
+[INSTANCES]
+WHEN 'OpenWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 8000
+PROPERTY:END
+  L:Desde = DATE(1,1,YEAR(TODAY()))
+  L:Hasta = TODAY()
+  L:Conn = GETINI('Conexion','Cadena','',LONGPATH() & '\TCWMariaDemo.ini')
+  IF L:Conn = ''
+    L:Estado = 'Falta la cadena de conexion en TCWMariaDemo.ini ([Conexion] Cadena=...)'
+  ELSE
+    SQL.SilentMode = True
+    SQL.ProgressFeq = ?SQLBarra
+    SQL.ProgressTextFeq = ?SQLTexto
+    IF SQL.InitMaria(L:Conn)
+      L:Estado = 'No se pudo conectar: ' & SQL.ErrorText()
+    ELSE
+      SQL.KeepCase = True
+      L:Ok = True
+    END
+  END
+  DISPLAY()
+  IF L:Ok THEN DO Buscar.
+[END]
+WHEN 'CloseWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 2000
+PROPERTY:END
+  SQL.Kill()
+[END]
+[END]
+EMBED %ControlEventHandling
+[INSTANCES]
+WHEN '?Buscar'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  UPDATE()
+  DO Buscar
+[END]
+[END]
+[END]
+EMBED %ProcedureRoutines
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+Buscar ROUTINE
+  IF NOT L:Ok THEN EXIT.
+  L:Query = 'SELECT IdTransaccion, Fecha, TipoCbte, Letra_Cbte, NroCbte, IdCliente, Descripcion, ImporteTotal, Saldo' & |
+            ' FROM cbtes WHERE Fecha BETWEEN ''' & FORMAT(L:Desde,@d10-) & ''' AND ''' & FORMAT(L:Hasta,@d10-) & ''''
+  IF L:Tipo <> '' THEN L:Query = L:Query & ' AND TipoCbte = ' & SQL.Quote(CLIP(L:Tipo)).
+  IF L:Texto <> '' THEN L:Query = L:Query & ' AND Descripcion LIKE ' & SQL.Quote('<37>' & CLIP(L:Texto) & '<37>').
+  L:Query = L:Query & ' ORDER BY Fecha DESC, IdTransaccion DESC LIMIT ' & CHOOSE(L:Max > 0,L:Max,1000)
+  SETCURSOR(CURSOR:Wait)
+  FREE(CbtesQ)
+  L:T0 = CLOCK()
+  IF SQL.ExecEx(L:Query,1)
+    SETCURSOR()
+    L:Estado = 'Error: ' & SQL.ErrorText()
+    DISPLAY()
+    EXIT
+  END
+  L:T1 = CLOCK()
+  SQL.Col_Format(2,'@d10-')                         ! la fecha llega como aaaa-mm-dd
+  SQL.LoadQueue(CbtesQ,0,0)
+  L:T2 = CLOCK()
+  L:Total = 0
+  LOOP L:I = 1 TO RECORDS(CbtesQ)
+    GET(CbtesQ,L:I)
+    L:Total += CBQ:Total
+  END
+  SETCURSOR()
+  L:Estado = RECORDS(CbtesQ) & ' comprobantes  |  consulta ' & (L:T1 - L:T0) * 10 & ' ms + carga ' & (L:T2 - L:T1) * 10 & |
+             ' ms = ' & (L:T2 - L:T0) * 10 & ' ms  |  Total: ' & CLIP(LEFT(FORMAT(L:Total,@n-20.2))) & '  |  SQLMariaClass directo - MySQL ' & SQL.ServerVersion() & ''
+  SELECT(?Lista,1)
+  DISPLAY()
+
+! comillas simples duplicadas y barra invertida escapada (MySQL)
+Esc ROUTINE
+  DATA
+E   CSTRING(200)
+P   LONG
+  CODE
+  E = ''
+  LOOP P = 1 TO LEN(CLIP(L:Texto))
+    CASE L:Texto[P]
+    OF ''''
+      E = E & ''''''
+    OF '\'
+      E = E & '\\'
+    ELSE
+      E = E & L:Texto[P]
+    END
+  END
+  L:TextoE = E
+[END]
+[END]
+[WINDOW]
+Window WINDOW('Comprobantes - SQLMariaClass (MariaDB directo, sin ODBC)'),AT(,,600,332),CENTER,GRAY,SYSTEM,MAX,FONT('Segoe UI',9)
+       PROMPT('Desde:'),AT(8,10),USE(?L:Desde:Prompt)
+       ENTRY(@d6),AT(34,8,50,12),USE(L:Desde)
+       PROMPT('Hasta:'),AT(92,10),USE(?L:Hasta:Prompt)
+       ENTRY(@d6),AT(116,8,50,12),USE(L:Hasta)
+       PROMPT('Tipo:'),AT(174,10),USE(?L:Tipo:Prompt)
+       ENTRY(@s3),AT(194,8,24,12),USE(L:Tipo),UPR
+       PROMPT('Cliente:'),AT(226,10),USE(?L:Texto:Prompt)
+       ENTRY(@s40),AT(256,8,120,12),USE(L:Texto)
+       PROMPT('Maximo:'),AT(384,10),USE(?L:Max:Prompt)
+       SPIN(@n6),AT(414,8,46,12),USE(L:Max),RANGE(1,100000),STEP(1000)
+       BUTTON('&Buscar'),AT(486,6,52,16),USE(?Buscar),DEFAULT
+       BUTTON('&Cerrar'),AT(542,6,50,16),USE(?Close),STD(STD:Close)
+       LIST,AT(8,28,584,258),USE(?Lista),VSCROLL,FROM(CbtesQ), |
+           FORMAT('48R(2)|M~Id~C(0)@n_10@44R(2)|M~Fecha~C(0)@d6@24C|M~Tipo~@s3@12C|M~L~@s1@42R(2)|M~Numero~C(0)@n_8@40R(2)|M~Cliente~C(0)@n_8@170L(2)|M~Razon social~@s70@68R(2)|M~Total~C(0)@n-17.2@64R(2)|M~Saldo~C(0)@n-15.2@')
+       PROGRESS,AT(8,290,584,8),USE(?SQLBarra),RANGE(0,100)
+       STRING(''),AT(8,301,584,10),USE(?SQLTexto),FONT(,,0808080H)
+       STRING(@s250),AT(8,316,584,12),USE(L:Estado)
+     END
+[END]
+[MODULE]
+NAME 'TCWMariaDemo003.clw'
+[COMMON]
+FROM ABC GENERATED
+MODIFIED '2026/10/28' '10:00:00'
+[PROCEDURE]
+NAME ComprobantesOdbc
+[COMMON]
+FROM ABC Window
+MODIFIED '2026/10/28' '10:00:00'
+[EMBED]
+EMBED %DataSection
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+SQLO                 SQLOdbcClass
+CbtesQ               QUEUE,PRE(CBQ)
+IdTransaccion          LONG
+Fecha                  LONG
+TipoCbte               STRING(3)
+Letra                  STRING(1)
+NroCbte                LONG
+IdCliente              LONG
+Cliente                STRING(70)
+Total                  DECIMAL(17,2)
+Saldo                  DECIMAL(12,2)
+                     END
+L:Desde              LONG
+L:Hasta              LONG
+L:Tipo               STRING(3)
+L:Texto              STRING(40)
+L:TextoE             STRING(90)
+L:Max                LONG(30000)
+L:Estado             STRING(250)
+L:Query              CSTRING(4000)
+L:Conn               CSTRING(1024)
+L:T0                 LONG
+L:T1                 LONG
+L:T2                 LONG
+L:Total              DECIMAL(19,2)
+L:I                  LONG
+L:Ok                 BYTE
+[END]
+EMBED %WindowEventHandling
+[INSTANCES]
+WHEN 'OpenWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 8000
+PROPERTY:END
+  L:Desde = DATE(1,1,YEAR(TODAY()))
+  L:Hasta = TODAY()
+  L:Conn = GETINI('Conexion','Cadena','',LONGPATH() & '\TCWMariaDemo.ini')
+  IF L:Conn = ''
+    L:Estado = 'Falta la cadena de conexion en TCWMariaDemo.ini ([Conexion] Cadena=...)'
+  ELSE
+    SQLO.SilentMode = True
+    IF SQLO.Init(SQLOdbcFile,SQF:Record,L:Conn)
+      L:Estado = 'No se pudo abrir la conexion ODBC'
+    ELSE
+      L:Ok = True
+    END
+  END
+  DISPLAY()
+  IF L:Ok THEN DO Buscar.
+[END]
+WHEN 'CloseWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 2000
+PROPERTY:END
+  SQLO.Kill()
+[END]
+[END]
+EMBED %ControlEventHandling
+[INSTANCES]
+WHEN '?Buscar'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  UPDATE()
+  DO Buscar
+[END]
+[END]
+[END]
+EMBED %ProcedureRoutines
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+Buscar ROUTINE
+  IF NOT L:Ok THEN EXIT.
+  L:Query = 'SELECT IdTransaccion, Fecha, TipoCbte, Letra_Cbte, NroCbte, IdCliente, Descripcion, ImporteTotal, Saldo' & |
+            ' FROM cbtes WHERE Fecha BETWEEN ''' & FORMAT(L:Desde,@d10-) & ''' AND ''' & FORMAT(L:Hasta,@d10-) & ''''
+  IF L:Tipo <> '' THEN L:Query = L:Query & ' AND TipoCbte = ' & '''' & CLIP(L:Tipo) & ''''.
+  IF L:Texto <> '' THEN DO Esc.
+  IF L:Texto <> '' THEN L:Query = L:Query & ' AND Descripcion LIKE ' & '''<37>' & CLIP(L:TextoE) & '<37>'''.
+  L:Query = L:Query & ' ORDER BY Fecha DESC, IdTransaccion DESC LIMIT ' & CHOOSE(L:Max > 0,L:Max,1000)
+  SETCURSOR(CURSOR:Wait)
+  FREE(CbtesQ)
+  L:T0 = CLOCK()
+  IF SQLO.ExecEx(L:Query,1)
+    SETCURSOR()
+    L:Estado = 'Error: ' & 'ver el mensaje del driver ODBC'
+    DISPLAY()
+    EXIT
+  END
+  L:T1 = CLOCK()
+  SQLO.Col_Format(2,'@d10-')                         ! la fecha llega como aaaa-mm-dd
+  SQLO.LoadQueue(CbtesQ,0,0)
+  L:T2 = CLOCK()
+  L:Total = 0
+  LOOP L:I = 1 TO RECORDS(CbtesQ)
+    GET(CbtesQ,L:I)
+    L:Total += CBQ:Total
+  END
+  SETCURSOR()
+  L:Estado = RECORDS(CbtesQ) & ' comprobantes  |  consulta ' & (L:T1 - L:T0) * 10 & ' ms + carga ' & (L:T2 - L:T1) * 10 & |
+             ' ms = ' & (L:T2 - L:T0) * 10 & ' ms  |  Total: ' & CLIP(LEFT(FORMAT(L:Total,@n-20.2))) & '  |  SQLClass6 + driver ODBC (tabla sqlclass, 25 campos de 49)'
+  SELECT(?Lista,1)
+  DISPLAY()
+
+! comillas simples duplicadas y barra invertida escapada (MySQL)
+Esc ROUTINE
+  DATA
+E   CSTRING(200)
+P   LONG
+  CODE
+  E = ''
+  LOOP P = 1 TO LEN(CLIP(L:Texto))
+    CASE L:Texto[P]
+    OF ''''
+      E = E & ''''''
+    OF '\'
+      E = E & '\\'
+    ELSE
+      E = E & L:Texto[P]
+    END
+  END
+  L:TextoE = E
+[END]
+[END]
+[WINDOW]
+Window WINDOW('Comprobantes - SQLClass6 + driver ODBC (MySQL ODBC 5.1)'),AT(,,600,320),CENTER,GRAY,SYSTEM,MAX,FONT('Segoe UI',9)
+       PROMPT('Desde:'),AT(8,10),USE(?L:Desde:Prompt)
+       ENTRY(@d6),AT(34,8,50,12),USE(L:Desde)
+       PROMPT('Hasta:'),AT(92,10),USE(?L:Hasta:Prompt)
+       ENTRY(@d6),AT(116,8,50,12),USE(L:Hasta)
+       PROMPT('Tipo:'),AT(174,10),USE(?L:Tipo:Prompt)
+       ENTRY(@s3),AT(194,8,24,12),USE(L:Tipo),UPR
+       PROMPT('Cliente:'),AT(226,10),USE(?L:Texto:Prompt)
+       ENTRY(@s40),AT(256,8,120,12),USE(L:Texto)
+       PROMPT('Maximo:'),AT(384,10),USE(?L:Max:Prompt)
+       SPIN(@n6),AT(414,8,46,12),USE(L:Max),RANGE(1,100000),STEP(1000)
+       BUTTON('&Buscar'),AT(486,6,52,16),USE(?Buscar),DEFAULT
+       BUTTON('&Cerrar'),AT(542,6,50,16),USE(?Close),STD(STD:Close)
+       LIST,AT(8,28,584,270),USE(?Lista),VSCROLL,FROM(CbtesQ), |
+           FORMAT('48R(2)|M~Id~C(0)@n_10@44R(2)|M~Fecha~C(0)@d6@24C|M~Tipo~@s3@12C|M~L~@s1@42R(2)|M~Numero~C(0)@n_8@40R(2)|M~Cliente~C(0)@n_8@170L(2)|M~Razon social~@s70@68R(2)|M~Total~C(0)@n-17.2@64R(2)|M~Saldo~C(0)@n-15.2@')
+       STRING(@s250),AT(8,304,584,12),USE(L:Estado)
+     END
+[END]
+[MODULE]
+NAME 'TCWMariaDemo004.clw'
+[COMMON]
+FROM ABC GENERATED
+MODIFIED '2026/10/28' '10:00:00'
+[PROCEDURE]
+NAME Comparar
+[COMMON]
+FROM ABC Window
+MODIFIED '2026/10/28' '10:00:00'
+[EMBED]
+EMBED %DataSection
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+CbtesQ               QUEUE,PRE(CBQ)
+IdTransaccion          LONG
+Fecha                  LONG
+TipoCbte               STRING(3)
+Letra                  STRING(1)
+NroCbte                LONG
+IdCliente              LONG
+Cliente                STRING(70)
+Total                  DECIMAL(17,2)
+Saldo                  DECIMAL(12,2)
+                     END
+SQLM                SQLMariaClass
+SQLO                 SQLOdbcClass
+ResQ                 QUEUE,PRE(RQ)
+Escenario              STRING(40)
+Motor                  STRING(30)
+Filas                  LONG
+MsConsulta             LONG
+MsCarga                LONG
+MsTotal                LONG
+Factor                 STRING(10)
+Rapidez                STRING(10)
+Igual                  STRING(10)
+                     END
+L:Max                LONG(30000)
+L:Rep                LONG(5)
+L:Estado             STRING(250)
+L:Query              CSTRING(1000)
+L:Conn               CSTRING(1024)
+L:E                  LONG
+L:EscNombre          STRING(40),DIM(8)
+L:EscWhere           CSTRING(300),DIM(8)
+L:R                  LONG
+L:T0                 LONG
+L:T1                 LONG
+L:T2                 LONG
+L:SumM               LONG,DIM(3)
+L:SumO               LONG,DIM(3)
+L:TotM               LONG
+L:TotO               LONG
+L:FilasM             LONG
+L:FilasO             LONG
+L:ImpM               DECIMAL(19,2)
+L:ImpO               DECIMAL(19,2)
+L:Auto               BYTE
+L:I                  LONG
+L:Y                  LONG
+L:Version            STRING(40)
+L:SumImp             DECIMAL(19,2)
+L:Pct                LONG
+L:Avance             LONG
+L:Paso               LONG
+L:Pasos              LONG
+L:MotorTxt           STRING(20)
+[END]
+EMBED %WindowEventHandling
+[INSTANCES]
+WHEN 'OpenWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 8000
+PROPERTY:END
+  L:Auto = CHOOSE(INSTRING('COMPARAR',UPPER(COMMAND()),1,1) > 0)
+  IF L:Auto
+    DO Comparar
+    POST(EVENT:CloseWindow)
+  END
+[END]
+[END]
+EMBED %ControlEventHandling
+[INSTANCES]
+WHEN '?Comparar'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  UPDATE()
+  DO Comparar
+[END]
+[END]
+[END]
+EMBED %ProcedureRoutines
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+! escenarios: sin filtro, filtros por indice (fecha, tipo, cliente) y LIKE '%texto%' (recorre toda la tabla)
+Escenarios ROUTINE
+  L:Y = YEAR(TODAY())
+  L:EscNombre[1] = 'Sin filtro (ultimas ' & L:Max & ')'
+  L:EscWhere[1]  = ''
+  L:EscNombre[2] = 'Fecha: 1er semestre ' & L:Y
+  L:EscWhere[2]  = ' WHERE Fecha BETWEEN ''' & FORMAT(DATE(1,1,L:Y),@d10-) & ''' AND ''' & FORMAT(DATE(6,30,L:Y),@d10-) & ''''
+  L:EscNombre[3] = 'Tipo FC desde el 1/1/' & L:Y
+  L:EscWhere[3]  = ' WHERE TipoCbte = ''FC'' AND Fecha >= ''' & FORMAT(DATE(1,1,L:Y),@d10-) & ''''
+  L:EscNombre[4] = 'Razon social LIKE <37>SRL<37>'
+  L:EscWhere[4]  = ' WHERE Descripcion LIKE ''<37>SRL<37>'''
+  L:EscNombre[5] = 'Razon social LIKE <37>GARCIA<37>'
+  L:EscWhere[5]  = ' WHERE Descripcion LIKE ''<37>GARCIA<37>'''
+  L:EscNombre[6] = 'Un cliente (IdCliente 1000112)'
+  L:EscWhere[6]  = ' WHERE IdCliente = 1000112'
+  L:EscNombre[7] = 'Fecha: mes actual'
+  L:EscWhere[7]  = ' WHERE Fecha BETWEEN ''' & FORMAT(DATE(MONTH(TODAY()),1,L:Y),@d10-) & ''' AND ''' & FORMAT(TODAY(),@d10-) & ''''
+  L:EscNombre[8] = 'Un comprobante (por Id)'
+  L:EscWhere[8]  = ' WHERE IdTransaccion = 970048800'
+
+Comparar ROUTINE
+  L:Conn = GETINI('Conexion','Cadena','',LONGPATH() & '\TCWMariaDemo.ini')
+  IF L:Conn = '' THEN L:Estado = 'Falta la cadena de conexion en TCWMariaDemo.ini'; DISPLAY(); EXIT.
+  IF L:Max < 1 THEN L:Max = 30000.
+  IF L:Rep < 1 THEN L:Rep = 1.
+  SETCURSOR(CURSOR:Wait)
+  FREE(ResQ)
+  L:TotM = 0
+  L:TotO = 0
+  SQLM.SilentMode = True
+  SQLO.SilentMode = True
+  IF SQLM.InitMaria(L:Conn) THEN SETCURSOR(); L:Estado = 'MariaDB: ' & SQLM.ErrorText(); DISPLAY(); EXIT.
+  SQLM.KeepCase = True
+  IF SQLO.Init(SQLOdbcFile,SQF:Record,L:Conn) THEN SETCURSOR(); L:Estado = 'No se pudo abrir la conexion ODBC'; DISPLAY(); EXIT.
+  DO Escenarios
+  L:Paso = 0
+  L:Pasos = 8 * (L:Rep + 1) * 2                ! escenarios x corridas (con la de calentamiento) x 2 motores
+  L:Avance = 0
+  DISPLAY(?L:Avance)
+  LOOP L:E = 1 TO 8
+    L:Query = 'SELECT IdTransaccion, Fecha, TipoCbte, Letra_Cbte, NroCbte, IdCliente, Descripcion, ImporteTotal, Saldo FROM cbtes' & L:EscWhere[L:E] & ' ORDER BY Fecha DESC, IdTransaccion DESC LIMIT ' & L:Max
+    L:SumM[1] = 0 ; L:SumM[2] = 0 ; L:SumM[3] = 0
+    L:SumO[1] = 0 ; L:SumO[2] = 0 ; L:SumO[3] = 0
+    LOOP L:R = 0 TO L:Rep                            ! la corrida 0 calienta la cache del servidor y no se cuenta
+      IF L:R - 2 * INT(L:R / 2)                      ! se alterna quien va primero
+        DO CorrerMaria
+        DO CorrerOdbc
+      ELSE
+        DO CorrerOdbc
+        DO CorrerMaria
+      END
+      IF L:R = 0
+        L:SumM[1] = 0 ; L:SumM[2] = 0 ; L:SumM[3] = 0
+        L:SumO[1] = 0 ; L:SumO[2] = 0 ; L:SumO[3] = 0
+      END
+    END
+    DO AddResults
+    DISPLAY(?Resultados)
+  END
+  L:Version = SQLM.ServerVersion()
+  SQLM.Kill()
+  SQLO.Kill()
+  SETCURSOR()
+  L:Avance = 100
+  L:Estado = 'Todos los escenarios: MariaDB directo ' & L:TotM & ' ms, ODBC ' & L:TotO & ' ms' & |
+             CHOOSE(L:TotM > 0,' (ODBC x ' & CLIP(LEFT(FORMAT(L:TotO / L:TotM,@n6.2))) & ', MariaDB ' & |
+             CHOOSE(L:TotO >= L:TotM,ROUND((L:TotO / L:TotM - 1) * 100,1) & '% mas rapido', |
+                    ROUND((L:TotM / L:TotO - 1) * 100,1) & '% mas lento') & ')','') & |
+             '  -  promedio de ' & L:Rep & ' corridas, MySQL ' & CLIP(L:Version)
+  DISPLAY()
+  IF L:Auto THEN DO Guardar.
+
+CorrerMaria ROUTINE
+  L:MotorTxt = 'MariaDB directo'
+  DO Avanzar
+  FREE(CbtesQ)
+  L:T0 = CLOCK()
+  IF SQLM.ExecEx(L:Query,1) THEN L:Estado = 'MariaDB: ' & SQLM.ErrorText(); EXIT.
+  L:T1 = CLOCK()
+  SQLM.Col_Format(2,'@d10-')
+  SQLM.LoadQueue(CbtesQ,0,0)
+  L:T2 = CLOCK()
+  L:SumM[1] += (L:T1 - L:T0) * 10 ; L:SumM[2] += (L:T2 - L:T1) * 10 ; L:SumM[3] += (L:T2 - L:T0) * 10
+  DO Verificar
+  L:FilasM = RECORDS(CbtesQ)
+  L:ImpM = L:SumImp
+
+CorrerOdbc ROUTINE
+  L:MotorTxt = 'SQLClass6 + ODBC'
+  DO Avanzar
+  FREE(CbtesQ)
+  L:T0 = CLOCK()
+  IF SQLO.ExecEx(L:Query,1) THEN L:Estado = 'ODBC: error en la consulta'; EXIT.
+  L:T1 = CLOCK()
+  SQLO.Col_Format(2,'@d10-')
+  SQLO.LoadQueue(CbtesQ,0,0)
+  L:T2 = CLOCK()
+  L:SumO[1] += (L:T1 - L:T0) * 10 ; L:SumO[2] += (L:T2 - L:T1) * 10 ; L:SumO[3] += (L:T2 - L:T0) * 10
+  DO Verificar
+  L:FilasO = RECORDS(CbtesQ)
+  L:ImpO = L:SumImp
+
+! una fila por motor con el promedio de las corridas; Factor = cuantas veces tarda ODBC lo que tarda MariaDB
+AddResults ROUTINE
+  RQ:Escenario = L:EscNombre[L:E]
+  RQ:Motor = 'MariaDB directo'
+  RQ:Filas = L:FilasM
+  RQ:MsConsulta = L:SumM[1] / L:Rep ; RQ:MsCarga = L:SumM[2] / L:Rep ; RQ:MsTotal = L:SumM[3] / L:Rep
+  RQ:Factor = ''
+  RQ:Rapidez = ''
+  RQ:Igual = CHOOSE(L:FilasM = L:FilasO AND L:ImpM = L:ImpO,'si','NO')
+  ADD(ResQ)
+  RQ:Escenario = ''
+  RQ:Motor = 'SQLClass6 + ODBC'
+  RQ:Filas = L:FilasO
+  RQ:MsConsulta = L:SumO[1] / L:Rep ; RQ:MsCarga = L:SumO[2] / L:Rep ; RQ:MsTotal = L:SumO[3] / L:Rep
+  RQ:Factor = CHOOSE(L:SumM[3] > 0,'x ' & CLIP(LEFT(FORMAT(L:SumO[3] / L:SumM[3],@n6.2))),'-')
+  ! cuanto mas rapido es MariaDB (+) o mas lento (-) que ODBC: x 1.83 = +83%
+  IF L:SumM[3] > 0
+    L:Pct = ROUND((L:SumO[3] / L:SumM[3] - 1) * 100,1)
+    RQ:Rapidez = CHOOSE(L:Pct > 0,'+','') & L:Pct & '%'
+  ELSE
+    RQ:Rapidez = '-'
+  END
+  RQ:Igual = ''
+  ADD(ResQ)
+  L:TotM += L:SumM[3] / L:Rep
+  L:TotO += L:SumO[3] / L:Rep
+
+! barra de avance: un paso por cada corrida de cada motor
+Avanzar ROUTINE
+  L:Paso += 1
+  L:Avance = L:Paso * 100 / L:Pasos
+  L:Estado = 'Escenario ' & L:E & ' de 8: ' & CLIP(L:EscNombre[L:E]) & '  -  ' & |
+             CHOOSE(L:R = 0,'calentamiento','corrida ' & L:R & ' de ' & L:Rep) & '  -  ' & CLIP(L:MotorTxt) & |
+             '  (' & L:Avance & '%)'
+  DISPLAY(?L:Avance)
+  DISPLAY(?L:Estado)
+
+! control de que los dos motores traen lo mismo: cantidad de filas y suma de importes
+Verificar ROUTINE
+  L:SumImp = 0
+  LOOP L:I = 1 TO RECORDS(CbtesQ)
+    GET(CbtesQ,L:I)
+    L:SumImp += CBQ:Total
+  END
+
+! modo automatico (TCWMariaDemo.exe comparar): deja el resultado en comparacion.txt
+Guardar ROUTINE
+  SQLM.LogFile = LONGPATH() & '\comparacion.txt'
+  SQLM.WriteLog('Comparacion por escenario: maximo ' & L:Max & ' filas, promedio de ' & L:Rep & ' corridas')
+  LOOP L:I = 1 TO RECORDS(ResQ)
+    GET(ResQ,L:I)
+    SQLM.WriteLog(FORMAT(RQ:Escenario,@s34) & ' ' & FORMAT(RQ:Motor,@s17) & ' filas ' & FORMAT(RQ:Filas,@n6) & |
+                  '  consulta ' & FORMAT(RQ:MsConsulta,@n5) & '  carga ' & FORMAT(RQ:MsCarga,@n5) & '  total ' & FORMAT(RQ:MsTotal,@n5) & |
+                  ' ms  ' & CLIP(RQ:Factor) & CHOOSE(RQ:Rapidez = '','','  MariaDB ' & CLIP(RQ:Rapidez)) & CHOOSE(RQ:Igual = '','','  mismo resultado: ' & RQ:Igual))
+  END
+  SQLM.WriteLog(CLIP(L:Estado))
+  SQLM.LogFile = ''
+[END]
+[END]
+[WINDOW]
+Window WINDOW('Comparar tiempos por escenario - SQLMariaClass directo vs SQLClass6 + ODBC'),AT(,,600,294),CENTER,GRAY,SYSTEM,FONT('Segoe UI',9)
+       PROMPT('Maximo de filas:'),AT(8,10),USE(?L:Max:Prompt)
+       SPIN(@n6),AT(62,8,50,12),USE(L:Max),RANGE(1,500000),STEP(10000)
+       PROMPT('Corridas:'),AT(122,10),USE(?L:Rep:Prompt)
+       SPIN(@n2),AT(156,8,30,12),USE(L:Rep),RANGE(1,20)
+       BUTTON('&Comparar'),AT(482,6,56,16),USE(?Comparar),DEFAULT
+       BUTTON('C&errar'),AT(542,6,50,16),USE(?Close),STD(STD:Close)
+       LIST,AT(8,28,584,212),USE(?Resultados),VSCROLL,FROM(ResQ), |
+           FORMAT('132L(2)|M~Escenario~@s40@76L(2)|M~Motor~@s30@42R(2)|M~Filas~C(0)@n_8@54R(2)|M~Consulta (ms)~C(0)@n_8@48R(2)|M~Carga (ms)~C(0)@n_8@48R(2)|M~Total (ms)~C(0)@n_8@52C|M~ODBC / Maria~@s10@58C|M~Maria + rapida~@s10@34C|M~Igual~@s10@')
+       STRING('Promedio por escenario. Igual = misma cantidad de filas y misma suma de importes. ODBC corta la razon social a 49 caracteres (tabla sqlclass).'),AT(8,244,584,10),USE(?Nota)
+       STRING(@s250),AT(8,258,584,12),USE(L:Estado),FONT(,,,FONT:bold)
+       PROGRESS,AT(8,274,584,10),USE(L:Avance),RANGE(0,100)
+     END
+[END]
+[MODULE]
+NAME 'TCWMariaDemo005.clw'
+[COMMON]
+FROM ABC GENERATED
+MODIFIED '2026/10/28' '10:00:00'
+[PROCEDURE]
+NAME ComprobantesPaginas
+[COMMON]
+FROM ABC Window
+MODIFIED '2026/10/28' '10:00:00'
+[EMBED]
+EMBED %DataSection
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+SQL                  SQLMariaClass
+CbtesQ               QUEUE,PRE(CBQ)
+IdTransaccion          LONG
+Fecha                  LONG
+TipoCbte               STRING(3)
+Letra                  STRING(1)
+NroCbte                LONG
+IdCliente              LONG
+Cliente                STRING(70)
+Total                  DECIMAL(17,2)
+Saldo                  DECIMAL(12,2)
+FechaSql               STRING(30)
+                     END
+L:Desde              LONG
+L:Hasta              LONG
+L:Tipo               STRING(3)
+L:Texto              STRING(40)
+L:Pagina             LONG(200)
+L:Contar             BYTE(1)
+L:Estado             STRING(250)
+L:Where              CSTRING(1000)
+L:Query              CSTRING(2000)
+L:Conn               CSTRING(1024)
+L:T0                 LONG
+L:MsPrimera          LONG
+L:MsUltima           LONG
+L:MsConteo           LONG
+L:Paginas            LONG
+L:Hay                LONG
+L:Antes              LONG
+L:UltFecha           STRING(30)
+L:UltId              LONG
+L:Total              DECIMAL(19,2)
+L:I                  LONG
+L:Ok                 BYTE
+L:Fin                BYTE
+L:Dif                LONG
+L:N                  LONG
+L:T1                 LONG
+L:MsPaginas          LONG
+[END]
+EMBED %WindowEventHandling
+[INSTANCES]
+WHEN 'OpenWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 8000
+PROPERTY:END
+  L:Desde = DATE(1,1,YEAR(TODAY()))
+  L:Hasta = TODAY()
+  L:Conn = GETINI('Conexion','Cadena','',LONGPATH() & '\TCWMariaDemo.ini')
+  IF L:Conn = ''
+    L:Estado = 'Falta la cadena de conexion en TCWMariaDemo.ini ([Conexion] Cadena=...)'
+  ELSE
+    SQL.SilentMode = True
+    SQL.ProgressFeq = ?SQLBarra
+    SQL.ProgressTextFeq = ?SQLTexto
+    IF SQL.InitMaria(L:Conn)
+      L:Estado = 'No se pudo conectar: ' & SQL.ErrorText()
+    ELSE
+      SQL.KeepCase = True
+      SQL.FreeQueue = False
+      L:Ok = True
+    END
+  END
+  DISPLAY()
+  IF INSTRING('PAGINAS',UPPER(COMMAND()),1,1)
+    DO Probar
+    POST(EVENT:CloseWindow)
+  ELSIF L:Ok
+    DO Buscar
+  END
+[END]
+WHEN 'CloseWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 2000
+PROPERTY:END
+  SQL.Kill()
+[END]
+WHEN 'Timer'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  DO Mirar
+[END]
+[END]
+EMBED %ControlEventHandling
+[INSTANCES]
+WHEN '?Buscar'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  UPDATE()
+  DO Buscar
+[END]
+[END]
+WHEN '?Lista'
+[INSTANCES]
+WHEN 'NewSelection'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  DO Mirar
+[END]
+[END]
+[END]
+EMBED %ProcedureRoutines
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+! arma el filtro, cuenta (opcional) y trae la primera pagina
+Buscar ROUTINE
+  IF NOT L:Ok THEN EXIT.
+  IF L:Pagina < 1 THEN L:Pagina = 200.
+  L:Where = 'Fecha BETWEEN ''' & FORMAT(L:Desde,@d10-) & ''' AND ''' & FORMAT(L:Hasta,@d10-) & ''''
+  IF L:Tipo <> '' THEN L:Where = L:Where & ' AND TipoCbte = ' & SQL.Quote(CLIP(L:Tipo)).
+  IF L:Texto <> '' THEN L:Where = L:Where & ' AND Descripcion LIKE ' & SQL.Quote('<37>' & CLIP(L:Texto) & '<37>').
+  FREE(CbtesQ)
+  L:Fin = False
+  L:Paginas = 0
+  L:Total = 0
+  L:Hay = -1
+  L:MsConteo = 0
+  IF L:Contar
+    SETCURSOR(CURSOR:Wait)
+    L:T0 = CLOCK()
+    IF NOT SQL.ExecEx('SELECT COUNT(*) FROM cbtes WHERE ' & L:Where,1)
+      IF SQL.Next() = Level:Benign THEN L:Hay = SQL.Col(1).
+    END
+    L:MsConteo = (CLOCK() - L:T0) * 10
+    SETCURSOR()
+  END
+  DO Siguiente
+  L:MsPrimera = L:MsUltima
+  SELECT(?Lista,1)
+  DISPLAY()
+
+! trae la pagina que sigue a la ultima fila cargada y la agrega al final de la cola
+Siguiente ROUTINE
+  IF NOT L:Ok OR L:Fin THEN EXIT.
+  L:Query = 'SELECT IdTransaccion, Fecha, TipoCbte, Letra_Cbte, NroCbte, IdCliente, Descripcion, ImporteTotal, Saldo, Fecha FROM cbtes WHERE ' & L:Where
+  IF RECORDS(CbtesQ)
+    L:Query = L:Query & ' AND Fecha <= ''' & CLIP(L:UltFecha) & ''' AND (Fecha < ''' & CLIP(L:UltFecha) & |
+              ''' OR IdTransaccion < ' & L:UltId & ')'
+  END
+  L:Query = L:Query & ' ORDER BY Fecha DESC, IdTransaccion DESC LIMIT ' & L:Pagina
+  L:Antes = RECORDS(CbtesQ)
+  SETCURSOR(CURSOR:Wait)
+  L:T0 = CLOCK()
+  IF SQL.ExecEx(L:Query,1)
+    SETCURSOR()
+    L:Fin = True
+    L:Estado = 'Error: ' & SQL.ErrorText()
+    DISPLAY()
+    EXIT
+  END
+  SQL.Col_Format(2,'@d10-')                           ! la fecha llega como aaaa-mm-dd
+  SQL.LoadQueue(CbtesQ,0,0)                           ! FreeQueue = False: agrega a lo ya cargado
+  L:MsUltima = (CLOCK() - L:T0) * 10
+  SETCURSOR()
+  L:Paginas += 1
+  IF RECORDS(CbtesQ) - L:Antes < L:Pagina THEN L:Fin = True.
+  LOOP L:I = L:Antes + 1 TO RECORDS(CbtesQ)
+    GET(CbtesQ,L:I)
+    L:Total += CBQ:Total
+  END
+  IF RECORDS(CbtesQ)
+    GET(CbtesQ,RECORDS(CbtesQ))
+    L:UltFecha = CBQ:FechaSql
+    L:UltId = CBQ:IdTransaccion
+  END
+  DO Estado
+
+! se llama desde el TIMER y al moverse en la lista: pide otra pagina si se ve el final de lo cargado
+Mirar ROUTINE
+  IF NOT L:Ok OR L:Fin OR NOT RECORDS(CbtesQ) THEN EXIT.
+  IF ?Lista{PROP:YOrigin} + 2 * ?Lista{PROP:Items} >= RECORDS(CbtesQ)
+    DO Siguiente
+    DISPLAY(?Lista)
+  END
+
+Estado ROUTINE
+  L:Estado = RECORDS(CbtesQ) & CHOOSE(L:Hay >= 0,' de ' & L:Hay,'') & ' comprobantes en ' & L:Paginas & ' paginas' & |
+             CHOOSE(L:Fin,' (fin)','') & '  |  primera ' & L:MsPrimera & ' ms, ultima ' & L:MsUltima & ' ms' & |
+             CHOOSE(L:Contar,', conteo ' & L:MsConteo & ' ms','') & '  |  Total cargado: ' & CLIP(LEFT(FORMAT(L:Total,@n-20.2)))
+  DISPLAY(?L:Estado)
+
+! modo automatico (TCWMariaDemo.exe paginas): carga ~5000 filas de a 137 y las compara, fila por fila,
+! con una sola consulta del mismo orden; ninguna diferencia = la clave no saltea ni repite filas
+Probar ROUTINE
+  L:Pagina = 137
+  L:Contar = False
+  L:T1 = CLOCK()
+  DO Buscar
+  L:MsPrimera = (CLOCK() - L:T1) * 10
+  LOOP WHILE NOT L:Fin AND RECORDS(CbtesQ) < 5000
+    DO Siguiente
+  END
+  L:MsPaginas = (CLOCK() - L:T1) * 10
+  L:Dif = 0
+  L:I = 0
+  IF SQL.ExecEx('SELECT IdTransaccion FROM cbtes WHERE ' & L:Where & ' ORDER BY Fecha DESC, IdTransaccion DESC LIMIT ' & RECORDS(CbtesQ),1)
+    L:Dif = -1
+  ELSE
+    LOOP UNTIL SQL.Next()
+      L:I += 1
+      GET(CbtesQ,L:I)
+      IF ERRORCODE() OR CBQ:IdTransaccion <> SQL.Col(1) THEN L:Dif += 1.
+    END
+    IF L:I <> RECORDS(CbtesQ) THEN L:Dif += 1.
+  END
+  SQL.LogFile = LONGPATH() & '\paginas.txt'
+  SQL.WriteLog(CLIP(L:Estado))
+  SQL.WriteLog('Una sola consulta: ' & L:I & ' filas. Diferencias con la carga por paginas: ' & L:Dif)
+  L:N = RECORDS(CbtesQ)
+  SQL.WriteLog('Por paginas de 137: primera pagina en pantalla ' & L:MsPrimera & ' ms; ' & L:N & ' filas en ' & L:Paginas & |
+               ' paginas ' & L:MsPaginas & ' ms')
+  ! sin paginas: las mismas filas de una vez, y todo el filtro de una vez (lo que hace la pantalla MariaDB directo)
+  FREE(CbtesQ)
+  L:T1 = CLOCK()
+  IF NOT SQL.ExecEx('SELECT IdTransaccion, Fecha, TipoCbte, Letra_Cbte, NroCbte, IdCliente, Descripcion, ImporteTotal, Saldo, Fecha FROM cbtes WHERE ' & L:Where & ' ORDER BY Fecha DESC, IdTransaccion DESC LIMIT ' & L:N,1)
+    SQL.Col_Format(2,'@d10-')
+    SQL.LoadQueue(CbtesQ,0,0)
+  END
+  SQL.WriteLog('Sin paginas, las mismas ' & RECORDS(CbtesQ) & ' filas de una vez: ' & (CLOCK() - L:T1) * 10 & ' ms')
+  FREE(CbtesQ)
+  L:T1 = CLOCK()
+  IF NOT SQL.ExecEx('SELECT IdTransaccion, Fecha, TipoCbte, Letra_Cbte, NroCbte, IdCliente, Descripcion, ImporteTotal, Saldo, Fecha FROM cbtes WHERE ' & L:Where & ' ORDER BY Fecha DESC, IdTransaccion DESC',1)
+    SQL.Col_Format(2,'@d10-')
+    SQL.LoadQueue(CbtesQ,0,0)
+  END
+  SQL.WriteLog('Sin paginas, todo el filtro (' & RECORDS(CbtesQ) & ' filas) de una vez: ' & (CLOCK() - L:T1) * 10 & |
+               ' ms hasta ver la primera fila')
+  SQL.LogFile = ''
+[END]
+[END]
+[WINDOW]
+Window WINDOW('Comprobantes por paginas - SQLMariaClass (carga al llegar al final de la lista)'),AT(,,600,332),CENTER,GRAY,SYSTEM,MAX,TIMER(25),FONT('Segoe UI',9)
+       PROMPT('Desde:'),AT(8,10),USE(?L:Desde:Prompt)
+       ENTRY(@d6),AT(34,8,50,12),USE(L:Desde)
+       PROMPT('Hasta:'),AT(92,10),USE(?L:Hasta:Prompt)
+       ENTRY(@d6),AT(116,8,50,12),USE(L:Hasta)
+       PROMPT('Tipo:'),AT(174,10),USE(?L:Tipo:Prompt)
+       ENTRY(@s3),AT(194,8,24,12),USE(L:Tipo),UPR
+       PROMPT('Cliente:'),AT(226,10),USE(?L:Texto:Prompt)
+       ENTRY(@s40),AT(256,8,100,12),USE(L:Texto)
+       PROMPT('Pagina:'),AT(362,10),USE(?L:Pagina:Prompt)
+       SPIN(@n5),AT(390,8,40,12),USE(L:Pagina),RANGE(10,5000),STEP(100)
+       CHECK('Contar'),AT(436,9),USE(L:Contar)
+       BUTTON('&Buscar'),AT(486,6,52,16),USE(?Buscar),DEFAULT
+       BUTTON('&Cerrar'),AT(542,6,50,16),USE(?Close),STD(STD:Close)
+       LIST,AT(8,28,584,258),USE(?Lista),VSCROLL,FROM(CbtesQ), |
+           FORMAT('48R(2)|M~Id~C(0)@n_10@44R(2)|M~Fecha~C(0)@d6@24C|M~Tipo~@s3@12C|M~L~@s1@42R(2)|M~Numero~C(0)@n_8@40R(2)|M~Cliente~C(0)@n_8@170L(2)|M~Razon social~@s70@68R(2)|M~Total~C(0)@n-17.2@64R(2)|M~Saldo~C(0)@n-15.2@')
+       PROGRESS,AT(8,290,584,8),USE(?SQLBarra),RANGE(0,100)
+       STRING(''),AT(8,301,584,10),USE(?SQLTexto),FONT(,,0808080H)
+       STRING(@s250),AT(8,316,584,12),USE(L:Estado)
+     END
+[END]
+[MODULE]
+NAME 'TCWMariaDemo006.clw'
+[COMMON]
+FROM ABC GENERATED
+MODIFIED '2026/10/28' '10:00:00'
+[PROCEDURE]
+NAME Ejemplos
+[COMMON]
+FROM ABC Window
+MODIFIED '2026/10/29' '12:00:00'
+[EMBED]
+EMBED %DataSection
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+SQL                  SQLMariaClass
+ResQ                 QUEUE,PRE(RQ)
+Linea                  STRING(250)
+                     END
+L:Conn               CSTRING(1024)
+L:Ok                 BYTE
+L:Txt                STRING(250)
+L:Titulo             STRING(60)
+L:Auto               BYTE
+L:Cliente            LONG(1000112)
+L:Cliente2           LONG(1000112)
+L:Desde              LONG
+L:Nombre             STRING(60)
+L:Importe            DECIMAL(12,2)
+L:Fecha              LONG
+L:Cantidad           LONG(5000)
+L:Largo              LONG(20000)
+L:Metodo             STRING(45),DIM(3)
+L:M                  LONG
+L:I                  LONG
+L:N                  LONG
+L:T0                 LONG
+L:Ms                 LONG
+L:Base               LONG
+L:Hay                LONG
+L:Feq1               LONG
+L:Feq2               LONG
+L:Cod1                STRING(1500)
+L:Cod2                STRING(1500)
+L:Cod3                STRING(1500)
+L:Cod4                STRING(1500)
+L:Cod5                STRING(1500)
+L:Cod6                STRING(1500)
+L:Cod7                STRING(1500)
+[END]
+EMBED %WindowEventHandling
+[INSTANCES]
+WHEN 'OpenWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 8000
+PROPERTY:END
+  L:Desde = DATE(1,1,YEAR(TODAY()) - 1)
+  L:Nombre = 'O''Brien "el de las comillas"'
+  L:Importe = 1234.56
+  L:Fecha = TODAY()
+  L:Metodo[1] = 'INSERT armado como texto (como PROP:SQL)'
+  L:Metodo[2] = 'Insertar (una fila por viaje)'
+  L:Metodo[3] = 'InsertarLote (INSERT de 500 filas)'
+  L:Cod1 = '! parametros ''?'': cada valor se escapa y va entre comillas solo (mysql_real_escape_string)<13,10>' & |
+           'SQL.AddParam(L:Cliente)<13,10>' & |
+           'SQL.AddParam(FORMAT(L:Desde,@d10-))<13,10>' & |
+           'IF SQL.ExecEx(''SELECT IdTransaccion, Fecha, TipoCbte, NroCbte, Descripcion, ImporteTotal'' & |<13,10>' & |
+           '              '' FROM cbtes WHERE IdCliente = ? AND Fecha >= ? ORDER BY Fecha DESC LIMIT 200'',1)<13,10>' & |
+           '  MESSAGE(SQL.ErrorText())<13,10>' & |
+           'END<13,10>' & |
+           'LOOP UNTIL SQL.Next()<13,10>' & |
+           '  ! SQL.Col(1), SQL.ColByName(''Descripcion'')...<13,10>' & |
+           'END'
+  L:Cod2 = '! INSERT por nombre de campo: sin comillas, Clip ni Fun_Date<13,10>' & |
+           'SQL.Campo(''Nombre'',L:Nombre)                    ! una '' o una " adentro no rompe nada<13,10>' & |
+           'SQL.Campo(''Importe'',L:Importe)<13,10>' & |
+           'SQL.CampoFecha(''Fecha'',L:Fecha)                 ! fecha de Clarion; 0 = NULL<13,10>' & |
+           'SQL.CampoFechaHora(''Hora'',TODAY(),CLOCK())<13,10>' & |
+           'SQL.CampoNulo(''Nota'')<13,10>' & |
+           'IF SQL.Insertar(''tcw_demo'') THEN MESSAGE(SQL.ErrorText()).<13,10>' & |
+           '<13,10>' & |
+           '! Insertar arma INSERT INTO tabla (...) VALUES (...) con cada valor escapado:<13,10>' & |
+           '! una '' o una \ en el texto no rompen la sentencia.'
+  L:Cod3 = '! muchas filas: InsertarLote arma un INSERT de varias filas (de a 500, hasta 512 KB)<13,10>' & |
+           'LOOP I = 1 TO Cantidad<13,10>' & |
+           '  SQL.Campo(''Id'',I)<13,10>' & |
+           '  SQL.Campo(''Nombre'',''Cliente '' & I)<13,10>' & |
+           '  SQL.Campo(''Importe'',I * 1.25)<13,10>' & |
+           '  SQL.CampoFecha(''Fecha'',TODAY() - I % 365)<13,10>' & |
+           '  IF SQL.InsertarLote(''tcw_demo_lote'') THEN BREAK.<13,10>' & |
+           'END<13,10>' & |
+           'SQL.EnviarLote()                                ! las que quedan (SQL.Db.BatchSize = 500)<13,10>' & |
+           '<13,10>' & |
+           '! Se compara con el INSERT armado como texto (como con PROP:SQL) y con Insertar fila por fila.'
+  L:Cod4 = '! sentencia preparada: se guarda una vez y los ''?'' se reemplazan al ejecutar<13,10>' & |
+           '! (MySQL 5.0 no tiene arreglos de parametros: AddRow con un INSERT arma uno de varias filas)<13,10>' & |
+           'SQL.Prepare(''UPDATE tcw_demo_lote SET Importe = Importe * ? WHERE MOD(Id, ?) = 0'')<13,10>' & |
+           'SQL.AddParam(''2'') ; SQL.AddParam(''10'')<13,10>' & |
+           'SQL.ExecPrepared()                              ! SQL.AffectedRows() = filas cambiadas<13,10>' & |
+           'SQL.AddParam(''0.5'') ; SQL.AddParam(''10'')<13,10>' & |
+           'SQL.ExecPrepared()                              ! misma sentencia, otros valores<13,10>' & |
+           '<13,10>' & |
+           '! Para un lote: AddParam de cada valor + SQL.AddRow() por fila, y SQL.ExecPrepared() al final.'
+  L:Cod5 = 'SQL.BeginTransaction()<13,10>' & |
+           'SQL.ExecEx(''DELETE FROM tcw_demo_lote'',1)<13,10>' & |
+           '! ... dentro de la transaccion la tabla esta vacia ...<13,10>' & |
+           'SQL.Rollback()                                  ! o SQL.Commit()<13,10>' & |
+           '<13,10>' & |
+           '! Equivale a LOGOUT / ROLLBACK (o COMMIT) del driver de Clarion. La tabla tiene que ser InnoDB<13,10>' & |
+           '! (en MyISAM no hay transacciones).'
+  L:Cod6 = '! dos SELECT en una sola consulta (igual con ExecSP(''CALL sp(?)'') si el procedimiento devuelve varios)<13,10>' & |
+           'SQL.AddParam(L:Cliente2) ; SQL.AddParam(L:Cliente2)<13,10>' & |
+           'IF SQL.ExecEx(''SELECT TipoCbte, COUNT(*) AS Cantidad, SUM(ImporteTotal) AS Total FROM cbtes'' & |<13,10>' & |
+           '              '' WHERE IdCliente = ? GROUP BY TipoCbte ORDER BY TipoCbte;'' & |<13,10>' & |
+           '              '' SELECT IdTransaccion, Fecha, TipoCbte, NroCbte, ImporteTotal FROM cbtes'' & |<13,10>' & |
+           '              '' WHERE IdCliente = ? ORDER BY Fecha DESC, IdTransaccion DESC LIMIT 10'',1)<13,10>' & |
+           '  MESSAGE(SQL.ErrorText())<13,10>' & |
+           'END<13,10>' & |
+           'LOOP UNTIL SQL.Next()                           ! resultado 1: resumen por tipo<13,10>' & |
+           'END<13,10>' & |
+           'IF SQL.NextResult() = Level:Benign              ! resultado 2: ultimos 10 comprobantes<13,10>' & |
+           '  LOOP UNTIL SQL.Next()<13,10>' & |
+           '  END<13,10>' & |
+           'END'
+  L:Cod7 = '! MEDIUMTEXT: se graba y se lee entero (sin el limite de 49 de la tabla sqlclass)<13,10>' & |
+           'SQL.Campo(''Nombre'',''Texto largo'')<13,10>' & |
+           'SQL.Campo(''Importe'',0)<13,10>' & |
+           'SQL.Campo(''Nota'',ALL(''0123456789'',L:Largo))<13,10>' & |
+           'SQL.Insertar(''tcw_demo'')<13,10>' & |
+           'SQL.ExecEx(''SELECT CHAR_LENGTH(Nota), Nota FROM tcw_demo ORDER BY Id DESC LIMIT 1'',1)<13,10>' & |
+           'SQL.Next()<13,10>' & |
+           'Texto = SQL.Col(2)                              ! los L:Largo caracteres'
+  L:Conn = GETINI('Conexion','Cadena','',LONGPATH() & '\TCWMariaDemo.ini')
+  IF L:Conn = ''
+    ?SQLTexto{PROP:Text} = 'Falta la cadena de conexion en TCWMariaDemo.ini ([Conexion] Cadena=Server=...;Database=...;User=...;Password=...)'
+  ELSE
+    SQL.SilentMode = True
+    SQL.ProgressFeq = ?SQLBarra
+    SQL.ProgressTextFeq = ?SQLTexto
+    IF SQL.InitMaria(L:Conn) = Level:Benign
+      SQL.KeepCase = True
+      L:Ok = True
+      ! tablas TEMPORARY (solo de esta conexion; no tocan la base); InnoDB para que haya transacciones
+      SQL.ExecEx('CREATE TEMPORARY TABLE IF NOT EXISTS tcw_demo (Id INT AUTO_INCREMENT PRIMARY KEY, Nombre VARCHAR(60), ' & |
+                 'Importe DECIMAL(12,2), Fecha DATE NULL, Hora DATETIME NULL, Nota MEDIUMTEXT NULL) ENGINE=InnoDB',1)
+      SQL.ExecEx('CREATE TEMPORARY TABLE IF NOT EXISTS tcw_demo_lote (Id INT PRIMARY KEY, Nombre VARCHAR(50), ' & |
+                 'Importe DECIMAL(12,2), Fecha DATE NULL) ENGINE=InnoDB',1)
+    END
+  END
+  DISPLAY()
+  L:Auto = CHOOSE(INSTRING('EJEMPLOS',UPPER(COMMAND()),1,1) > 0)
+  IF L:Auto AND L:Ok
+    L:Cantidad = 2000
+    L:Titulo = '1. Parametros' ; DO Param ; DO Volcar
+    L:Titulo = '2. Insertar' ; DO Insert ; DO Volcar
+    L:Titulo = '3. InsertarLote (2000 filas)' ; DO Lote ; DO Volcar
+    L:Titulo = '4. Prepare' ; DO Prepara ; DO Volcar
+    L:Titulo = '5. Transaccion' ; DO Trans ; DO Volcar
+    L:Titulo = '6. Varios resultados' ; DO Varios ; DO Volcar
+    L:Titulo = '7. Texto largo' ; DO Largo ; DO Volcar
+    POST(EVENT:CloseWindow)
+  END
+[END]
+WHEN 'CloseWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 2000
+PROPERTY:END
+  SQL.Kill()
+[END]
+[END]
+EMBED %ControlEventHandling
+[INSTANCES]
+WHEN '?Run1'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  UPDATE()
+  IF L:Ok THEN DO Param.
+  DISPLAY()
+[END]
+[END]
+WHEN '?Run2'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  UPDATE()
+  IF L:Ok THEN DO Insert.
+  DISPLAY()
+[END]
+[END]
+WHEN '?Run3'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  UPDATE()
+  IF L:Ok THEN DO Lote.
+  DISPLAY()
+[END]
+[END]
+WHEN '?Run4'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  UPDATE()
+  IF L:Ok THEN DO Prepara.
+  DISPLAY()
+[END]
+[END]
+WHEN '?Run5'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  UPDATE()
+  IF L:Ok THEN DO Trans.
+  DISPLAY()
+[END]
+[END]
+WHEN '?Run6'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  UPDATE()
+  IF L:Ok THEN DO Varios.
+  DISPLAY()
+[END]
+[END]
+WHEN '?Run7'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+  UPDATE()
+  IF L:Ok THEN DO Largo.
+  DISPLAY()
+[END]
+[END]
+[END]
+EMBED %ProcedureRoutines
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+Agregar ROUTINE
+  RQ:Linea = L:Txt
+  ADD(ResQ)
+
+MostrarError ROUTINE
+  L:Txt = 'ERROR: ' & SQL.ErrorText()
+  DO Agregar
+
+! modo automatico (TCWMsSQLDemo.exe ejemplos): agrega lo que muestra la lista a ejemplos.txt
+Volcar ROUTINE
+  SQL.LogFile = LONGPATH() & '\ejemplos.txt'
+  SQL.WriteLog('== ' & CLIP(L:Titulo))
+  LOOP L:I = 1 TO RECORDS(ResQ)
+    GET(ResQ,L:I)
+    SQL.WriteLog('   ' & CLIP(RQ:Linea))
+  END
+  SQL.LogFile = ''
+
+! 1. parametros '?'
+Param ROUTINE
+  FREE(ResQ)
+  L:T0 = CLOCK()
+  SQL.AddParam(L:Cliente)
+  SQL.AddParam(FORMAT(L:Desde,@d10-))
+  IF SQL.ExecEx('SELECT IdTransaccion, Fecha, TipoCbte, NroCbte, Descripcion, ImporteTotal' & |
+                ' FROM cbtes WHERE IdCliente = ? AND Fecha >= ? ORDER BY Fecha DESC, IdTransaccion DESC LIMIT 200',1)
+    DO MostrarError
+    EXIT
+  END
+  L:N = 0
+  LOOP UNTIL SQL.Next()
+    L:N += 1
+    L:Txt = FORMAT(SQL.Col(1),@n_10) & '  ' & SQL.Col(2) & '  ' & FORMAT(SQL.Col(3),@s4) & FORMAT(SQL.Col(4),@n_9) & '  ' & |
+            FORMAT(SQL.ColByName('Descripcion'),@s45) & FORMAT(SQL.Col(6),@n-16.2)
+    DO Agregar
+  END
+  RQ:Linea = L:N & ' comprobantes del cliente ' & L:Cliente & ' desde el ' & FORMAT(L:Desde,@d6) & ' en ' & (CLOCK() - L:T0) * 10 & |
+             ' ms (dos parametros ?, escapados solos)'
+  ADD(ResQ,1)
+
+! 2. INSERT por nombre de campo
+Insert ROUTINE
+  FREE(ResQ)
+  SQL.Campo('Nombre',L:Nombre)
+  SQL.Campo('Importe',L:Importe)
+  SQL.CampoFecha('Fecha',L:Fecha)
+  SQL.CampoFechaHora('Hora',TODAY(),CLOCK())
+  SQL.CampoNulo('Nota')
+  IF SQL.Insertar('tcw_demo')
+    DO MostrarError
+    EXIT
+  END
+  L:Txt = 'Insertado. Ultimas filas de tcw_demo (Id, Nombre, Importe, Fecha, Hora, Nota):'
+  DO Agregar
+  DO MostrarDemo
+
+MostrarDemo ROUTINE
+  IF SQL.ExecEx('SELECT Id, Nombre, Importe, Fecha, DATE_FORMAT(Hora,''<37>Y-<37>m-<37>d <37>H:<37>i:<37>s''), ' & |
+                'CASE WHEN Nota IS NULL THEN ''(NULL)'' ELSE CONCAT(CHAR_LENGTH(Nota), '' caracteres'') END' & |
+                ' FROM tcw_demo ORDER BY Id DESC LIMIT 15',1)
+    DO MostrarError
+    EXIT
+  END
+  LOOP UNTIL SQL.Next()
+    L:Txt = FORMAT(SQL.Col(1),@n6) & '  ' & FORMAT(SQL.Col(2),@s36) & FORMAT(SQL.Col(3),@n-12.2) & '  ' & |
+            FORMAT(SQL.Col(4),@s11) & FORMAT(SQL.Col(5),@s20) & SQL.Col(6)
+    DO Agregar
+  END
+
+! 3. tres formas de grabar las mismas filas; la barra la mueve esta rutina (la de la clase se apaga para no
+!    sumarle a la forma 1 el repintado de cada consulta)
+Lote ROUTINE
+  FREE(ResQ)
+  IF L:Cantidad < 1 THEN L:Cantidad = 1000.
+  L:Feq1 = SQL.ProgressFeq
+  L:Feq2 = SQL.ProgressTextFeq
+  SQL.ProgressFeq = 0
+  SQL.ProgressTextFeq = 0
+  L:Base = 0
+  LOOP L:M = 1 TO 3
+    SQL.ExecEx('TRUNCATE TABLE tcw_demo_lote',1)
+    L:T0 = CLOCK()
+    LOOP L:I = 1 TO L:Cantidad
+      IF L:M = 1
+        IF SQL.ExecEx('INSERT INTO tcw_demo_lote (Id, Nombre, Importe, Fecha) VALUES (' & L:I & ', ' & |
+                      SQL.Quote('Cliente ' & L:I) & ', ' & L:I * 1.25 & ', ''' & FORMAT(TODAY() - L:I % 365,@d10-) & ''')',1)
+          DO MostrarError
+          BREAK
+        END
+      ELSE
+        SQL.Campo('Id',L:I)
+        SQL.Campo('Nombre','Cliente ' & L:I)
+        SQL.Campo('Importe',L:I * 1.25)
+        SQL.CampoFecha('Fecha',TODAY() - L:I % 365)
+        IF L:M = 2
+          IF SQL.Insertar('tcw_demo_lote') THEN DO MostrarError ; BREAK.
+        ELSE
+          IF SQL.InsertarLote('tcw_demo_lote') THEN DO MostrarError ; BREAK.
+        END
+      END
+      IF L:I % 250 = 0
+        ?SQLBarra{PROP:Progress} = L:I * 100 / L:Cantidad
+        ?SQLTexto{PROP:Text} = CLIP(L:Metodo[L:M]) & ': ' & L:I & ' de ' & L:Cantidad & ' filas'
+        DISPLAY(?SQLBarra)
+        DISPLAY(?SQLTexto)
+      END
+    END
+    IF L:M = 3 AND SQL.EnviarLote() THEN DO MostrarError.
+    L:Ms = (CLOCK() - L:T0) * 10
+    IF L:M = 1 THEN L:Base = L:Ms.
+    L:Hay = SQL.Fetch(1,'SELECT COUNT(*) FROM tcw_demo_lote')
+    L:Txt = FORMAT(L:Metodo[L:M],@s44) & FORMAT(L:Ms,@n8) & ' ms' & FORMAT(CHOOSE(L:Ms > 0,L:Cantidad * 1000 / L:Ms,0),@n9) & ' filas/s' & |
+            CHOOSE(L:M > 1 AND L:Ms > 0,'   ' & CLIP(LEFT(FORMAT(L:Base / L:Ms,@n6.1))) & ' veces mas rapido','') & |
+            CHOOSE(L:Hay = L:Cantidad,'','   (grabo ' & L:Hay & ')')
+    DO Agregar
+    DISPLAY(?Res)
+  END
+  SQL.ProgressFeq = L:Feq1
+  SQL.ProgressTextFeq = L:Feq2
+  ?SQLBarra{PROP:Progress} = 100
+  ?SQLTexto{PROP:Text} = 'Listo: ' & L:Cantidad & ' filas de cada forma en tcw_demo_lote'
+  DISPLAY()
+
+! 4. sentencia preparada, dos veces con otros valores
+Prepara ROUTINE
+  FREE(ResQ)
+  IF SQL.Fetch(1,'SELECT COUNT(*) FROM tcw_demo_lote') = 0
+    LOOP L:I = 1 TO 1000
+      SQL.Campo('Id',L:I)
+      SQL.Campo('Nombre','Cliente ' & L:I)
+      SQL.Campo('Importe',L:I * 1.25)
+      SQL.CampoFecha('Fecha',TODAY() - L:I % 365)
+      SQL.InsertarLote('tcw_demo_lote')
+    END
+    SQL.EnviarLote()
+  END
+  L:Txt = 'Antes:   ' & SQL.Fetch(1,'SELECT CONCAT(COUNT(*), '' filas, suma '', SUM(Importe)) FROM tcw_demo_lote')
+  DO Agregar
+  IF SQL.Prepare('UPDATE tcw_demo_lote SET Importe = Importe * ? WHERE MOD(Id, ?) = 0')
+    DO MostrarError
+    EXIT
+  END
+  SQL.AddParam('2')
+  SQL.AddParam('10')
+  IF SQL.ExecPrepared() THEN DO MostrarError ; EXIT.
+  L:Txt = 'ExecPrepared con 2 y 10:   ' & SQL.AffectedRows() & ' filas (Importe x 2 donde Id es multiplo de 10)'
+  DO Agregar
+  L:Txt = '         ' & SQL.Fetch(1,'SELECT CONCAT(COUNT(*), '' filas, suma '', SUM(Importe)) FROM tcw_demo_lote')
+  DO Agregar
+  SQL.AddParam('0.5')
+  SQL.AddParam('10')
+  IF SQL.ExecPrepared() THEN DO MostrarError ; EXIT.
+  L:Txt = 'ExecPrepared con 0.5 y 10: ' & SQL.AffectedRows() & ' filas (misma sentencia, otros valores: vuelve al importe original)'
+  DO Agregar
+  L:Txt = 'Despues: ' & SQL.Fetch(1,'SELECT CONCAT(COUNT(*), '' filas, suma '', SUM(Importe)) FROM tcw_demo_lote')
+  DO Agregar
+
+! 5. transaccion con rollback
+Trans ROUTINE
+  FREE(ResQ)
+  L:Txt = 'Filas antes:                     ' & SQL.Fetch(1,'SELECT COUNT(*) FROM tcw_demo_lote')
+  DO Agregar
+  IF SQL.BeginTransaction() THEN DO MostrarError ; EXIT.
+  SQL.ExecEx('DELETE FROM tcw_demo_lote',1)
+  L:Txt = 'BeginTransaction + DELETE:       borradas ' & SQL.AffectedRows() & ', quedan ' & SQL.Fetch(1,'SELECT COUNT(*) FROM tcw_demo_lote')
+  DO Agregar
+  IF SQL.Rollback() THEN DO MostrarError ; EXIT.
+  L:Txt = 'Rollback:                        quedan ' & SQL.Fetch(1,'SELECT COUNT(*) FROM tcw_demo_lote') & ' (no se borro nada)'
+  DO Agregar
+
+! 6. procedimiento con dos resultados
+Varios ROUTINE
+  FREE(ResQ)
+  SQL.AddParam(L:Cliente2)
+  SQL.AddParam(L:Cliente2)
+  IF SQL.ExecEx('SELECT TipoCbte, COUNT(*) AS Cantidad, SUM(ImporteTotal) AS Total FROM cbtes' & |
+                ' WHERE IdCliente = ? GROUP BY TipoCbte ORDER BY TipoCbte;' & |
+                ' SELECT IdTransaccion, Fecha, TipoCbte, NroCbte, ImporteTotal FROM cbtes' & |
+                ' WHERE IdCliente = ? ORDER BY Fecha DESC, IdTransaccion DESC LIMIT 10',1)
+    DO MostrarError
+    EXIT
+  END
+  L:Txt = 'Resultado 1 (' & CLIP(SQL.Field(1)) & ', ' & CLIP(SQL.Field(2)) & ', ' & CLIP(SQL.Field(3)) & '): resumen por tipo del cliente ' & L:Cliente2
+  DO Agregar
+  LOOP UNTIL SQL.Next()
+    L:Txt = '   ' & FORMAT(SQL.Col(1),@s5) & FORMAT(SQL.Col(2),@n8) & ' comprobantes' & FORMAT(SQL.Col(3),@n-20.2)
+    DO Agregar
+  END
+  IF SQL.NextResult() = Level:Benign
+    L:Txt = 'Resultado 2 (' & SQL.Columns() & ' columnas): los ultimos 10'
+    DO Agregar
+    LOOP UNTIL SQL.Next()
+      L:Txt = '   ' & FORMAT(SQL.Col(1),@n_10) & '  ' & SQL.Col(2) & '  ' & FORMAT(SQL.Col(3),@s4) & FORMAT(SQL.Col(4),@n_9) & FORMAT(SQL.Col(5),@n-16.2)
+      DO Agregar
+    END
+  END
+
+! 7. varchar(max)
+Largo ROUTINE
+  FREE(ResQ)
+  IF L:Largo < 1 THEN L:Largo = 20000.
+  SQL.Campo('Nombre','Texto de ' & L:Largo & ' caracteres')
+  SQL.Campo('Importe',0)
+  SQL.Campo('Nota',ALL('0123456789',L:Largo))
+  IF SQL.Insertar('tcw_demo')
+    DO MostrarError
+    EXIT
+  END
+  IF SQL.ExecEx('SELECT CHAR_LENGTH(Nota), Nota FROM tcw_demo ORDER BY Id DESC LIMIT 1',1) THEN DO MostrarError ; EXIT.
+  SQL.Next()
+  L:N = LEN(SQL.Col(2))
+  L:Txt = 'Grabado: ' & SQL.Col(1) & ' caracteres en el servidor; leido: ' & L:N & CHOOSE(SQL.Col(2) = ALL('0123456789',L:Largo),' (identico)',' (DISTINTO)')
+  DO Agregar
+  DO MostrarDemo
+[END]
+[END]
+[WINDOW]
+Window WINDOW('Ejemplos de uso - SQLMariaClass (MariaDB directo)'),AT(,,640,406),CENTER,GRAY,SYSTEM,MAX,FONT('Segoe UI',9)
+       SHEET,AT(4,4,632,174),USE(?Sheet)
+           TAB('1. Parametros ?'),USE(?Tab1)
+             PROMPT('Cliente:'),AT(12,24),USE(?L:Cliente:Prompt)
+             ENTRY(@n_10),AT(42,22,50,12),USE(L:Cliente)
+             PROMPT('Desde:'),AT(102,24),USE(?L:Desde:Prompt)
+             ENTRY(@d6),AT(128,22,52,12),USE(L:Desde)
+             BUTTON('&Buscar'),AT(564,20,64,16),USE(?Run1)
+             TEXT,AT(10,42,618,130),USE(L:Cod1),SKIP,FONT('Consolas',8),VSCROLL,READONLY
+           END
+           TAB('2. Insertar'),USE(?Tab2)
+             PROMPT('Nombre:'),AT(12,24),USE(?L:Nombre:Prompt)
+             ENTRY(@s60),AT(42,22,200,12),USE(L:Nombre)
+             PROMPT('Importe:'),AT(250,24),USE(?L:Importe:Prompt)
+             ENTRY(@n-12.2),AT(282,22,60,12),USE(L:Importe)
+             PROMPT('Fecha:'),AT(350,24),USE(?L:Fecha:Prompt)
+             ENTRY(@d6),AT(376,22,52,12),USE(L:Fecha)
+             BUTTON('&Insertar'),AT(564,20,64,16),USE(?Run2)
+             TEXT,AT(10,42,618,130),USE(L:Cod2),SKIP,FONT('Consolas',8),VSCROLL,READONLY
+           END
+           TAB('3. InsertarLote'),USE(?Tab3)
+             PROMPT('Filas:'),AT(12,24),USE(?L:Cantidad:Prompt)
+             SPIN(@n7),AT(42,22,60,12),USE(L:Cantidad),RANGE(100,200000),STEP(1000)
+             PROMPT('Graba las mismas filas de tres formas y compara los tiempos.'),AT(110,24),USE(?Lote:Nota)
+             BUTTON('&Comparar'),AT(564,20,64,16),USE(?Run3)
+             TEXT,AT(10,42,618,130),USE(L:Cod3),SKIP,FONT('Consolas',8),VSCROLL,READONLY
+           END
+           TAB('4. Prepare'),USE(?Tab4)
+             PROMPT('Un UPDATE preparado, ejecutado dos veces con otros valores.'),AT(12,24),USE(?Prep:Nota)
+             BUTTON('&Ejecutar'),AT(564,20,64,16),USE(?Run4)
+             TEXT,AT(10,42,618,130),USE(L:Cod4),SKIP,FONT('Consolas',8),VSCROLL,READONLY
+           END
+           TAB('5. Transaccion'),USE(?Tab5)
+             PROMPT('BeginTransaction, DELETE y Rollback: no se borra nada.'),AT(12,24),USE(?Trans:Nota)
+             BUTTON('&Ejecutar'),AT(564,20,64,16),USE(?Run5)
+             TEXT,AT(10,42,618,130),USE(L:Cod5),SKIP,FONT('Consolas',8),VSCROLL,READONLY
+           END
+           TAB('6. Varios resultados'),USE(?Tab6)
+             PROMPT('Cliente:'),AT(12,24),USE(?L:Cliente2:Prompt)
+             ENTRY(@n_10),AT(42,22,50,12),USE(L:Cliente2)
+             BUTTON('&Ejecutar'),AT(564,20,64,16),USE(?Run6)
+             TEXT,AT(10,42,618,130),USE(L:Cod6),SKIP,FONT('Consolas',8),VSCROLL,READONLY
+           END
+           TAB('7. Texto largo'),USE(?Tab7)
+             PROMPT('Caracteres:'),AT(12,24),USE(?L:Largo:Prompt)
+             SPIN(@n7),AT(52,22,60,12),USE(L:Largo),RANGE(1,1000000),STEP(10000)
+             BUTTON('&Ejecutar'),AT(564,20,64,16),USE(?Run7)
+             TEXT,AT(10,42,618,130),USE(L:Cod7),SKIP,FONT('Consolas',8),VSCROLL,READONLY
+           END
+       END
+       PROGRESS,AT(4,182,632,8),USE(?SQLBarra),RANGE(0,100)
+       STRING(''),AT(4,192,632,10),USE(?SQLTexto),FONT(,,0808080H)
+       LIST,AT(4,204,632,180),USE(?Res),VSCROLL,FROM(ResQ),FONT('Consolas',8),FORMAT('1000L(2)@s250@')
+       BUTTON('&Cerrar'),AT(576,388,60,14),USE(?Close),STD(STD:Close)
+     END
+[END]

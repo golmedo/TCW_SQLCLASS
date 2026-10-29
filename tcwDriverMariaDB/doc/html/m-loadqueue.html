@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.LoadQueue</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Leer resultados</div><h1>SQLMariaClass.LoadQueue</h1></div>
+<div class="content">
+<pre class="sig">LoadQueue(*QUEUE MyQ, BYTE WithCount, BYTE ShowWin),BYTE</pre><p>Carga todas las filas del resultado en una cola, <b>por posición</b>: la columna 1 va al primer campo de la cola, la 2 al segundo, y así. Es la forma más rápida de llenar un LIST.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>MyQ</code></td><td>la cola. Sus primeros campos tienen que estar en el mismo orden que las columnas del SELECT.</td></tr><tr><td><code>WithCount</code></td><td>1 = cuenta las filas antes (para el porcentaje de la ventana).</td></tr><tr><td><code>ShowWin</code></td><td>1 = muestra una ventana con el avance y el botón para cancelar.</td></tr></table><h2>Devuelve</h2><p>Level:Benign; Level:Notify si falló el ADD a la cola.</p><h2>Ejemplo</h2><pre class="code">  <span class="k">FREE</span>(CbtesQ)
+  <span class="k">IF</span> SQLM.ExecEx(L:Query,1) = Level:Benign
+    SQLM.Col_Format(2,<span class="s">&#x27;@d10-&#x27;</span>)                      <span class="c">! columna 2: fecha aaaa-mm-dd</span>
+    SQLM.LoadQueue(CbtesQ,0,0)
+  <span class="k">END</span></pre><h2>Observaciones</h2><ul><li>Si <code>FreeQueue = True</code> (el valor que deja <code>Init</code>) vacía la cola antes de cargar.</li><li>Aplica los formatos de <code>Col_Format</code> con <code>DEFORMAT</code> y después los borra.</li><li>Si <code>MaxReads</code> es mayor que 0, avisa y deja de cargar al pasar esa cantidad.</li><li>Al terminar, <code>Records</code> = cantidad de filas de la cola.</li><li>Si la cola tiene menos campos que columnas el SELECT, las columnas sobrantes se ignoran.</li></ul><h2>Respecto de SQLClass6</h2><div class="dif">Mismo comportamiento; el porcentaje de la ventana ahora es correcto.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-col-format.html">Col_Format</a> <a href="ej-comprobantes.html">Ejemplo de comprobantes</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

@@ -1,0 +1,29 @@
+body { font-family: Segoe UI, Tahoma, Arial, sans-serif; font-size: 10pt; color: #1f2933; background: #ffffff; margin: 0; }
+.top { background: #0e5a8a; color: #ffffff; padding: 10px 16px 8px 16px; }
+.top .crumb { font-size: 8.5pt; color: #cfe3f1; }
+.top h1 { font-size: 15pt; margin: 2px 0 0 0; font-weight: 600; color: #ffffff; }
+.content { padding: 6px 16px 24px 16px; max-width: 900px; }
+h2 { font-size: 11.5pt; color: #0e5a8a; border-bottom: 1px solid #d5e3ec; padding-bottom: 2px; margin: 20px 0 8px 0; }
+h3 { font-size: 10.5pt; color: #1f2933; margin: 16px 0 6px 0; }
+p { margin: 6px 0 8px 0; line-height: 1.45; }
+ul, ol { margin: 4px 0 8px 22px; padding: 0; }
+li { margin: 2px 0; line-height: 1.4; }
+code { font-family: Consolas, Courier New, monospace; font-size: 9.5pt; background: #f1f5f8; padding: 0 3px; }
+pre.code { font-family: Consolas, Courier New, monospace; font-size: 9.5pt; background: #f6f8fa; border: 1px solid #dde4ea;
+           border-left: 3px solid #0e5a8a; padding: 8px 10px; margin: 6px 0 10px 0; overflow: auto; line-height: 1.35; }
+pre.code .k { color: #00008b; font-weight: bold; }
+pre.code .s { color: #a31515; }
+pre.code .c { color: #2e7d32; }
+pre.sig { font-family: Consolas, Courier New, monospace; font-size: 10pt; background: #eef4f8; border: 1px solid #cfdde7;
+          padding: 6px 10px; margin: 6px 0 10px 0; }
+table { border-collapse: collapse; margin: 6px 0 12px 0; }
+th { background: #e8f0f5; text-align: left; font-weight: 600; border: 1px solid #cfdde7; padding: 4px 8px; }
+td { border: 1px solid #dde4ea; padding: 4px 8px; vertical-align: top; }
+td.n { text-align: right; }
+.nota { background: #fff8e1; border: 1px solid #f0d58c; padding: 6px 10px; margin: 8px 0 10px 0; }
+.ok { background: #edf7ee; border: 1px solid #b9dfbd; padding: 6px 10px; margin: 8px 0 10px 0; }
+.dif { background: #eef4f8; border: 1px solid #cfdde7; padding: 6px 10px; margin: 8px 0 10px 0; }
+.tag { display: inline; font-size: 8pt; background: #0e5a8a; color: #ffffff; padding: 0 5px; margin-left: 6px; }
+.tag.nuevo { background: #2e7d32; }
+.vt a { margin-right: 10px; }
+.pie { font-size: 8pt; color: #7b8794; border-top: 1px solid #e4e7eb; margin-top: 24px; padding-top: 6px; }

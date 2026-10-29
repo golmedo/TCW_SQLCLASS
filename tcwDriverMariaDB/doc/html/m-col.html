@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Col</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Leer resultados</div><h1>SQLMariaClass.Col</h1></div>
+<div class="content">
+<pre class="sig">Col(SHORT NroCol),STRING</pre><p>Devuelve el valor de una columna de la fila actual, como texto. Se asigna directo a campos numéricos, de texto o <code>DECIMAL</code>.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>NroCol</code></td><td>número de columna (1 = la primera del SELECT).</td></tr></table><h2>Devuelve</h2><p>El valor como texto. <code>''</code> si es NULL o si la columna no existe.</p><h2>Ejemplo</h2><pre class="code">  CBQ:Cliente = SQLM.Col(7)
+  CBQ:Total   = SQLM.Col(8)                         <span class="c">! &#x27;12345.67&#x27; -&gt; 12345.67</span>
+  CBQ:Fecha   = <span class="k">DEFORMAT</span>(SQLM.Col(2),@d10-)         <span class="c">! &#x27;2026-10-28&#x27; -&gt; fecha de Clarion</span></pre><h2>Observaciones</h2><p>No tiene límite de largo. Formatos que manda el servidor: fechas <code>aaaa-mm-dd</code>, horas <code>hh:mm:ss</code>, números con punto decimal. <code>Col_Format</code> no se aplica aquí (solo en <code>LoadQueue</code>): para fechas usar <code>DEFORMAT</code>.</p><h2>Respecto de SQLClass6</h2><div class="dif">No depende del registro de la tabla de trabajo: sin límite de columnas ni de largo.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-colbyname.html">ColByName</a> <a href="m-isnull.html">IsNull</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

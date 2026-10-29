@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Diferencias con SQLClass6 (driver)</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Guía</div><h1>Diferencias con SQLClass6 (driver)</h1></div>
+<div class="content">
+<p><code>SQLMariaClass</code> respeta el comportamiento de la SQLClass6. Estas son las diferencias, todas a favor salvo que se indique.</p>
+<table><tr><th>Tema</th><th>SQLClass6 con driver</th><th>SQLMariaClass</th></tr><tr><td>Tabla de trabajo</td><td>Necesita la tabla <code>sqlclass</code> (N campos de M caracteres)</td><td>No usa archivo; <code>Init</code> recibe el archivo solo por compatibilidad</td></tr><tr><td>Columnas y largo</td><td>Limitados por el registro (por ejemplo 25 campos de 49)</td><td>Sin límite</td></tr><tr><td><code>Col(n)</code></td><td>Campo n del registro</td><td>Valor que mandó el servidor; <code>''</code> si es NULL</td></tr><tr><td><code>Columns()</code> / <code>Field(n)</code></td><td>Lo que dedujo el parser del SELECT</td><td>Cantidad y nombres reales que manda el servidor</td></tr><tr><td><code>Records()</code></td><td>Hace un <code>SELECT COUNT(*)</code> aparte</td><td>Cuenta el resultado ya leído (exacto con GROUP BY / DISTINCT)</td></tr><tr><td>Procedimientos almacenados</td><td><code>ExecSP</code> convierte <code>EXEC</code> en <code>CALL</code></td><td>Igual, y descarta el resultado extra del CALL</td></tr><tr><td>Sentencias aceptadas por <code>Parse</code></td><td>SELECT, INSERT, UPDATE, DELETE, CREATE...</td><td>Además SHOW, DESCRIBE, EXPLAIN, REPLACE, USE, WITH, LOCK..., y SELECT sin FROM</td></tr><tr><td>Conexión caída</td><td>Error</td><td>Reconecta y reintenta una vez (errores 2006 / 2013)</td></tr><tr><td><code>LoadQueue</code> con ventana</td><td>Porcentaje invertido</td><td>Porcentaje correcto</td></tr><tr><td>Nuevos</td><td class="n">-</td><td><code>InitMaria</code>, <code>ColByName</code>, <code>IsNull</code>, <code>Escape</code>, <code>Quote</code>, <code>InsertId</code>, <code>AffectedRows</code>, <code>ErrorText</code>, <code>ErrorCode</code>, <code>ServerVersion</code>, <code>BeginTransaction</code>, <code>Commit</code>, <code>Rollback</code>, <code>KeepCase</code>, <code>Db</code></td></tr></table>
+<h2>Lo que se mantiene igual (a propósito)</h2>
+<ul><li><code>Exec</code> pasa la consulta a minúsculas (salvo <code>KeepCase</code>).</li><li>Códigos de retorno: 0 = bien, 1 = error; <code>Next()</code> devuelve 0 cuando trajo una fila.</li><li><code>SilentMode</code>, <code>Debug</code> / <code>Debug_Limit</code> (aviso de consulta lenta), <code>MaxReads</code>, <code>FreeQueue</code>, <code>LogFile</code>, <code>ShowProgress</code>.</li><li>Embeds de métodos y métodos virtuales (<code>TakeRecord</code>, <code>TakeSelect</code>...).</li></ul>
+<div class="dif">Los métodos de la SQLClass6 no son VIRTUAL (salvo <code>Init</code> y los <code>Take*</code>). Por eso el objeto tiene que ser de tipo <code>SQLMariaClass</code>: una referencia <code>&amp;SQLMsClass</code> que apunte a un <code>SQLMariaClass</code> llamaría al código del driver.</div>
+<h2>Ver también</h2><p class="vt"><a href="rendimiento.html">Rendimiento</a> <a href="sqlmariaclass.html">SQLMariaClass</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

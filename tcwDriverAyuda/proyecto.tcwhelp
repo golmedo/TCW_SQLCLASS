@@ -1,0 +1,273 @@
+{
+  "author": "Templates Clarion",
+  "default": "introduccion",
+  "lang": "es",
+  "snippets": {},
+  "subtitle": "SQLMariaClass y SQLMsDirectClass: la SQLClass directo a MariaDB / MySQL y SQL Server",
+  "theme": "light",
+  "title": "SQLClass directo",
+  "topics": [
+    {
+      "children": [
+        {
+          "children": [],
+          "file": "topics/novedades.html",
+          "id": "novedades",
+          "inToc": true,
+          "title": "Novedades"
+        }
+      ],
+      "file": "topics/introduccion.html",
+      "id": "introduccion",
+      "inToc": true,
+      "title": "Introducción"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "file": "topics/conexion.html",
+          "id": "conexion",
+          "inToc": true,
+          "title": "Cadena de conexión",
+          "keywords": [
+            "owner",
+            "localhost"
+          ]
+        }
+      ],
+      "file": "topics/instalacion.html",
+      "id": "instalacion",
+      "inToc": true,
+      "title": "Instalación"
+    },
+    {
+      "children": [],
+      "file": "topics/guia.html",
+      "id": "guia",
+      "inToc": true,
+      "title": "Guía rápida"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "file": "topics/parametros.html",
+          "id": "parametros",
+          "inToc": true,
+          "title": "Parámetros ?",
+          "keywords": [
+            "AddParam",
+            "AddNullParam",
+            "?"
+          ]
+        },
+        {
+          "children": [],
+          "file": "topics/varios.html",
+          "id": "varios",
+          "inToc": true,
+          "title": "Varios resultados",
+          "keywords": [
+            "NextResult",
+            "ExecSP",
+            "CALL"
+          ]
+        },
+        {
+          "children": [],
+          "file": "topics/largos.html",
+          "id": "largos",
+          "inToc": true,
+          "title": "Textos largos"
+        },
+        {
+          "children": [],
+          "file": "topics/paginas.html",
+          "id": "paginas",
+          "inToc": true,
+          "title": "Carga por páginas",
+          "keywords": [
+            "TOP",
+            "LIMIT",
+            "keyset"
+          ]
+        },
+        {
+          "children": [],
+          "file": "topics/avance.html",
+          "id": "avance",
+          "inToc": true,
+          "title": "Barra de avance en la ventana",
+          "keywords": [
+            "ProgressFeq",
+            "ProgressTextFeq"
+          ]
+        }
+      ],
+      "file": "topics/leer.html",
+      "id": "leer",
+      "inToc": true,
+      "title": "Leer datos"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "file": "topics/insertar.html",
+          "id": "insertar",
+          "inToc": true,
+          "title": "Campo e Insertar",
+          "keywords": [
+            "Campo",
+            "CampoFecha",
+            "CampoFechaHora",
+            "CampoNulo",
+            "Insertar"
+          ]
+        },
+        {
+          "children": [],
+          "file": "topics/lotes.html",
+          "id": "lotes",
+          "inToc": true,
+          "title": "Lotes (InsertarLote)",
+          "keywords": [
+            "InsertarLote",
+            "EnviarLote",
+            "BatchSize"
+          ]
+        },
+        {
+          "children": [],
+          "file": "topics/preparadas.html",
+          "id": "preparadas",
+          "inToc": true,
+          "title": "Sentencias preparadas",
+          "keywords": [
+            "Prepare",
+            "ExecPrepared",
+            "AddRow"
+          ]
+        },
+        {
+          "children": [],
+          "file": "topics/transacciones.html",
+          "id": "transacciones",
+          "inToc": true,
+          "title": "Transacciones",
+          "keywords": [
+            "BeginTransaction",
+            "Commit",
+            "Rollback",
+            "LOGOUT"
+          ]
+        },
+        {
+          "children": [],
+          "file": "topics/migrar.html",
+          "id": "migrar",
+          "inToc": true,
+          "title": "Pasar un INSERT de PROP:SQL a Campo/Insertar",
+          "keywords": [
+            "PROP:SQL",
+            "QUOTED_IDENTIFIER"
+          ]
+        }
+      ],
+      "file": "topics/escribir.html",
+      "id": "escribir",
+      "inToc": true,
+      "title": "Escribir datos"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "file": "topics/est-mssql-lectura.html",
+          "id": "est-mssql-lectura",
+          "inToc": true,
+          "title": "SQL Server: lectura",
+          "keywords": [
+            "BUFFER",
+            "VIEW"
+          ]
+        },
+        {
+          "children": [],
+          "file": "topics/est-mssql-escritura.html",
+          "id": "est-mssql-escritura",
+          "inToc": true,
+          "title": "SQL Server: escritura"
+        },
+        {
+          "children": [],
+          "file": "topics/est-maria.html",
+          "id": "est-maria",
+          "inToc": true,
+          "title": "MariaDB / MySQL"
+        },
+        {
+          "children": [],
+          "file": "topics/est-paginas.html",
+          "id": "est-paginas",
+          "inToc": true,
+          "title": "Páginas y conexión"
+        },
+        {
+          "children": [],
+          "file": "topics/est-como.html",
+          "id": "est-como",
+          "inToc": true,
+          "title": "Cómo se midió"
+        }
+      ],
+      "file": "topics/estadisticas.html",
+      "id": "estadisticas",
+      "inToc": true,
+      "title": "Estadísticas de velocidad"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "file": "topics/ref-conexion.html",
+          "id": "ref-conexion",
+          "inToc": true,
+          "title": "TCWMsSQL / TCWMariaDB (conexión)"
+        }
+      ],
+      "file": "topics/referencia.html",
+      "id": "referencia",
+      "inToc": true,
+      "title": "Referencia de métodos"
+    },
+    {
+      "children": [],
+      "file": "topics/demo.html",
+      "id": "demo",
+      "inToc": true,
+      "title": "Aplicaciones de ejemplo"
+    },
+    {
+      "children": [],
+      "file": "topics/trampas.html",
+      "id": "trampas",
+      "inToc": true,
+      "title": "Diferencias y trampas",
+      "keywords": [
+        "209",
+        "MARS"
+      ]
+    },
+    {
+      "children": [],
+      "file": "topics/pruebas.html",
+      "id": "pruebas",
+      "inToc": true,
+      "title": "Pruebas"
+    }
+  ],
+  "variables": {},
+  "version": "1.0"
+}

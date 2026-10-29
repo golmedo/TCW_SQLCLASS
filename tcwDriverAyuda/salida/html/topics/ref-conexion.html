@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TCWMsSQL / TCWMariaDB (conexi&#243;n) - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="ref-conexion.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>TCWMsSQL / TCWMariaDB (conexi&#243;n)</h1>
+<p>La conexión directa, que se puede usar sola. Propiedades útiles desde la SQLClass como <code>SQL.Db.xxx</code>:</p><table><thead><tr><th>Propiedad / método</th><th>Qué hace</th></tr></thead><tbody><tr><td><code>BatchSize</code></td><td>filas por envío de InsertarLote / AddRow (500; 0 = solo con EnviarLote)</td></tr><tr><td><code>MaxBatchBytes</code></td><td>MariaDB: tamaño máximo de un INSERT de varias filas (512 KB)</td></tr><tr><td><code>PendingRows()</code></td><td>filas del lote que faltan mandar</td></tr><tr><td><code>ClientVersion()</code></td><td>driver usado (SQL Server: <em>ODBC Driver 17 for SQL Server (msodbcsql17.dll 17.10)</em>)</td></tr><tr><td><code>IdentityAfterInsert</code></td><td>SQL Server: 1 = un INSERT por Exec deja el IDENTITY en InsertId</td></tr><tr><td><code>AutoReconnect</code></td><td>1 = si se cayó la conexión reconecta y reintenta una vez</td></tr><tr><td><code>Driver</code>, <code>Encrypt</code>, <code>ConnectTimeout</code></td><td>SQL Server: driver ODBC, cifrado, tiempo de conexión</td></tr><tr><td><code>Charset</code>, <code>SSL</code>, <code>Port</code></td><td>MariaDB</td></tr></tbody></table><p>SQL Server: el motor está en <code>tcwmss.c</code> (API de ODBC; <code>odbc32.dll</code> se carga en runtime, sin .lib). MariaDB: <code>libmariadb.dll</code> por su API pública.</p>
+</article>
+<footer class="pager"><a class="prev" href="referencia.html">&larr; Referencia de m&#233;todos</a><a class="next" href="demo.html">Aplicaciones de ejemplo &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

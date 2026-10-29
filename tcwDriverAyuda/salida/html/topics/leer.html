@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leer datos - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="leer.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Leer datos</h1>
+<table><thead><tr><th>Método</th><th>Qué hace</th></tr></thead><tbody><tr><td><code>Exec(q)</code></td><td>ejecuta (pasa la consulta a minúsculas, como SQLClass6)</td></tr><tr><td><code>ExecEx(q,1)</code></td><td>ejecuta respetando mayúsculas (recomendado; los valores entre comillas no se tocan)</td></tr><tr><td><code>Next()</code></td><td>fila siguiente: 0 = trajo una; distinto de 0 = no hay más</td></tr><tr><td><code>Col(n)</code> / <code>ColByName(nombre)</code></td><td>valor como texto (fechas <code>aaaa-mm-dd</code>, decimales con punto)</td></tr><tr><td><code>IsNull(n)</code></td><td>1 si el valor es NULL</td></tr><tr><td><code>Columns()</code> / <code>Field(n)</code></td><td>cantidad de columnas / nombre real de la columna n</td></tr><tr><td><code>Records()</code></td><td>filas del resultado, exacto (también con GROUP BY / DISTINCT): el resultado se lee entero al ejecutar</td></tr><tr><td><code>Col_Format(n,pic)</code> + <code>LoadQueue(Q,0,0)</code></td><td>carga la cola campo por campo con DEFORMAT</td></tr><tr><td><code>Fetch(n,q)</code></td><td>primer valor de una consulta</td></tr></tbody></table><div class="callout" data-kind="nota"><p><strong>Nota:</strong> cada consulta se lee <strong>entera</strong> al ejecutarla (como <code>mysql_store_result</code>): <code>Records()</code> es exacto y la barra de avance tiene total. Una consulta de millones de filas ocupa esa memoria: paginar (ver <a href="paginas.html">Carga por páginas</a>).</p></div>
+</article>
+<footer class="pager"><a class="prev" href="guia.html">&larr; Gu&#237;a r&#225;pida</a><a class="next" href="parametros.html">Par&#225;metros ? &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

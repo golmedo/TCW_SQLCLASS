@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Problemas frecuentes</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Guía</div><h1>Problemas frecuentes</h1></div>
+<div class="content">
+<h3>No conecta: "TLS/SSL error" o "SSL connection is required"</h3>
+<p>El servidor no tiene TLS (MySQL 5.0, por ejemplo). Con <code>SSL=0</code> (el valor por defecto) no se exige. Si la cadena tiene <code>SSL=1</code> o <code>SslMode=REQUIRED</code>, quitarlo.</p>
+<h3>Falta libmariadb.dll al ejecutar</h3>
+<p>Copiar <code>libmariadb.dll</code> (32 bits) junto al .exe.</p>
+<h3>Error de compilación: "ExecEx / LogFile / WriteLog no definido"</h3>
+<p>La SQLClass6 instalada es la original de 2011. <code>SQLMariaClass</code> necesita la SQLClass6 extendida (ver <a href="instalacion.html">Instalación</a>).</p>
+<h3>Unresolved external mysql_...</h3>
+<p>Falta <code>libmariadb.lib</code> en las <i>Libraries</i> del proyecto (con el template se agrega sola si algún objeto usa <i>MariaDB directo</i>).</p>
+<h3>"Table 'base.Clientes' doesn't exist" pero la tabla existe</h3>
+<p>En Linux los nombres de tabla distinguen mayúsculas y <code>Exec</code> pasa la consulta a minúsculas. Usar <code>KeepCase = True</code> o <code>ExecEx(consulta, 1)</code>.</p>
+<h3>Los textos que grabo quedan en minúsculas</h3>
+<p>Mismo motivo: <code>Exec</code> pasa a minúsculas toda la consulta, incluidos los valores entre comillas. Para INSERT y UPDATE usar <code>KeepCase = True</code> o <code>ExecEx(consulta, 1)</code>.</p>
+<h3>Leo dos consultas a la vez y la primera "se corta"</h3>
+<p>Cada objeto tiene un resultado por vez: un <code>Exec</code> dentro del <code>LOOP</code> de otro <code>Exec</code> sobre el mismo objeto reemplaza el resultado. Usar un segundo objeto.</p>
+<h3>Acentos o eñes mal</h3>
+<p>La conexión tiene que usar <code>Charset=latin1</code> (el valor por defecto). Si la base está en <code>utf8</code>, el servidor convierte a latin1 al enviar.</p>
+<h3>La primera consulta tarda más</h3>
+<p>El servidor tiene que leer los datos del disco la primera vez. Para medir tiempos, descartar la primera corrida (ver <a href="ej-comparar.html">Comparar motores</a>).</p>
+<h3>Fecha vacía en la cola</h3>
+<p>Las fechas llegan como texto <code>aaaa-mm-dd</code>. Antes de <code>LoadQueue</code> indicar <code>Col_Format(n,'@d10-')</code> para esa columna (ver <a href="m-col-format.html">Col_Format</a>).</p>
+<h2>Ver también</h2><p class="vt"><a href="instalacion.html">Instalación</a> <a href="conexion.html">Cadena de conexión</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

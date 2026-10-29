@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sentencias preparadas - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="preparadas.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Sentencias preparadas</h1>
+<pre><code>  SQL.Prepare('UPDATE lote SET Importe = Importe * ? WHERE Id % ? = 0')
+  SQL.AddParam('2') ; SQL.AddParam('10')
+  SQL.ExecPrepared()                              ! SQL.AffectedRows() = filas cambiadas
+  SQL.AddParam('0.5') ; SQL.AddParam('10')
+  SQL.ExecPrepared()                              ! misma sentencia, otros valores</code></pre><ul><li>SQL Server: <code>SQLPrepare</code> una vez, después solo viajan los valores (lo mismo que hace el driver de Clarion con <code>ADD</code>).</li><li>MariaDB: MySQL 5.0 no tiene arreglos de parámetros; la sentencia se guarda y los <code>?</code> se reemplazan al ejecutar. Con un <code>INSERT ... VALUES</code>, <code>AddRow</code> arma un INSERT de varias filas.</li></ul>
+</article>
+<footer class="pager"><a class="prev" href="lotes.html">&larr; Lotes (InsertarLote)</a><a class="next" href="transacciones.html">Transacciones &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.IsNull</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Leer resultados</div><h1>SQLMariaClass.IsNull</h1></div>
+<div class="content">
+<span class="tag nuevo">nuevo</span><pre class="sig">IsNull(SHORT NroCol),BYTE</pre><p>Indica si una columna de la fila actual es NULL. <code>Col</code> devuelve <code>''</code> tanto para NULL como para un texto vacío; con <code>IsNull</code> se distinguen.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>NroCol</code></td><td>número de columna.</td></tr></table><h2>Devuelve</h2><p>1 si es NULL (o la columna no existe); 0 si tiene valor.</p><h2>Ejemplo</h2><pre class="code">  <span class="k">IF</span> SQLM.IsNull(4)
+    Q:FechaBaja = 0
+  <span class="k">ELSE</span>
+    Q:FechaBaja = <span class="k">DEFORMAT</span>(SQLM.Col(4),@d10-)
+  <span class="k">END</span></pre><h2>Respecto de SQLClass6</h2><div class="dif">Método nuevo: no existe en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-col.html">Col</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

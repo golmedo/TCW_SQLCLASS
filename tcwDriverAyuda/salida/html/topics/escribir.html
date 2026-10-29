@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escribir datos - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="escribir.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Escribir datos</h1>
+<table><thead><tr><th>Forma</th><th>Cuándo</th><th>Tema</th></tr></thead><tbody><tr><td><code>Campo</code> + <code>Insertar</code></td><td>una fila</td><td><a href="insertar.html">Campo e Insertar</a></td></tr><tr><td><code>Campo</code> + <code>InsertarLote</code> + <code>EnviarLote</code></td><td>muchas filas</td><td><a href="lotes.html">Lotes</a></td></tr><tr><td><code>Prepare</code> + <code>AddParam</code> + <code>ExecPrepared</code></td><td>UPDATE / DELETE repetidos</td><td><a href="preparadas.html">Sentencias preparadas</a></td></tr><tr><td><code>BeginTransaction</code> / <code>Commit</code> / <code>Rollback</code></td><td>todo o nada</td><td><a href="transacciones.html">Transacciones</a></td></tr><tr><td><code>ExecEx(q,1)</code></td><td>una sentencia suelta</td><td>—</td></tr></tbody></table><p>Si hoy arman los <code>INSERT</code> con <code>PROP:SQL</code>: <a href="migrar.html">Pasar un INSERT de PROP:SQL a Campo/Insertar</a>.</p>
+</article>
+<footer class="pager"><a class="prev" href="avance.html">&larr; Barra de avance en la ventana</a><a class="next" href="insertar.html">Campo e Insertar &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

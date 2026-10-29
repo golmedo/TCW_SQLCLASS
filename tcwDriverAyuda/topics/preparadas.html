@@ -1,0 +1,5 @@
+<pre><code>  SQL.Prepare('UPDATE lote SET Importe = Importe * ? WHERE Id % ? = 0')
+  SQL.AddParam('2') ; SQL.AddParam('10')
+  SQL.ExecPrepared()                              ! SQL.AffectedRows() = filas cambiadas
+  SQL.AddParam('0.5') ; SQL.AddParam('10')
+  SQL.ExecPrepared()                              ! misma sentencia, otros valores</code></pre><ul><li>SQL Server: <code>SQLPrepare</code> una vez, después solo viajan los valores (lo mismo que hace el driver de Clarion con <code>ADD</code>).</li><li>MariaDB: MySQL 5.0 no tiene arreglos de parámetros; la sentencia se guarda y los <code>?</code> se reemplazan al ejecutar. Con un <code>INSERT ... VALUES</code>, <code>AddRow</code> arma un INSERT de varias filas.</li></ul>

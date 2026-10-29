@@ -1,0 +1,15 @@
+<h2>Leer</h2><pre><code>  SQL.AddParam(Cliente)                                    ! parametros '?': sin comillas ni escape
+  IF SQL.ExecEx('SELECT IdTransaccion, Fecha, Descripcion FROM cbtes WHERE IdCliente = ?',1)
+    MESSAGE(SQL.ErrorText()) ; RETURN
+  END
+  LOOP UNTIL SQL.Next()
+    Q:Id = SQL.Col(1) ; Q:Nombre = SQL.ColByName('Descripcion') ; ADD(Q)
+  END
+  ! o de una: SQL.Col_Format(2,'@d10-') ; SQL.LoadQueue(Q,0,0)</code></pre><h2>Escribir</h2><pre><code>  SQL.Campo('IdCliente',Cliente)
+  SQL.Campo('Descripcion',RazonSocial)                     ! una ' o una " adentro no rompe nada
+  SQL.CampoFecha('Fecha',Fecha)                            ! 0 = NULL
+  IF SQL.Insertar('cbtes') THEN MESSAGE(SQL.ErrorText()).</code></pre><h2>Muchas filas</h2><pre><code>  LOOP ...
+    SQL.Campo(...) ...
+    SQL.InsertarLote('cbtes')                              ! de a 500 filas por viaje
+  END
+  SQL.EnviarLote()                                         ! las que quedan</code></pre><p>Exec y ExecEx devuelven <code>Level:Benign</code> (0) si anduvo; <code>Next()</code> devuelve 0 mientras trae filas. Los temas de <a href="tcw:leer">Leer datos</a> y <a href="tcw:escribir">Escribir datos</a> tienen el detalle.</p>

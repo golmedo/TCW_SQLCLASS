@@ -1,0 +1,4 @@
+tests/.build/
+demo/.build*/
+template/.test/
+doc/*.chm

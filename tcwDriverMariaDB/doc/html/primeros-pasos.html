@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Primeros pasos</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Guía</div><h1>Primeros pasos</h1></div>
+<div class="content">
+<h2>El ejemplo mínimo</h2>
+<p>Conectar, consultar, recorrer las filas y cerrar:</p>
+<pre class="code">  <span class="k">INCLUDE</span>(<span class="s">&#x27;SQLClass6Maria.inc&#x27;</span>),<span class="k">ONCE</span>        <span class="c">! Global Includes (con el template se agrega solo)</span>
+
+SQLM        SQLMariaClass
+L:Conn      CSTRING(1024)
+L:Total     DECIMAL(19,2)
+
+  <span class="k">CODE</span>
+  L:Conn = <span class="k">GETINI</span>(<span class="s">&#x27;Conexion&#x27;</span>,<span class="s">&#x27;Cadena&#x27;</span>,<span class="s">&#x27;&#x27;</span>,<span class="k">LONGPATH</span>() &amp; <span class="s">&#x27;\MiApp.ini&#x27;</span>)
+  SQLM.SilentMode = True                    <span class="c">! los errores se informan con ErrorText(), sin STOP</span>
+  <span class="k">IF</span> SQLM.InitMaria(L:Conn)
+    <span class="k">MESSAGE</span>(<span class="s">&#x27;No se pudo conectar: &#x27;</span> &amp; SQLM.ErrorText())
+    <span class="k">RETURN</span>
+  <span class="k">END</span>
+  SQLM.KeepCase = True                      <span class="c">! Exec envía la consulta tal cual (sin pasar a minúsculas)</span>
+  <span class="k">IF</span> SQLM.Exec(<span class="s">&#x27;SELECT IdTransaccion, Descripcion, ImporteTotal FROM cbtes WHERE Fecha &gt;= &#x27;&#x27;2026-01-01&#x27;&#x27;&#x27;</span>) = Level:Benign
+    <span class="k">LOOP</span> <span class="k">UNTIL</span> SQLM.Next()                  <span class="c">! Next() devuelve 0 mientras trae filas</span>
+      L:Total += SQLM.Col(3)
+    <span class="k">END</span>
+    <span class="k">MESSAGE</span>(SQLM.Records() &amp; <span class="s">&#x27; comprobantes, total &#x27;</span> &amp; <span class="k">FORMAT</span>(L:Total,@n-20.2))
+  <span class="k">ELSE</span>
+    <span class="k">MESSAGE</span>(<span class="s">&#x27;Error: &#x27;</span> &amp; SQLM.ErrorText())
+  <span class="k">END</span>
+  SQLM.Kill()</pre>
+<h2>Lo que hay que saber</h2>
+<ul><li><b>Códigos de retorno</b>: como en la SQLClass, <code>Level:Benign</code> (0) es <i>bien</i> y <code>Level:Notify</code> (1) es <i>error</i>. Por eso se escribe <code>IF SQLM.Exec(...)</code> para detectar el error, y <code>LOOP UNTIL SQLM.Next()</code> para recorrer.</li><li><b>Minúsculas</b>: <code>Exec</code> pasa toda la consulta a minúsculas (igual que la SQLClass), <i>incluidos los valores entre comillas</i>. Usar <code>KeepCase = True</code> o <code>ExecEx(consulta, 1)</code>. Ver <a href="m-exec.html">Exec</a>.</li><li><b>Un resultado por objeto</b>: cada <code>Exec</code> reemplaza el resultado anterior. Para leer dos consultas a la vez, usar dos objetos.</li><li><b>Columnas por posición o por nombre</b>: <code>Col(2)</code> o <code>ColByName('Descripcion')</code>.</li><li><b>Errores</b>: con <code>SilentMode = False</code> (por defecto) la clase muestra el error con <code>STOP</code>. Con <code>SilentMode = True</code> no muestra nada y el texto queda en <code>ErrorText()</code>.</li></ul>
+<h2>Siguiente paso</h2>
+<ul><li>Cargar un LIST: <a href="m-loadqueue.html">LoadQueue</a> y el <a href="ej-comprobantes.html">ejemplo de comprobantes</a>.</li><li>Grabar datos: <a href="ej-grabar.html">Insertar, actualizar y transacciones</a>.</li></ul>
+<h2>Ver también</h2><p class="vt"><a href="sqlmariaclass.html">SQLMariaClass</a> <a href="ej-comprobantes.html">Ejemplo de comprobantes</a> <a href="m-next.html">Next</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

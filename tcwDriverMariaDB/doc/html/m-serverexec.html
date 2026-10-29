@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.ServerExec / ServerExecEx</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Ejecutar consultas</div><h1>SQLMariaClass.ServerExec / ServerExecEx</h1></div>
+<div class="content">
+<pre class="sig">ServerExec(),BYTE
+ServerExecEx(),BYTE</pre><p>Uso interno: envían al servidor lo que hay en la propiedad <code>Query</code>, con log (<code>LogFile</code>) y ventana de proceso (<code>ShowProgress</code>). <code>ServerExec</code> lo pasa a minúsculas salvo <code>KeepCase</code>; <code>ServerExecEx</code> lo envía tal cual. Normalmente no se llaman directo: usar <code>Exec</code> / <code>ExecEx</code>.</p><h2>Devuelve</h2><p>Level:Benign (0) si salió bien; Level:Notify (1) si hubo un error (el texto queda en ErrorText()).</p><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-exec.html">Exec</a> <a href="m-execex.html">ExecEx</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

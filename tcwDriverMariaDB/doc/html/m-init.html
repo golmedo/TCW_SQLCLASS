@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Init</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Conexión</div><h1>SQLMariaClass.Init</h1></div>
+<div class="content">
+<pre class="sig">Init(*FILE Archivo, *GROUP Registro, STRING Conexion),BYTE,VIRTUAL</pre><p>Conecta con el servidor. Tiene la misma firma que en la SQLClass6 para que el código existente (y el que genera el template) no cambie: <b>el archivo y el registro se guardan pero no se usan</b>; no se abre ningún archivo.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>Archivo</code></td><td>archivo de trabajo de la SQLClass (se ignora).</td></tr><tr><td><code>Registro</code></td><td>su registro (se ignora).</td></tr><tr><td><code>Conexion</code></td><td>cadena de conexión. Sirve también la de ODBC (ver <a href="conexion.html">Cadena de conexión</a>).</td></tr></table><h2>Devuelve</h2><p>Level:Benign (0) si salió bien; Level:Notify (1) si hubo un error (el texto queda en ErrorText()).</p><h2>Ejemplo</h2><pre class="code">  SQLM.SilentMode = True
+  <span class="k">IF</span> SQLM.Init(sqlclass,uSQL:Record,GLO:Conexion)
+    <span class="k">MESSAGE</span>(<span class="s">&#x27;No se pudo conectar: &#x27;</span> &amp; SQLM.ErrorText())
+  <span class="k">END</span></pre><h2>Observaciones</h2><p>Con <code>SilentMode = False</code> (por defecto) un error de conexión se muestra con <code>STOP</code>. Se puede llamar otra vez para reconectar; cierra la conexión anterior.</p><h2>Respecto de SQLClass6</h2><div class="dif">Misma firma; no abre ni crea la tabla de trabajo.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-initmaria.html">InitMaria</a> <a href="m-kill.html">Kill</a> <a href="conexion.html">Cadena de conexión</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

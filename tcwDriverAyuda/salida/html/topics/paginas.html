@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carga por p&#225;ginas - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="paginas.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Carga por p&#225;ginas</h1>
+<p>Para listas grandes: se trae una página (por ejemplo 200 filas) y la siguiente cuando el final de lo cargado entra en pantalla. La página siguiente <strong>continúa desde la última fila</strong> (clave), no usa <code>OFFSET</code>:</p><pre><code>  ! primera pagina
+  SELECT TOP 200 ... FROM cbtes WHERE &lt;filtro&gt; ORDER BY Fecha DESC, IdTransaccion DESC     ! MySQL: ... LIMIT 200
+  ! siguientes: desde la ultima fila cargada
+  ... AND Fecha &lt;= 'ult' AND (Fecha &lt; 'ult' OR IdTransaccion &lt; ultId)</code></pre><ul><li>Se detecta el final con un <code>TIMER</code> y <code>EVENT:NewSelection</code> mirando <code>?Lista{PROP:YOrigin} + ?Lista{PROP:Items}</code> (anda con la rueda, la barra y el teclado, sin <code>IMM</code>).</li><li><code>SQL.FreeQueue = False</code>: <code>LoadQueue</code> agrega a la cola en vez de vaciarla.</li><li>Guardar la fecha tal como la manda el servidor (columna extra con alias: en SQL Server la misma columna dos veces con <code>ORDER BY</code> por ella da el error 209).</li></ul><p>Resultados en <a href="est-paginas.html">Páginas y conexión</a>.</p>
+</article>
+<footer class="pager"><a class="prev" href="largos.html">&larr; Textos largos</a><a class="next" href="avance.html">Barra de avance en la ventana &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

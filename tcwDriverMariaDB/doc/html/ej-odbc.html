@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Ejemplo: la misma pantalla con ODBC</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Ejemplos</div><h1>Ejemplo: la misma pantalla con ODBC</h1></div>
+<div class="content">
+<p>La pantalla <b>Comprobantes &gt; ODBC</b> de la aplicación de ejemplo es la misma ventana, con la misma consulta, pero con la SQLClass6 y el driver ODBC de Clarion. Comparar las dos muestra <b>qué cambia</b> al pasar a MariaDB directo.</p>
+<table><tr><th>Parte</th><th>ODBC (SQLClass6)</th><th>MariaDB directo</th></tr><tr><td>Objeto</td><td><code>SQLO SQLOdbcClass</code></td><td><code>SQL SQLMariaClass</code></td></tr><tr><td>Conectar</td><td><code>SQLO.Init(SQLOdbcFile,SQF:Record,L:Conn)</code></td><td><code>SQL.InitMaria(L:Conn)</code> (o el mismo <code>Init</code>)</td></tr><tr><td>Tabla de trabajo</td><td><code>FILE,DRIVER('ODBC')</code> sobre <code>sqlclass</code> (25 campos de 49)</td><td>ninguna</td></tr><tr><td>Comillas en los filtros</td><td>a mano: duplicar <code>'</code> y <code>\</code></td><td><code>SQL.Quote(texto)</code></td></tr><tr><td>Texto del error</td><td>lo muestra el driver</td><td><code>SQL.ErrorText()</code></td></tr><tr><td>Razón social de 70 caracteres</td><td>llega cortada a 49</td><td>llega completa</td></tr></table>
+<p>El resto (<code>ExecEx</code>, <code>Col_Format</code>, <code>LoadQueue</code>, el LIST) es <b>idéntico</b>.</p>
+<h2>Escapar a mano con ODBC</h2>
+<p>Con la SQLClass6 hay que escapar el texto del usuario antes de ponerlo en la consulta:</p>
+<pre class="code">Esc <span class="k">ROUTINE</span>
+  <span class="k">DATA</span>
+E   CSTRING(200)
+P   LONG
+  <span class="k">CODE</span>
+  E = <span class="s">&#x27;&#x27;</span>
+  <span class="k">LOOP</span> P = 1 <span class="k">TO</span> <span class="k">LEN</span>(<span class="k">CLIP</span>(L:Texto))
+    <span class="k">CASE</span> L:Texto[P]
+    <span class="k">OF</span> <span class="s">&#x27;&#x27;&#x27;&#x27;</span>
+      E = E &amp; <span class="s">&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;</span>
+    <span class="k">OF</span> <span class="s">&#x27;\&#x27;</span>
+      E = E &amp; <span class="s">&#x27;\\&#x27;</span>
+    <span class="k">ELSE</span>
+      E = E &amp; L:Texto[P]
+    <span class="k">END</span>
+  <span class="k">END</span>
+  L:TextoE = E</pre>
+<p>Con <code>SQLMariaClass</code> esa rutina se reemplaza por <code>SQL.Quote(texto)</code>, que además usa el juego de caracteres de la conexión.</p>
+<h2>Ver también</h2><p class="vt"><a href="ej-comprobantes.html">Comprobantes con MariaDB</a> <a href="m-quote.html">Quote</a> <a href="diferencias.html">Diferencias</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

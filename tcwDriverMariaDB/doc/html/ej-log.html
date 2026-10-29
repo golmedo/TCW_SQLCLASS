@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Ejemplo: log y ventana de proceso</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Ejemplos</div><h1>Ejemplo: log y ventana de proceso</h1></div>
+<div class="content">
+<h2>Anotar cada consulta en un archivo</h2>
+<pre class="code">  SQLM.LogFile = <span class="k">LONGPATH</span>() &amp; <span class="s">&#x27;\sql.log&#x27;</span>           <span class="c">! vacío = sin log</span></pre>
+<p>Cada consulta deja dos líneas: lo que se envió y el resultado con el tiempo en centésimas:</p>
+<pre class="code">20261028 20:25:05 SQL&gt; SELECT COUNT(*) FROM cbtes WHERE Fecha &gt;= <span class="s">&#x27;2026-01-01&#x27;</span>
+20261028 20:25:05     -&gt; OK  (2 cs)</pre>
+<p>También se pueden anotar líneas propias: <code>SQLM.WriteLog('Inicio del cierre de caja')</code>.</p>
+<h2>Ventana mientras el servidor procesa</h2>
+<pre class="code">  SQLM.ShowProgress  = True
+  SQLM.ProgressTitle = <span class="s">&#x27;Comprobantes&#x27;</span>
+  SQLM.ProgressText  = <span class="s">&#x27;Buscando los comprobantes del año...&#x27;</span>
+  SQLM.ExecEx(L:Query,1)                            <span class="c">! se ve la ventana mientras espera la respuesta</span>
+  SQLM.ShowProgress  = False</pre>
+<h2>Avisar las consultas lentas</h2>
+<pre class="code">  SQLM.Debug       = True
+  SQLM.Debug_Limit = 300                            <span class="c">! centésimas: avisa si una consulta tarda más de 3 segundos</span></pre>
+<h2>Ver también</h2><p class="vt"><a href="propiedades.html">Propiedades</a> <a href="m-writelog.html">WriteLog</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

@@ -1,0 +1,17 @@
+# Compilaciones y pruebas
+.build*/
+.test*/
+obj/
+*.trf
+*.obj
+*.RSC
+*.MAP
+*.EXP
+
+# Datos locales (conexiones, claves)
+*.ini
+*.db
+*.tps
+*.pfx
+*.pem
+*.key

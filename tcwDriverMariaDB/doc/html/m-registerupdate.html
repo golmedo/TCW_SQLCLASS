@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.RegisterUpdate / UpdateBuffer</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Otros (heredados)</div><h1>SQLMariaClass.RegisterUpdate / UpdateBuffer</h1></div>
+<div class="content">
+<pre class="sig">RegisterUpdate(*FileManager MyFm, *KEY MyKey, *? MyField),VIRTUAL
+UpdateBuffer(),BYTE,PROC</pre><p>Heredados de la SQLClass6 (<i>AutoUpdate</i>): <code>RegisterUpdate</code> asocia el objeto a un archivo del diccionario, su clave y el campo de la clave primaria; <code>UpdateBuffer</code> toma el valor de la columna <code>PK_Col</code> de la fila actual y lee ese registro con el FileManager.</p><h2>Devuelve</h2><p>UpdateBuffer: False si leyó el registro; True si no lo encontró.</p><h2>Ejemplo</h2><pre class="code">  SQLM.RegisterUpdate(Access:Clientes,CLI:PorId,CLI:Id)
+  SQLM.PK_Col = 1
+  <span class="k">IF</span> SQLM.ExecEx(<span class="s">&#x27;SELECT Id FROM clientes WHERE Saldo &gt; 0&#x27;</span>,1) = Level:Benign
+    <span class="k">LOOP</span> <span class="k">UNTIL</span> SQLM.Next()
+      <span class="k">IF</span> <span class="k">NOT</span> SQLM.UpdateBuffer()
+        <span class="c">! CLI:Record tiene el cliente completo</span>
+      <span class="k">END</span>
+    <span class="k">END</span>
+  <span class="k">END</span></pre><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="propiedades.html">Propiedades</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

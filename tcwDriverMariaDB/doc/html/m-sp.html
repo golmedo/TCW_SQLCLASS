@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.SP</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Ejecutar consultas</div><h1>SQLMariaClass.SP</h1></div>
+<div class="content">
+<pre class="sig">SP(SHORT NoCols, STRING SP_Name),BYTE</pre><p>Forma antigua de llamar a un procedimiento almacenado: envía <code>CALL </code> &amp; SP_Name con <code>Exec</code> (por lo tanto pasa a minúsculas salvo <code>KeepCase</code>). En código nuevo usar <code>ExecSP</code>.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>NoCols</code></td><td>cantidad de columnas que devuelve.</td></tr><tr><td><code>SP_Name</code></td><td>nombre y parámetros, por ejemplo <code>sp_Cierre(20261028)</code>.</td></tr></table><h2>Devuelve</h2><p>Level:Benign (0) si salió bien; Level:Notify (1) si hubo un error (el texto queda en ErrorText()).</p><h2>Ejemplo</h2><pre class="code">  SQLM.SP(1,<span class="s">&#x27;sp_Cierre(20261028)&#x27;</span>)</pre><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-execsp.html">ExecSP</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

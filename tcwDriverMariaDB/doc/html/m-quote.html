@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Quote</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Grabar datos</div><h1>SQLMariaClass.Quote</h1></div>
+<div class="content">
+<span class="tag nuevo">nuevo</span><pre class="sig">Quote(STRING Texto),STRING</pre><p>Escapa un texto y lo devuelve <b>entre comillas simples</b>, listo para concatenar en la consulta. Evita errores con nombres como <code>O'Higgins</code> y protege de la inyección de SQL con lo que escribe el usuario.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>Texto</code></td><td>el valor.</td></tr></table><h2>Devuelve</h2><p><code>'texto escapado'</code>.</p><h2>Ejemplo</h2><pre class="code">  L:Sql = <span class="s">&#x27;UPDATE clientes SET Nombre = &#x27;</span> &amp; SQLM.Quote(CLI:Nombre) &amp; <span class="s">&#x27; WHERE Id = &#x27;</span> &amp; CLI:Id
+  L:Sql = <span class="s">&#x27;SELECT ... WHERE Descripcion LIKE &#x27;</span> &amp; SQLM.Quote(<span class="s">&#x27;&lt;37&gt;&#x27;</span> &amp; <span class="k">CLIP</span>(L:Texto) &amp; <span class="s">&#x27;&lt;37&gt;&#x27;</span>)</pre><h2>Respecto de SQLClass6</h2><div class="dif">Método nuevo: no existe en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-escape.html">Escape</a> <a href="ej-grabar.html">Ejemplos de grabación</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

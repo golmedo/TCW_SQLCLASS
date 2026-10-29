@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Ejemplo: insertar, actualizar y transacciones</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Ejemplos</div><h1>Ejemplo: insertar, actualizar y transacciones</h1></div>
+<div class="content">
+<h2>Insertar y obtener el Id</h2>
+<pre class="code">  L:Sql = <span class="s">&#x27;INSERT INTO clientes (Nombre, Cuit, Alta) VALUES (&#x27;</span> &amp; |
+          SQLM.Quote(CLI:Nombre) &amp; <span class="s">&#x27;,&#x27;</span> &amp; SQLM.Quote(CLI:Cuit) &amp; <span class="s">&#x27;,&#x27;&#x27;&#x27;</span> &amp; <span class="k">FORMAT</span>(TODAY(),@d10-) &amp; <span class="s">&#x27;&#x27;&#x27;)&#x27;</span>
+  <span class="k">IF</span> SQLM.ExecEx(L:Sql,1)                           <span class="c">! 1 = respeta mayúsculas: el nombre se graba como lo escribió el usuario</span>
+    <span class="k">MESSAGE</span>(<span class="s">&#x27;No se pudo grabar: &#x27;</span> &amp; SQLM.ErrorText())
+  <span class="k">ELSE</span>
+    CLI:Id = SQLM.InsertId()                        <span class="c">! valor AUTO_INCREMENT generado</span>
+  <span class="k">END</span></pre>
+<h2>Actualizar y saber cuántas filas cambiaron</h2>
+<pre class="code">  <span class="k">IF</span> SQLM.ExecEx(<span class="s">&#x27;UPDATE cbtes SET Saldo = 0 WHERE IdCliente = &#x27;</span> &amp; L:Cliente &amp; <span class="s">&#x27; AND Saldo &lt; 0.01&#x27;</span>,1) = Level:Benign
+    <span class="k">MESSAGE</span>(SQLM.AffectedRows() &amp; <span class="s">&#x27; comprobantes actualizados&#x27;</span>)
+  <span class="k">END</span></pre>
+<h2>Transacción</h2>
+<p>Con tablas InnoDB. Si una sentencia falla se deshace todo.</p>
+<pre class="code">L:Error     BYTE
+  <span class="k">CODE</span>
+  SQLM.BeginTransaction()
+  L:Error = SQLM.ExecEx(<span class="s">&#x27;UPDATE cuentas SET Saldo = Saldo - &#x27;</span> &amp; L:Importe &amp; <span class="s">&#x27; WHERE Id = &#x27;</span> &amp; L:Origen,1)
+  <span class="k">IF</span> <span class="k">NOT</span> L:Error
+    L:Error = SQLM.ExecEx(<span class="s">&#x27;UPDATE cuentas SET Saldo = Saldo + &#x27;</span> &amp; L:Importe &amp; <span class="s">&#x27; WHERE Id = &#x27;</span> &amp; L:Destino,1)
+  <span class="k">END</span>
+  <span class="k">IF</span> L:Error
+    SQLM.Rollback()
+    <span class="k">MESSAGE</span>(<span class="s">&#x27;No se pudo transferir: &#x27;</span> &amp; SQLM.ErrorText())
+  <span class="k">ELSE</span>
+    SQLM.Commit()
+  <span class="k">END</span></pre>
+<div class="nota">En tablas MyISAM no hay transacciones: <code>BeginTransaction</code>, <code>Commit</code> y <code>Rollback</code> no dan error pero no deshacen nada.</div>
+<h2>Un valor suelto</h2>
+<pre class="code">  L:Cantidad = SQLM.Fetch(1,<span class="s">&#x27;SELECT COUNT(*) FROM cbtes WHERE IdCliente = &#x27;</span> &amp; L:Cliente)</pre>
+<h2>Procedimiento almacenado con resultado</h2>
+<pre class="code">  <span class="k">IF</span> SQLM.ExecSP(<span class="s">&#x27;EXEC sp_SaldoCliente &#x27;</span> &amp; L:Cliente &amp; <span class="s">&#x27;, &#x27;&#x27;&#x27;</span> &amp; <span class="k">FORMAT</span>(TODAY(),@d10-) &amp; <span class="s">&#x27;&#x27;&#x27;&#x27;</span>) = Level:Benign
+    <span class="k">LOOP</span> <span class="k">UNTIL</span> SQLM.Next()                          <span class="c">! se envió: CALL sp_SaldoCliente(1000112, &#x27;2026-10-28&#x27;)</span>
+      L:Saldo = SQLM.ColByName(<span class="s">&#x27;Saldo&#x27;</span>)
+    <span class="k">END</span>
+  <span class="k">END</span></pre>
+<h2>Ver también</h2><p class="vt"><a href="m-quote.html">Quote</a> <a href="m-insertid.html">InsertId</a> <a href="m-begintransaction.html">BeginTransaction</a> <a href="m-execsp.html">ExecSP</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

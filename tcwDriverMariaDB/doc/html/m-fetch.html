@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Fetch</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Ejecutar consultas</div><h1>SQLMariaClass.Fetch</h1></div>
+<div class="content">
+<pre class="sig">Fetch(SHORT NroCol, STRING Query),STRING
+Fetch(SHORT NroCol, STRING Query, *STRING Result),BYTE</pre><p>Ejecuta una consulta (con <code>Exec</code>) y devuelve una columna de la <b>primera fila</b>. Útil para un valor suelto: un COUNT, un nombre, un saldo.</p>
+<ul><li>La primera forma devuelve el valor.</li><li>La segunda lo deja en <code>Result</code> y devuelve si salió bien.</li></ul><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>NroCol</code></td><td>número de columna a devolver.</td></tr><tr><td><code>Query</code></td><td>la consulta.</td></tr><tr><td><code>Result</code></td><td>variable donde queda el valor (segunda forma).</td></tr></table><h2>Devuelve</h2><p>Primera forma: el valor de la columna. Segunda forma: Level:Benign si trajo una fila; Level:Notify si hubo error o no hubo filas.</p><h2>Ejemplo</h2><pre class="code">  L:Cantidad = SQLM.Fetch(1,<span class="s">&#x27;SELECT COUNT(*) FROM cbtes WHERE IdCliente = &#x27;</span> &amp; L:Cliente)
+
+  <span class="k">IF</span> SQLM.Fetch(1,<span class="s">&#x27;SELECT Descripcion FROM clientes WHERE Id = &#x27;</span> &amp; L:Cliente,L:Nombre)
+    L:Nombre = <span class="s">&#x27;(no existe)&#x27;</span>
+  <span class="k">END</span></pre><h2>Observaciones</h2><p>En la primera forma, heredada de la SQLClass6, un error devuelve <code>'1'</code> y una consulta sin filas <code>'0'</code>: si eso puede confundirse con un valor real, usar la segunda forma. Pasa por <code>Exec</code>: usar <code>KeepCase = True</code> si hay textos.</p><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-exec.html">Exec</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

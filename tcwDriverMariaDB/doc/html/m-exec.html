@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Exec</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Ejecutar consultas</div><h1>SQLMariaClass.Exec</h1></div>
+<div class="content">
+<pre class="sig">Exec(STRING Query),BYTE</pre><p>Envía una consulta al servidor. Si es un SELECT, deja el resultado listo para leer con <code>Next</code> / <code>Col</code> / <code>LoadQueue</code>.</p>
+<p>Como en la SQLClass6, <b>pasa toda la consulta a minúsculas</b> antes de enviarla (incluidos los valores entre comillas), salvo que <code>KeepCase = True</code>. Después la analiza con <code>Parse</code> y la envía.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>Query</code></td><td>la sentencia SQL (SELECT, INSERT, UPDATE, DELETE, CALL, SHOW...).</td></tr></table><h2>Devuelve</h2><p>Level:Benign (0) si salió bien; Level:Notify (1) si hubo un error (el texto queda en ErrorText()).</p><h2>Ejemplo</h2><pre class="code">  SQLM.KeepCase = True
+  <span class="k">IF</span> SQLM.Exec(<span class="s">&#x27;SELECT IdCliente, Descripcion FROM cbtes WHERE TipoCbte = &#x27;&#x27;FC&#x27;&#x27;&#x27;</span>) = Level:Benign
+    <span class="k">LOOP</span> <span class="k">UNTIL</span> SQLM.Next()
+      <span class="c">! SQLM.Col(1), SQLM.Col(2)</span>
+    <span class="k">END</span>
+  <span class="k">END</span></pre><h2>Observaciones</h2><p>Con <code>SilentMode = False</code> un error muestra el mensaje del servidor con <code>STOP</code>. Siempre que falla, la consulta queda copiada al portapapeles (también con <code>SilentMode</code>). Con <code>Debug = True</code> avisa si la consulta tardó más de <code>Debug_Limit</code>.</p>
+<div class="nota">Sin <code>KeepCase</code>, un <code>INSERT ... VALUES ('Juan')</code> graba <code>juan</code>, y en servidores Linux los nombres de tabla con mayúsculas no se encuentran.</div><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-execex.html">ExecEx</a> <a href="m-next.html">Next</a> <a href="propiedades.html">KeepCase</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

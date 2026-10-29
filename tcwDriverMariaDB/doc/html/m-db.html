@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Db</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Referencia &gt; SQLMariaClass</div><h1>SQLMariaClass.Db</h1></div>
+<div class="content">
+<p>Propiedad <code>Db</code> (<code>&amp;TCWMariaDB</code>): la conexión directa que usa el objeto. Se crea en el constructor y se libera en el destructor. Sirve para ajustar la conexión o usar lo que <code>SQLMariaClass</code> no expone:</p>
+<pre class="code">  SQLM.Db.ConnectTimeout = 5                        <span class="c">! antes del Init</span>
+  SQLM.Db.AutoReconnect  = False
+  <span class="k">IF</span> SQLM.InitMaria(L:Conn) <span class="k">THEN</span> <span class="k">RETURN</span>.
+  <span class="k">IF</span> SQLM.Db.Ping() <span class="k">THEN</span> <span class="k">MESSAGE</span>(<span class="s">&#x27;Se perdió la conexión: &#x27;</span> &amp; SQLM.Db.LastError).
+  L:Version = SQLM.Db.ClientVersion()               <span class="c">! versión de libmariadb.dll</span></pre>
+<div class="nota">No ejecutar consultas con <code>SQLM.Db.Query</code> mientras se lee un resultado de <code>SQLM</code>: comparten el resultado.</div>
+<h2>Ver también</h2><p class="vt"><a href="tcwmariadb.html">TCWMariaDB</a> <a href="propiedades.html">Propiedades</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

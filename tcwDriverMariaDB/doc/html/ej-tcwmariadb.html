@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Ejemplo: TCWMariaDB sola</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Ejemplos</div><h1>Ejemplo: TCWMariaDB sola</h1></div>
+<div class="content">
+<p><code>TCWMariaDB</code> es la conexión que usa <code>SQLMariaClass</code> por dentro. Se puede usar sola en código que no necesita la interfaz de la SQLClass (por ejemplo un proceso o una utilidad). No pasa nada a minúsculas.</p>
+<pre class="code">  <span class="k">INCLUDE</span>(<span class="s">&#x27;TCWMariaDB.inc&#x27;</span>),<span class="k">ONCE</span>
+
+Db          TCWMariaDB
+  <span class="k">CODE</span>
+  <span class="k">IF</span> Db.Connect(L:Conn)
+    <span class="k">MESSAGE</span>(<span class="s">&#x27;No se pudo conectar: &#x27;</span> &amp; Db.LastError)
+    <span class="k">RETURN</span>
+  <span class="k">END</span>
+  <span class="k">IF</span> Db.Query(<span class="s">&#x27;SELECT IdCliente, Descripcion, ImporteTotal FROM cbtes WHERE Fecha = CURDATE()&#x27;</span>) = Level:Benign
+    <span class="k">LOOP</span> <span class="k">UNTIL</span> Db.Next()
+      Q:Cliente = Db.Col(1)
+      Q:Nombre  = Db.Col(Db.ColIndex(<span class="s">&#x27;Descripcion&#x27;</span>))
+      Q:Total   = Db.Col(3)
+      <span class="k">ADD</span>(Q)
+    <span class="k">END</span>
+  <span class="k">ELSE</span>
+    <span class="k">MESSAGE</span>(Db.LastError)
+  <span class="k">END</span>
+  Db.Disconnect()</pre>
+<p>Desde un objeto <code>SQLMariaClass</code> la misma conexión está en la propiedad <code>Db</code>: por ejemplo <code>SQLM.Db.Ping()</code> o <code>SQLM.Db.ConnectTimeout = 5</code> antes del <code>Init</code>.</p>
+<h2>Ver también</h2><p class="vt"><a href="tcwmariadb.html">TCWMariaDB</a> <a href="m-db.html">Propiedad Db</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

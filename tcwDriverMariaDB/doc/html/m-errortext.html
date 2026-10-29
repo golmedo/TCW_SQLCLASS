@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.ErrorText / ErrorCode</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Errores y diagnóstico</div><h1>SQLMariaClass.ErrorText / ErrorCode</h1></div>
+<div class="content">
+<span class="tag nuevo">nuevo</span><pre class="sig">ErrorText(),STRING
+ErrorCode(),LONG</pre><p>Texto y número del último error del servidor o de la conexión. Útiles con <code>SilentMode = True</code>, cuando la clase no muestra los errores.</p><h2>Devuelve</h2><p>Texto con el detalle y el número entre paréntesis, por ejemplo <code>Error en la consulta: Unknown column 'x' in 'field list' (1054)</code>. Vacío si la última operación salió bien.</p><h2>Ejemplo</h2><pre class="code">  SQLM.SilentMode = True
+  <span class="k">IF</span> SQLM.ExecEx(L:Query,1)
+    L:Estado = <span class="s">&#x27;Error &#x27;</span> &amp; SQLM.ErrorCode() &amp; <span class="s">&#x27;: &#x27;</span> &amp; SQLM.ErrorText()
+  <span class="k">END</span></pre><h2>Observaciones</h2><p>Errores comunes: 1045 usuario o clave, 1049 base inexistente, 1054 columna inexistente, 1146 tabla inexistente, 2003 no se llega al servidor, 2006 / 2013 se cortó la conexión.</p><h2>Respecto de SQLClass6</h2><div class="dif">Método nuevo: no existe en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="propiedades.html">SilentMode</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

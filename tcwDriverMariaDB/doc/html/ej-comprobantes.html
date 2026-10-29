@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Ejemplo: comprobantes con filtros</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Ejemplos</div><h1>Ejemplo: comprobantes con filtros</h1></div>
+<div class="content">
+<p>Es la pantalla <b>Comprobantes &gt; MariaDB directo</b> de la aplicación de ejemplo (<code>demo\TCWMariaDemo</code>). Una ventana con filtros (fecha desde / hasta, tipo, texto de la razón social, máximo de filas), un LIST y una línea de estado con cantidad, tiempos, total y versión del servidor.</p>
+<h2>Datos</h2>
+<pre class="code">SQL                  SQLMariaClass
+CbtesQ               <span class="k">QUEUE</span>,PRE(CBQ)                 <span class="c">! una columna de la cola por cada columna del SELECT, en orden</span>
+IdTransaccion          LONG
+Fecha                  LONG
+TipoCbte               STRING(3)
+Letra                  STRING(1)
+NroCbte                LONG
+IdCliente              LONG
+Cliente                STRING(70)
+Total                  DECIMAL(17,2)
+Saldo                  DECIMAL(12,2)
+                     <span class="k">END</span>
+L:Desde              LONG
+L:Hasta              LONG
+L:Tipo               STRING(3)
+L:Texto              STRING(40)
+L:Max                LONG(30000)
+L:Estado             STRING(250)
+L:Query              CSTRING(4000)
+L:Conn               CSTRING(1024)
+L:T0                 LONG
+L:T1                 LONG
+L:T2                 LONG
+L:Ok                 BYTE</pre>
+<h2>Al abrir la ventana (OpenWindow)</h2>
+<pre class="code">  L:Desde = DATE(1,1,YEAR(TODAY()))
+  L:Hasta = TODAY()
+  L:Conn = <span class="k">GETINI</span>(<span class="s">&#x27;Conexion&#x27;</span>,<span class="s">&#x27;Cadena&#x27;</span>,<span class="s">&#x27;&#x27;</span>,<span class="k">LONGPATH</span>() &amp; <span class="s">&#x27;\TCWMariaDemo.ini&#x27;</span>)
+  <span class="k">IF</span> L:Conn = <span class="s">&#x27;&#x27;</span>
+    L:Estado = <span class="s">&#x27;Falta la cadena de conexion en TCWMariaDemo.ini ([Conexion] Cadena=...)&#x27;</span>
+  <span class="k">ELSE</span>
+    SQL.SilentMode = True
+    <span class="k">IF</span> SQL.InitMaria(L:Conn)
+      L:Estado = <span class="s">&#x27;No se pudo conectar: &#x27;</span> &amp; SQL.ErrorText()
+    <span class="k">ELSE</span>
+      SQL.KeepCase = True
+      L:Ok = True
+    <span class="k">END</span>
+  <span class="k">END</span>
+  <span class="k">DISPLAY</span>()
+  <span class="k">IF</span> L:Ok <span class="k">THEN</span> <span class="k">DO</span> Buscar.</pre>
+<h2>Botón Buscar</h2>
+<p><code>Quote()</code> escapa y pone entre comillas lo que escribió el usuario: no hace falta duplicar comillas a mano.</p>
+<pre class="code">Buscar <span class="k">ROUTINE</span>
+  <span class="k">IF</span> <span class="k">NOT</span> L:Ok <span class="k">THEN</span> <span class="k">EXIT</span>.
+  L:Query = <span class="s">&#x27;SELECT IdTransaccion, Fecha, TipoCbte, Letra_Cbte, NroCbte, IdCliente, Descripcion, ImporteTotal, Saldo&#x27;</span> &amp; |
+            <span class="s">&#x27; FROM cbtes WHERE Fecha BETWEEN &#x27;&#x27;&#x27;</span> &amp; <span class="k">FORMAT</span>(L:Desde,@d10-) &amp; <span class="s">&#x27;&#x27;&#x27; AND &#x27;&#x27;&#x27;</span> &amp; <span class="k">FORMAT</span>(L:Hasta,@d10-) &amp; <span class="s">&#x27;&#x27;&#x27;&#x27;</span>
+  <span class="k">IF</span> L:Tipo &lt;&gt; <span class="s">&#x27;&#x27;</span> <span class="k">THEN</span> L:Query = L:Query &amp; <span class="s">&#x27; AND TipoCbte = &#x27;</span> &amp; SQL.Quote(<span class="k">CLIP</span>(L:Tipo)).
+  <span class="k">IF</span> L:Texto &lt;&gt; <span class="s">&#x27;&#x27;</span> <span class="k">THEN</span> L:Query = L:Query &amp; <span class="s">&#x27; AND Descripcion LIKE &#x27;</span> &amp; SQL.Quote(<span class="s">&#x27;&lt;37&gt;&#x27;</span> &amp; <span class="k">CLIP</span>(L:Texto) &amp; <span class="s">&#x27;&lt;37&gt;&#x27;</span>).
+  L:Query = L:Query &amp; <span class="s">&#x27; ORDER BY Fecha DESC, IdTransaccion DESC LIMIT &#x27;</span> &amp; <span class="k">CHOOSE</span>(L:Max &gt; 0,L:Max,1000)
+  <span class="k">SETCURSOR</span>(CURSOR:Wait)
+  <span class="k">FREE</span>(CbtesQ)
+  L:T0 = <span class="k">CLOCK</span>()
+  <span class="k">IF</span> SQL.ExecEx(L:Query,1)                          <span class="c">! 1 = se envía tal cual, sin pasar a minúsculas</span>
+    <span class="k">SETCURSOR</span>()
+    L:Estado = <span class="s">&#x27;Error: &#x27;</span> &amp; SQL.ErrorText()
+    <span class="k">DISPLAY</span>()
+    <span class="k">EXIT</span>
+  <span class="k">END</span>
+  L:T1 = <span class="k">CLOCK</span>()
+  SQL.Col_Format(2,<span class="s">&#x27;@d10-&#x27;</span>)                         <span class="c">! la fecha llega como aaaa-mm-dd</span>
+  SQL.LoadQueue(CbtesQ,0,0)                         <span class="c">! columna 1 -&gt; campo 1 de la cola, columna 2 -&gt; campo 2...</span>
+  L:T2 = <span class="k">CLOCK</span>()
+  <span class="k">SETCURSOR</span>()
+  L:Estado = <span class="k">RECORDS</span>(CbtesQ) &amp; <span class="s">&#x27; comprobantes | consulta &#x27;</span> &amp; (L:T1 - L:T0) * 10 &amp; <span class="s">&#x27; ms + carga &#x27;</span> &amp; |
+             (L:T2 - L:T1) * 10 &amp; <span class="s">&#x27; ms | MySQL &#x27;</span> &amp; SQL.ServerVersion()
+  SELECT(?Lista,1)
+  <span class="k">DISPLAY</span>()</pre>
+<h2>Al cerrar (CloseWindow)</h2>
+<pre class="code">  SQL.Kill()</pre>
+<div class="ok">Resultado real: 1.000 comprobantes en 30 ms; 30.000 en 430 ms.</div>
+<h2>Puntos clave</h2>
+<ul><li><code>&lt;37&gt;</code> es el carácter <code>%</code> (escrito así para que Clarion no lo tome como parte de un picture).</li><li>Las fechas se arman con <code>FORMAT(fecha,@d10-)</code> (<code>aaaa-mm-dd</code>) y vuelven con <code>Col_Format(n,'@d10-')</code>.</li><li>Los importes llegan con punto decimal y se asignan directo a campos <code>DECIMAL</code>.</li><li><code>Col_Format</code> se borra después de cada <code>LoadQueue</code>: indicarlo antes de cada carga.</li></ul>
+<h2>Ver también</h2><p class="vt"><a href="m-loadqueue.html">LoadQueue</a> <a href="m-quote.html">Quote</a> <a href="m-execex.html">ExecEx</a> <a href="ej-odbc.html">La misma pantalla con ODBC</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

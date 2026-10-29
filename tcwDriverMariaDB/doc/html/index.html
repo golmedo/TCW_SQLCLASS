@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Inicio</div><h1>SQLMariaClass</h1></div>
+<div class="content">
+<p><code>SQLMariaClass</code> es la <b>SQLClass de siempre</b> (SQLClass6: <code>Exec</code>, <code>Next</code>, <code>Col</code>, <code>LoadQueue</code>...) yendo <b>directo a MariaDB o MySQL</b>, sin ODBC, sin driver de archivos de Clarion y sin tabla de trabajo. Usa <code>libmariadb.dll</code> (MariaDB Connector/C, API pública, licencia LGPL).</p>
+<p>El código que hoy se escribe con la SQLClass sirve igual: mismos métodos, mismas firmas y mismos códigos de retorno. Para pasar un procedimiento a MariaDB directo alcanza con usar un objeto <code>SQLMariaClass</code> en lugar de <code>SQLMsClass</code> / <code>SQLOdbcClass</code>.</p>
+<h2>Cómo está armado</h2>
+<table><tr><th>Capa</th><th>Qué hace</th></tr><tr><td><code>SQLMariaClass</code> (SQLClass6Maria.inc/.clw)</td><td>Hereda de <code>SQLOdbcClass</code> y reimplementa sus métodos. Es lo que usa la aplicación.</td></tr><tr><td><code>TCWMariaDB</code> (TCWMariaDB.inc/.clw)</td><td>Conexión directa: conecta, ejecuta, recorre filas, escapa textos. Se puede usar sola.</td></tr><tr><td><code>libmariadb.dll</code></td><td>MariaDB Connector/C 3.4.9 (32 bits). Va junto al .exe.</td></tr><tr><td>Template <code>SQLClass</code> (sqlclass6.tpl)</td><td>Opción <b>Motor</b> por objeto: <i>Driver de la app</i> o <i>MariaDB directo</i>.</td></tr></table>
+<h2>Por qué usarla</h2>
+<ul><li><b>Más rápida para traer filas</b>: 30.000 comprobantes en 430 ms contra 636 ms por ODBC (ver <a href="rendimiento.html">Rendimiento</a>).</li><li><b>Sin límites de la tabla de trabajo</b>: no hay máximo de columnas ni de largo por valor (por ODBC la razón social de 70 caracteres llegaba cortada a 49).</li><li><b>Sin configurar ODBC</b> en cada PC: alcanza con <code>libmariadb.dll</code> junto al programa.</li><li><b>Más información</b>: <code>Records()</code> exacto, nombre real de cada columna, <code>InsertId()</code>, <code>AffectedRows()</code>, <code>ErrorText()</code>, transacciones.</li></ul>
+<h2>Por dónde empezar</h2>
+<ol><li><a href="instalacion.html">Instalación y requisitos</a></li><li><a href="primeros-pasos.html">Primeros pasos</a>: el ejemplo mínimo.</li><li><a href="template.html">Template SQLClass</a>: agregar un objeto con Motor = MariaDB directo.</li><li><a href="ej-comprobantes.html">Ejemplo: pantalla de comprobantes con filtros</a> (la app de ejemplo).</li><li><a href="sqlmariaclass.html">Referencia de SQLMariaClass</a>.</li></ol>
+<h2>Ver también</h2><p class="vt"><a href="instalacion.html">Instalación</a> <a href="primeros-pasos.html">Primeros pasos</a> <a href="sqlmariaclass.html">SQLMariaClass</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

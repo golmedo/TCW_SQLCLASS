@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadena de conexi&#243;n - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="conexion.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Cadena de conexi&#243;n</h1>
+<table><thead><tr><th>Forma</th><th>Ejemplo</th><th>Clase</th></tr></thead><tbody><tr><td>Owner del driver de Clarion</td><td><code>PC\INSTANCIA,base,usuario,clave</code></td><td>SQLMsDirectClass (así un <code>Init</code> existente no cambia)</td></tr><tr><td>Clave=valor</td><td><code>Server=PC\INSTANCIA;Database=base;User=u;Password=p;Timeout=15</code></td><td>las dos</td></tr><tr><td>Cadena ODBC</td><td><code>Driver={ODBC Driver 17 for SQL Server};Server=...;Uid=...;Pwd=...</code></td><td>las dos (MariaDB ignora DRIVER y OPTION)</td></tr></tbody></table><h2 id="claves">Claves</h2><table><thead><tr><th>Clave</th><th>Sinónimos</th><th>Qué hace</th></tr></thead><tbody><tr><td>Server</td><td>Host, Data Source, Address</td><td>servidor; en SQL Server <code>PC\INSTANCIA</code> o <code>servidor,1433</code></td></tr><tr><td>Port</td><td></td><td>MariaDB: 3306 por defecto</td></tr><tr><td>Database</td><td>Db, Initial Catalog</td><td>base</td></tr><tr><td>User / Password</td><td>Uid, User Id / Pwd</td><td>en SQL Server, sin User = seguridad integrada de Windows</td></tr><tr><td>Timeout</td><td>Connect Timeout</td><td>segundos (MariaDB 10, SQL Server 15)</td></tr><tr><td>Charset</td><td></td><td>MariaDB: <code>latin1</code> (los textos de Clarion viajan sin conversión)</td></tr><tr><td>Encrypt / SSL</td><td></td><td>1 = conexión cifrada (con el Driver 18 confía en el certificado)</td></tr></tbody></table><p>SQL Server sin cadena ODBC prueba en orden <em>ODBC Driver 17</em>, <em>18</em> y <em>SQL Server</em> (solo pasa al siguiente si el driver no está instalado). <code>SQL.Db.ClientVersion()</code> dice cuál usó.</p><div class="callout" data-kind="aviso"><p><strong>Cuidado:</strong> con <code>Server=localhost</code> conectar a MySQL 5.0 tardó <strong>1,8 s</strong> (Windows prueba primero IPv6 <code>::1</code> y MySQL 5.0 escucha solo en IPv4); con <code>Server=127.0.0.1</code> es inmediato.</p></div>
+</article>
+<footer class="pager"><a class="prev" href="instalacion.html">&larr; Instalaci&#243;n</a><a class="next" href="guia.html">Gu&#237;a r&#225;pida &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.TakeRecord y Take*</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Otros (heredados)</div><h1>SQLMariaClass.TakeRecord y Take*</h1></div>
+<div class="content">
+<pre class="sig">TakeRecord(),BYTE,VIRTUAL
+TakeSelect / TakeInsert / TakeUpdate / TakeDelete / TakeDrop(),BYTE,VIRTUAL</pre><p>Métodos virtuales que se pueden completar desde los embeds del objeto en el template:</p>
+<ul><li><code>TakeRecord</code>: se llama en cada <code>Next()</code> que trajo una fila. Lo que devuelve es lo que devuelve <code>Next</code>.</li><li><code>TakeSelect</code>, <code>TakeInsert</code>, ...: se llaman desde <code>Parse</code> según el tipo de sentencia. Devolver Level:Notify cancela el envío (salvo en SELECT).</li></ul><h2>Devuelve</h2><p>Level:Benign para seguir.</p><h2>Ejemplo</h2><pre class="code"><span class="c">! embed de SQLM.TakeRecord (antes de la llamada a PARENT)</span>
+  L:Filas += 1
+  <span class="k">IF</span> L:Filas % 1000 = 0 <span class="k">THEN</span> <span class="k">DISPLAY</span>(?Avance).</pre><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-next.html">Next</a> <a href="template.html">Template</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

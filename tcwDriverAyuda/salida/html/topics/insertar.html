@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campo e Insertar - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="insertar.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Campo e Insertar</h1>
+<pre><code>  SQL.Campo('Nombre',L:Nombre)                    ! texto: sin comillas ni CLIP
+  SQL.Campo('Importe',L:Importe)                  ! numeros: mejor DECIMAL que REAL
+  SQL.CampoFecha('Fecha',L:Fecha)                 ! fecha de Clarion; 0 = NULL
+  SQL.CampoFechaHora('Hora',TODAY(),CLOCK())      ! 'aaaa-mm-dd hh:mm:ss'
+  SQL.CampoNulo('Nota')
+  IF SQL.Insertar('clientes') THEN MESSAGE(SQL.ErrorText()).</code></pre><ul><li><code>Insertar</code> arma <code>INSERT INTO tabla (c1,c2,...) VALUES (?,?,...)</code> con los campos agregados.</li><li>SQL Server: la sentencia se prepara la primera vez y se reutiliza mientras los campos sean los mismos.</li><li>El servidor convierte cada valor al tipo de la columna (texto, número, fecha <code>aaaa-mm-dd</code>).</li><li>SQL Server: <code>SQL.InsertId()</code> da el IDENTITY de un <code>INSERT</code> hecho con <code>Exec</code> (agrega <code>SCOPE_IDENTITY()</code> en el mismo lote); MariaDB: <code>InsertId()</code> después de cualquier INSERT.</li></ul><div class="callout" data-kind="aviso"><p><strong>Cuidado:</strong> un <code>REAL</code> convertido a texto puede salir en notación científica (<code>1.5E+20</code>) y SQL Server no lo acepta para un <code>decimal</code>: para importes usar variables <code>DECIMAL</code>.</p></div>
+</article>
+<footer class="pager"><a class="prev" href="escribir.html">&larr; Escribir datos</a><a class="next" href="lotes.html">Lotes (InsertarLote) &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

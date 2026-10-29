@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.WriteLog</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Errores y diagnóstico</div><h1>SQLMariaClass.WriteLog</h1></div>
+<div class="content">
+<pre class="sig">WriteLog(STRING Text)</pre><p>Agrega una línea <code>aaaammdd hh:mm:ss.cc texto</code> al archivo indicado en <code>LogFile</code>. La clase la usa para anotar cada consulta; también se puede llamar para anotar líneas propias. Si <code>LogFile</code> está vacío no hace nada.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>Text</code></td><td>el texto a anotar.</td></tr></table><h2>Ejemplo</h2><pre class="code">  SQLM.LogFile = <span class="k">LONGPATH</span>() &amp; <span class="s">&#x27;\sql.log&#x27;</span>
+  SQLM.WriteLog(<span class="s">&#x27;Cierre de caja: inicio&#x27;</span>)</pre><h2>Observaciones</h2><p>Con StringTheory (por defecto) o, si el template tiene destildado <i>Usar StringTheory</i>, con la API de Windows.</p><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="ej-log.html">Ejemplo de log</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

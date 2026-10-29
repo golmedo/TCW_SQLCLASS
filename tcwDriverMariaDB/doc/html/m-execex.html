@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.ExecEx</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Ejecutar consultas</div><h1>SQLMariaClass.ExecEx</h1></div>
+<div class="content">
+<pre class="sig">ExecEx(STRING Query, &lt;BYTE OmitLower&gt;),BYTE</pre><p>Igual que <code>Exec</code>, pero con un parámetro para <b>enviar la consulta tal cual</b>. Es la forma recomendada en código nuevo.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>Query</code></td><td>la sentencia SQL.</td></tr><tr><td><code>OmitLower</code></td><td>opcional. 1 = no pasa la consulta a minúsculas. Omitido o 0 = la pasa (como Exec).</td></tr></table><h2>Devuelve</h2><p>Level:Benign (0) si salió bien; Level:Notify (1) si hubo un error (el texto queda en ErrorText()).</p><h2>Ejemplo</h2><pre class="code">  <span class="k">IF</span> SQLM.ExecEx(<span class="s">&#x27;SELECT IdTransaccion, Fecha, Descripcion FROM cbtes WHERE Descripcion LIKE &#x27;</span> &amp; SQLM.Quote(<span class="s">&#x27;&lt;37&gt;GARCIA&lt;37&gt;&#x27;</span>),1)
+    <span class="k">MESSAGE</span>(SQLM.ErrorText())
+  <span class="k">END</span></pre><h2>Observaciones</h2><p>En la SQLClass6 <code>ExecEx</code> cuenta las columnas del SELECT con un analizador propio; en <code>SQLMariaClass</code> la cantidad y los nombres reales los da el servidor.</p><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-exec.html">Exec</a> <a href="ej-comprobantes.html">Ejemplo de comprobantes</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diferencias y trampas - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="trampas.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Diferencias y trampas</h1>
+<table><thead><tr><th>Tema</th><th>Qué pasa</th><th>Qué hacer</th></tr></thead><tbody><tr><td>Comillas dobles</td><td>SQL Server con ODBC 17/18 toma <code>"texto"</code> como nombre de columna</td><td><code>Campo</code> / parámetros, o comillas simples</td></tr><tr><td>Misma columna dos veces</td><td>SQL Server: <code>ORDER BY</code> por ella da el error 209 (ambigua)</td><td>alias: <code>Fecha AS FechaSql</code></td></tr><tr><td>Un resultado pendiente</td><td>SQL Server sin MARS: una sola sentencia activa por conexión</td><td>la clase cierra el anterior sola</td></tr><tr><td>Consulta de más de 20.480 caracteres</td><td>SQLClass6 la corta (<code>Query CSTRING(20480)</code>)</td><td>InsertarLote</td></tr><tr><td>REAL en notación científica</td><td>SQL Server no lo acepta para decimal</td><td>DECIMAL</td></tr><tr><td><code>Exec</code> pasa a minúsculas</td><td>también los valores entre comillas</td><td><code>ExecEx(q,1)</code>, <code>KeepCase</code> o parámetros</td></tr><tr><td>Mayúsculas en nombres de tabla</td><td>MySQL en Linux las distingue</td><td><code>KeepCase = 1</code></td></tr><tr><td>localhost</td><td>MySQL 5.0: 1,8 s para conectar</td><td><code>127.0.0.1</code></td></tr><tr><td>Transacciones en MySQL</td><td>MyISAM no las tiene</td><td>InnoDB</td></tr><tr><td><code>BUFFER</code> con SQLMsClass</td><td>se pierde: la clase cierra y abre su archivo en cada consulta</td><td>SQLMsDirectClass, o cambiar SQLClass6</td></tr><tr><td>Ventana mientras consulta</td><td>no responde (la llamada bloquea)</td><td>páginas; barra con texto</td></tr></tbody></table>
+</article>
+<footer class="pager"><a class="prev" href="demo.html">&larr; Aplicaciones de ejemplo</a><a class="next" href="pruebas.html">Pruebas &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

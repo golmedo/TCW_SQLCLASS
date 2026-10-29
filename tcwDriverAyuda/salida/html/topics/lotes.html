@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lotes (InsertarLote) - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="lotes.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Lotes (InsertarLote)</h1>
+<pre><code>  LOOP I = 1 TO RECORDS(Q)
+    GET(Q,I)
+    SQL.Campo('Id',Q:Id)
+    SQL.Campo('Nombre',Q:Nombre)
+    SQL.CampoFecha('Fecha',Q:Fecha)
+    IF SQL.InsertarLote('clientes') THEN BREAK.
+  END
+  SQL.EnviarLote()                                ! las que quedan</code></pre><table><thead><tr><th></th><th>SQL Server</th><th>MariaDB / MySQL</th></tr></thead><tbody><tr><td>Cómo</td><td>arreglos de parámetros de ODBC: 500 filas en una llamada</td><td>un <code>INSERT ... VALUES (...),(...)</code> de 500 filas</td></tr><tr><td>Tamaño</td><td><code>SQL.Db.BatchSize</code> (500)</td><td><code>BatchSize</code> (500) y <code>MaxBatchBytes</code> (512 KB: MySQL 5.0 acepta 1 MB por paquete)</td></tr><tr><td>2.000 filas</td><td>15.385 filas/s (24 veces el INSERT como texto)</td><td>40.000 filas/s (100 veces)</td></tr></tbody></table><p>Las filas se mandan solas cada <code>BatchSize</code>; <code>SQL.Db.PendingRows()</code> dice cuántas faltan. Para otra sentencia: <code>Prepare</code> + <code>AddParam</code> de cada valor + <code>AddRow</code> por fila + <code>ExecPrepared</code>.</p>
+</article>
+<footer class="pager"><a class="prev" href="insertar.html">&larr; Campo e Insertar</a><a class="next" href="preparadas.html">Sentencias preparadas &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

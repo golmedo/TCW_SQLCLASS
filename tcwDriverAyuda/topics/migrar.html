@@ -1,0 +1,13 @@
+<p>Hoy:</p><pre><code>  TemSQL{Prop:SQL} = 'INSERT INTO cbtes (IdTransaccion,IdEmpresa,IdSucursal,TipoCbte,...,IdFPagoOrig) ' &amp;|
+                     'VALUES ('&amp;Loc:IdTransaccion&amp;','&amp;GLO:IdEmpresa&amp;','&amp;L:IdSucursal&amp;',"'&amp;Clip(Loc:TipoCbte)&amp;'",' &amp;|
+                     ... Fun_Date(Loc:Fecha) ... '"'&amp;Clip(Loc:RazonSocial)&amp;'",' ... Fun_DateTime(glo:hoy,Clock()) ...</code></pre><p>Con la clase directa:</p><pre><code>  SQL.Campo('IdTransaccion',Loc:IdTransaccion)
+  SQL.Campo('IdEmpresa',GLO:IdEmpresa)
+  SQL.Campo('IdSucursal',L:IdSucursal)
+  SQL.Campo('TipoCbte',Loc:TipoCbte)              ! sin "..." ni Clip
+  SQL.Campo('Descripcion',Loc:RazonSocial)
+  SQL.CampoFecha('Fecha',Loc:Fecha)               ! en vez de Fun_Date
+  SQL.Campo('Ano',YEAR(Loc:Fecha))
+  SQL.Campo('Saldo',-ABS(Loc:Deuda))
+  SQL.CampoFechaHora('Aud_Fecha',glo:hoy,CLOCK()) ! en vez de Fun_DateTime
+  ...
+  IF SQL.Insertar('cbtes') THEN MESSAGE(SQL.ErrorText()).</code></pre><ul><li>Se lee columna por columna: no hay que contar comas para saber qué valor va en qué columna (en 90 columnas es donde se esconden los errores).</li><li>Una <code>'</code> o una <code>"</code> en la razón social no rompe nada.</li><li>El servidor no vuelve a analizar el texto en cada fila (SQL Server: preparada; ver <a href="tcw:est-mssql-escritura">escritura</a>).</li></ul><div class="callout" data-kind="aviso"><p><strong>Cuidado:</strong> las <code>"comillas dobles"</code> para textos andan con el driver de Clarion porque conecta con <code>QUOTED_IDENTIFIER</code> apagado. Con el ODBC Driver 17/18 viene encendido y <code>"texto"</code> se toma como <strong>nombre de columna</strong>: ese <code>PROP:SQL</code> armado a mano falla con <code>SQLMsDirectClass</code>.</p></div>

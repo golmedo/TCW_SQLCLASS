@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Col_Format</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Leer resultados</div><h1>SQLMariaClass.Col_Format</h1></div>
+<div class="content">
+<pre class="sig">Col_Format(SHORT NroCol, STRING Formato)</pre><p>Indica el picture con que <code>LoadQueue</code> convierte (con <code>DEFORMAT</code>) una columna antes de ponerla en la cola. Se usa sobre todo para fechas y horas, que llegan como texto.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>NroCol</code></td><td>número de columna.</td></tr><tr><td><code>Formato</code></td><td>picture de Clarion, por ejemplo <code>'@d10-'</code> para <code>aaaa-mm-dd</code> o <code>'@t4'</code> para <code>hh:mm:ss</code>.</td></tr></table><h2>Ejemplo</h2><pre class="code">  SQLM.Col_Format(2,<span class="s">&#x27;@d10-&#x27;</span>)
+  SQLM.Col_Format(3,<span class="s">&#x27;@t4&#x27;</span>)
+  SQLM.LoadQueue(MovQ,0,0)</pre><h2>Observaciones</h2><p>Los formatos se borran después de cada <code>LoadQueue</code>: indicarlos antes de cada carga. No se aplican a <code>Col()</code>.</p><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-loadqueue.html">LoadQueue</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

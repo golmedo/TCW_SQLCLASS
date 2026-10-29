@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Records</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Leer resultados</div><h1>SQLMariaClass.Records</h1></div>
+<div class="content">
+<pre class="sig">Records(),LONG</pre><p>Cantidad de filas.</p>
+<ul><li><b>Si hay un resultado abierto</b> (después de un SELECT), cuenta sus filas: es exacto también con <code>GROUP BY</code>, <code>DISTINCT</code> o <code>LIMIT</code>, y no hace otra consulta.</li><li><b>Si no</b>, igual que la SQLClass6: ejecuta <code>SELECT COUNT(*)</code> con el FROM y el WHERE de la última consulta.</li></ul><h2>Devuelve</h2><p>Cantidad de filas (también queda en la propiedad <code>Records</code>).</p><h2>Ejemplo</h2><pre class="code">  <span class="k">IF</span> SQLM.ExecEx(<span class="s">&#x27;SELECT IdCliente FROM cbtes WHERE Fecha &gt;= &#x27;&#x27;2026-01-01&#x27;&#x27; GROUP BY IdCliente&#x27;</span>,1) = Level:Benign
+    <span class="k">MESSAGE</span>(SQLM.Records() &amp; <span class="s">&#x27; clientes con comprobantes este año&#x27;</span>)
+  <span class="k">END</span></pre><h2>Observaciones</h2><p>Cuenta todas las filas del resultado, no las que faltan leer.</p><h2>Respecto de SQLClass6</h2><div class="dif">Con resultado abierto no hace un COUNT(*) aparte.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-loadqueue.html">LoadQueue</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

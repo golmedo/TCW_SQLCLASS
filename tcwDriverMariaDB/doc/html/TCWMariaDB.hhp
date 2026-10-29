@@ -1,0 +1,60 @@
+[OPTIONS]
+Compatibility=1.1 or later
+Compiled file=TCWMariaDB.chm
+Contents file=toc.hhc
+Index file=index.hhk
+Default topic=index.html
+Display compile progress=No
+Full-text search=Yes
+Language=0x2c0a Español (Argentina)
+Title=SQLMariaClass - la SQLClass directo a MariaDB / MySQL
+
+[FILES]
+conexion.html
+diferencias.html
+ej-comparar.html
+ej-comprobantes.html
+ej-grabar.html
+ej-log.html
+ej-odbc.html
+ej-tcwmariadb.html
+index.html
+instalacion.html
+m-affectedrows.html
+m-begintransaction.html
+m-col-format.html
+m-col.html
+m-colbyname.html
+m-columns.html
+m-db.html
+m-errortext.html
+m-escape.html
+m-exec.html
+m-execex.html
+m-execsp.html
+m-fetch.html
+m-field.html
+m-init.html
+m-initmaria.html
+m-insertid.html
+m-isnull.html
+m-kill.html
+m-loadqueue.html
+m-next.html
+m-parse.html
+m-quote.html
+m-records.html
+m-registerupdate.html
+m-serverexec.html
+m-serverversion.html
+m-sp.html
+m-take.html
+m-writelog.html
+primeros-pasos.html
+problemas.html
+propiedades.html
+rendimiento.html
+sqlmariaclass.html
+tcwmariadb.html
+template.html
+style.css

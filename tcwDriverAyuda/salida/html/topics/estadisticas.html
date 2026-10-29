@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estad&#237;sticas de velocidad - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="estadisticas.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Estad&#237;sticas de velocidad</h1>
+<p>Medidas el 28 y 29/10/2026 en una PC con los servidores locales: <strong>SQL Server 2022</strong> (base psnamen, tabla <code>dbo.Cbtes</code>, 101.798 filas) y <strong>MySQL 5.0.67</strong> (base gestion, tabla <code>cbtes</code>, ~500.000 filas). Misma consulta (9 columnas, <code>ORDER BY Fecha DESC, IdTransaccion DESC</code>) y misma carga a la cola en todos los motores; control de que todos traen las mismas filas y la misma suma de importes.</p><table><thead><tr><th>Resumen</th><th>Directo</th><th>Driver de Clarion</th></tr></thead><tbody><tr><td>SQL Server, leer 101.798 filas</td><td><strong>1,7 s</strong></td><td>26–30 s (SQLMsClass); 4,4 s (VIEW con <code>BUFFER(500)</code>)</td></tr><tr><td>SQL Server, escribir (filas/s)</td><td><strong>~6.600</strong> (InsertarLote)</td><td>~2.300 (<code>ADD</code>, con o sin <code>LOGOUT</code>)</td></tr><tr><td>MySQL, leer 30.000 filas</td><td><strong>430 ms</strong></td><td>640 ms (SQLClass6 + ODBC 5.1)</td></tr><tr><td>MySQL, escribir (filas/s)</td><td><strong>40.000</strong> (InsertarLote)</td><td>401 (INSERT armado como texto)</td></tr></tbody></table><p>Detalle: <a href="est-mssql-lectura.html">SQL Server: lectura</a>, <a href="est-mssql-escritura.html">SQL Server: escritura</a>, <a href="est-maria.html">MariaDB / MySQL</a>, <a href="est-paginas.html">Páginas y conexión</a> y <a href="est-como.html">Cómo se midió</a>.</p><div class="callout" data-kind="nota"><p><strong>Nota:</strong> los tiempos varían bastante entre corridas (una PC con otras cosas abiertas): miren las proporciones más que los milisegundos.</p></div>
+</article>
+<footer class="pager"><a class="prev" href="migrar.html">&larr; Pasar un INSERT de PROP:SQL a Campo/Insertar</a><a class="next" href="est-mssql-lectura.html">SQL Server: lectura &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

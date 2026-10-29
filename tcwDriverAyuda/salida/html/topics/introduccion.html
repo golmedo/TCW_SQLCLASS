@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducci&#243;n - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="introduccion.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Introducci&#243;n</h1>
+<p><strong>SQLClass directo</strong> son dos clases que hacen lo mismo que la SQLClass de siempre (SQLClass6), con los mismos métodos, firmas y códigos de retorno, pero mandando el SQL <em>directo</em> al servidor, sin el driver de archivos de Clarion ni la tabla de trabajo <code>sqlclass</code>:</p><table><thead><tr><th>Clase</th><th>Servidor</th><th>Cómo llega al servidor</th></tr></thead><tbody><tr><td><code>SQLMariaClass</code></td><td>MariaDB / MySQL</td><td><code>libmariadb.dll</code> (MariaDB Connector/C), protocolo de MySQL</td></tr><tr><td><code>SQLMsDirectClass</code></td><td>SQL Server</td><td>API de ODBC (<code>odbc32.dll</code>) + ODBC Driver 17/18 de Microsoft (TDS 7.4)</td></tr></tbody></table><h2 id="por-que">Por qué</h2><ul><li><strong>Más rápido</strong>: leyendo muchas filas, 1,5 veces (MariaDB) y 10 a 25 veces (SQL Server, contra el driver MSSQL sin <code>BUFFER</code>); escribiendo muchas filas con <code>InsertarLote</code>, 3 veces (SQL Server) y 100 veces (MySQL) más que el <code>INSERT</code> armado como texto. Ver <a href="estadisticas.html">Estadísticas</a>.</li><li><strong>Sin límites</strong> de columnas ni de largo de cada valor (la tabla <code>sqlclass</code> corta a 49 caracteres).</li><li><strong>Más cosas</strong>: parámetros <code>?</code>, varios resultados por consulta, sentencias preparadas, <code>INSERT</code> por nombre de campo, lotes, transacciones, <code>Records()</code> exacto y barra de avance en la ventana.</li><li><strong>Sin cambiar el código</strong>: <code>Init(archivo, registro, conexión)</code> sigue andando; el archivo se ignora.</li></ul><div class="callout" data-kind="nota"><p><strong>Nota:</strong> SQLClass6.INC / .clw no se modifican: las apps que usan <code>SQLMsClass</code> u ODBC siguen igual. Cada clase hereda de <code>SQLOdbcClass</code> y reimplementa sus métodos en archivos propios.</p></div><p>Para empezar: <a href="instalacion.html">Instalación</a> y <a href="guia.html">Guía rápida</a>.</p>
+</article>
+<footer class="pager"><span></span><a class="next" href="novedades.html">Novedades &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

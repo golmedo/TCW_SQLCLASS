@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Cadena de conexión</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Guía</div><h1>Cadena de conexión</h1></div>
+<div class="content">
+<p>La cadena va en <code>Init(...)</code>, <code>InitMaria(...)</code> o <code>Db.Connect(...)</code>. Son pares <code>clave=valor</code> separados por <code>;</code>. Las mayúsculas en las claves no importan.</p>
+<table><tr><th>Clave (y sinónimos)</th><th>Valor</th><th>Por defecto</th></tr><tr><td><code>Server</code> (<code>Host</code>, <code>Data Source</code>, <code>Address</code>)</td><td>nombre o IP del servidor</td><td><code>127.0.0.1</code></td></tr><tr><td><code>Port</code></td><td>puerto</td><td><code>3306</code></td></tr><tr><td><code>Database</code> (<code>Db</code>, <code>Initial Catalog</code>)</td><td>base de datos</td><td>ninguna</td></tr><tr><td><code>User</code> (<code>Uid</code>, <code>User Id</code>, <code>Username</code>)</td><td>usuario</td><td></td></tr><tr><td><code>Password</code> (<code>Pwd</code>)</td><td>clave</td><td></td></tr><tr><td><code>Charset</code> (<code>Character Set</code>)</td><td>juego de caracteres de la conexión</td><td><code>latin1</code></td></tr><tr><td><code>Timeout</code> (<code>Connect Timeout</code>, <code>Connection Timeout</code>)</td><td>segundos para conectar</td><td><code>10</code></td></tr><tr><td><code>SSL</code> (<code>SslMode</code>, <code>Ssl Mode</code>)</td><td><code>1</code>, <code>TRUE</code>, <code>REQUIRED</code>, <code>VERIFY_CA</code> o <code>VERIFY_FULL</code> exige TLS y verifica el certificado</td><td><code>0</code></td></tr></table>
+<pre class="code">Server=192.168.0.10;Port=3306;Database=gestion;User=app;Password=****</pre>
+<h2>La cadena de ODBC también sirve</h2>
+<p>Las claves que no conoce se ignoran, así que la cadena que hoy usa la aplicación con el driver ODBC funciona tal cual:</p>
+<pre class="code">DRIVER={MySQL ODBC 5.1 Driver};SERVER=192.168.0.10;DATABASE=gestion;UID=app;PWD=****;OPTION=3</pre>
+<p>Por eso, al pasar un objeto a <i>MariaDB directo</i> desde el template, el <code>Init(archivo, registro, cadena)</code> existente no se toca.</p>
+<h2>Charset latin1</h2>
+<p>Con <code>latin1</code> (el valor por defecto) los textos viajan sin conversión entre Clarion (ANSI / windows-1252) y el servidor: acentos y eñes llegan bien. Cambiarlo solo si la base usa otro juego de caracteres y se convierte a mano.</p>
+<h2>TLS (SSL)</h2>
+<p>Connector/C 3.4 exige TLS de fábrica, y los servidores viejos (MySQL 5.0) no lo tienen. Por eso, con <code>SSL=0</code> (por defecto) la clase usa TLS solo si el servidor lo ofrece, sin exigirlo. Con <code>SSL=1</code> lo exige y verifica el certificado.</p>
+<h2>Leer la cadena del INI</h2>
+<pre class="code">L:Conn      CSTRING(1024)
+  <span class="k">CODE</span>
+  L:Conn = <span class="k">GETINI</span>(<span class="s">&#x27;Conexion&#x27;</span>,<span class="s">&#x27;Cadena&#x27;</span>,<span class="s">&#x27;&#x27;</span>,<span class="k">LONGPATH</span>() &amp; <span class="s">&#x27;\MiApp.ini&#x27;</span>)
+  <span class="k">IF</span> SQLM.InitMaria(L:Conn) <span class="k">THEN</span> <span class="k">MESSAGE</span>(SQLM.ErrorText()); <span class="k">RETURN</span>.</pre>
+<h2>Ver también</h2><p class="vt"><a href="m-init.html">Init</a> <a href="m-initmaria.html">InitMaria</a> <a href="tcwmariadb.html">TCWMariaDB</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.ExecSP</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Ejecutar consultas</div><h1>SQLMariaClass.ExecSP</h1></div>
+<div class="content">
+<pre class="sig">ExecSP(STRING Query, &lt;SHORT NoCols&gt;),BYTE</pre><p>Ejecuta un procedimiento almacenado que devuelve filas. Acepta la forma de SQL Server y la convierte:</p>
+<table><tr><th>Se escribe</th><th>Se envía</th></tr><tr><td><code>EXEC sp_Saldo 1000112, '2026-10-28'</code></td><td><code>CALL sp_Saldo(1000112, '2026-10-28')</code></td></tr><tr><td><code>EXECUTE sp_Saldo 1000112</code></td><td><code>CALL sp_Saldo(1000112)</code></td></tr><tr><td><code>CALL sp_Saldo(1000112)</code></td><td>igual</td></tr><tr><td><code>sp_Totales</code></td><td><code>CALL sp_Totales()</code></td></tr></table>
+<p>No pasa a minúsculas ni por <code>Parse</code>. Las filas se leen igual que las de un SELECT.</p><h2>Parámetros</h2><table><tr><th>Parámetro</th><th>Descripción</th></tr><tr><td><code>Query</code></td><td>llamada al procedimiento.</td></tr><tr><td><code>NoCols</code></td><td>opcional; cantidad de columnas. No hace falta: la da el servidor.</td></tr></table><h2>Devuelve</h2><p>Level:Benign (0) si salió bien; Level:Notify (1) si hubo un error (el texto queda en ErrorText()).</p><h2>Ejemplo</h2><pre class="code">  <span class="k">IF</span> SQLM.ExecSP(<span class="s">&#x27;EXEC sp_SaldoCliente &#x27;</span> &amp; L:Cliente) = Level:Benign
+    <span class="k">LOOP</span> <span class="k">UNTIL</span> SQLM.Next()
+      L:Saldo = SQLM.ColByName(<span class="s">&#x27;Saldo&#x27;</span>)
+    <span class="k">END</span>
+  <span class="k">END</span></pre><h2>Observaciones</h2><p>MariaDB devuelve después de un CALL un resultado extra de estado; la clase lo descarta, así que la siguiente consulta no da <i>Commands out of sync</i>.</p><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-sp.html">SP</a> <a href="ej-grabar.html">Ejemplos de grabación</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

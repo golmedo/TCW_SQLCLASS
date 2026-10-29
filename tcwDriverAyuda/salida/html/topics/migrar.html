@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pasar un INSERT de PROP:SQL a Campo/Insertar - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="migrar.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Pasar un INSERT de PROP:SQL a Campo/Insertar</h1>
+<p>Hoy:</p><pre><code>  TemSQL{Prop:SQL} = 'INSERT INTO cbtes (IdTransaccion,IdEmpresa,IdSucursal,TipoCbte,...,IdFPagoOrig) ' &amp;|
+                     'VALUES ('&amp;Loc:IdTransaccion&amp;','&amp;GLO:IdEmpresa&amp;','&amp;L:IdSucursal&amp;',"'&amp;Clip(Loc:TipoCbte)&amp;'",' &amp;|
+                     ... Fun_Date(Loc:Fecha) ... '"'&amp;Clip(Loc:RazonSocial)&amp;'",' ... Fun_DateTime(glo:hoy,Clock()) ...</code></pre><p>Con la clase directa:</p><pre><code>  SQL.Campo('IdTransaccion',Loc:IdTransaccion)
+  SQL.Campo('IdEmpresa',GLO:IdEmpresa)
+  SQL.Campo('IdSucursal',L:IdSucursal)
+  SQL.Campo('TipoCbte',Loc:TipoCbte)              ! sin "..." ni Clip
+  SQL.Campo('Descripcion',Loc:RazonSocial)
+  SQL.CampoFecha('Fecha',Loc:Fecha)               ! en vez de Fun_Date
+  SQL.Campo('Ano',YEAR(Loc:Fecha))
+  SQL.Campo('Saldo',-ABS(Loc:Deuda))
+  SQL.CampoFechaHora('Aud_Fecha',glo:hoy,CLOCK()) ! en vez de Fun_DateTime
+  ...
+  IF SQL.Insertar('cbtes') THEN MESSAGE(SQL.ErrorText()).</code></pre><ul><li>Se lee columna por columna: no hay que contar comas para saber qué valor va en qué columna (en 90 columnas es donde se esconden los errores).</li><li>Una <code>'</code> o una <code>"</code> en la razón social no rompe nada.</li><li>El servidor no vuelve a analizar el texto en cada fila (SQL Server: preparada; ver <a href="est-mssql-escritura.html">escritura</a>).</li></ul><div class="callout" data-kind="aviso"><p><strong>Cuidado:</strong> las <code>"comillas dobles"</code> para textos andan con el driver de Clarion porque conecta con <code>QUOTED_IDENTIFIER</code> apagado. Con el ODBC Driver 17/18 viene encendido y <code>"texto"</code> se toma como <strong>nombre de columna</strong>: ese <code>PROP:SQL</code> armado a mano falla con <code>SQLMsDirectClass</code>.</p></div>
+</article>
+<footer class="pager"><a class="prev" href="transacciones.html">&larr; Transacciones</a><a class="next" href="estadisticas.html">Estad&#237;sticas de velocidad &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

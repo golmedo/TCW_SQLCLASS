@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Varios resultados - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="varios.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Varios resultados</h1>
+<p>Un procedimiento puede devolver varios <code>SELECT</code>, y una consulta puede tener varias sentencias. Se lee el primer resultado como siempre y <code>NextResult()</code> pasa al siguiente (devuelve <code>Level:Notify</code> cuando no hay más).</p><pre><code>  SQL.AddParam(Cliente)
+  SQL.ExecSP('EXEC dbo.Resumen ?')        ! MariaDB: ExecSP('CALL Resumen(?)')
+  LOOP UNTIL SQL.Next()                   ! resultado 1
+  END
+  IF SQL.NextResult() = Level:Benign      ! resultado 2
+    LOOP UNTIL SQL.Next()
+    END
+  END</code></pre><ul><li>Los conteos intermedios de un procedimiento (<code>UPDATE</code> antes del <code>SELECT</code>) se saltean solos.</li><li>Una consulta <code>UPDATE ...; SELECT ...</code> queda directamente en el resultado del <code>SELECT</code>.</li><li>MariaDB: la conexión habilita <code>CLIENT_MULTI_STATEMENTS</code>; <code>ExecSP('EXEC sp p1, p2')</code> se manda como <code>CALL sp(p1, p2)</code> y el resultado de estado del CALL se descarta.</li><li>SQL Server: <code>ExecSP('CALL sp(p)')</code> va con el escape de ODBC <code>{CALL sp(p)}</code>.</li></ul><div class="callout" data-kind="nota"><p><strong>Nota:</strong> un resultado con resultados pendientes sin leer no traba la consulta siguiente: la clase los descarta antes de ejecutar.</p></div>
+</article>
+<footer class="pager"><a class="prev" href="parametros.html">&larr; Par&#225;metros ?</a><a class="next" href="largos.html">Textos largos &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

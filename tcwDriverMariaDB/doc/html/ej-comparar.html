@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Ejemplo: comparar motores</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Ejemplos</div><h1>Ejemplo: comparar motores</h1></div>
+<div class="content">
+<p>La pantalla <b>Comparar tiempos</b> de la aplicación de ejemplo corre 8 consultas (sin filtro y con distintos filtros) con los dos motores, varias veces, y muestra el promedio. Este es el núcleo de la medición, simplificado.</p>
+<pre class="code">SQLM                 SQLMariaClass
+SQLO                 SQLOdbcClass
+L:R                  LONG
+L:Rep                LONG(5)
+L:T0                 LONG
+L:T1                 LONG
+L:T2                 LONG
+L:SumM               LONG,DIM(3)                    <span class="c">! consulta, carga y total (MariaDB)</span>
+  <span class="k">CODE</span>
+  SQLM.SilentMode = True
+  <span class="k">IF</span> SQLM.InitMaria(L:Conn) <span class="k">THEN</span> <span class="k">MESSAGE</span>(SQLM.ErrorText()); <span class="k">RETURN</span>.
+  SQLM.KeepCase = True
+  CLEAR(L:SumM)
+  <span class="k">LOOP</span> L:R = 0 <span class="k">TO</span> L:Rep                             <span class="c">! la corrida 0 es de calentamiento</span>
+    L:T0 = <span class="k">CLOCK</span>()
+    <span class="k">IF</span> SQLM.ExecEx(L:Query,1) <span class="k">THEN</span> <span class="k">BREAK</span>.
+    L:T1 = <span class="k">CLOCK</span>()
+    SQLM.Col_Format(2,<span class="s">&#x27;@d10-&#x27;</span>)
+    SQLM.LoadQueue(CbtesQ,0,0)
+    L:T2 = <span class="k">CLOCK</span>()
+    <span class="k">IF</span> L:R = 0 <span class="k">THEN</span> <span class="k">CYCLE</span>.                          <span class="c">! no se cuenta: el servidor todavía leía del disco</span>
+    L:SumM[1] += (L:T1 - L:T0) * 10
+    L:SumM[2] += (L:T2 - L:T1) * 10
+    L:SumM[3] += (L:T2 - L:T0) * 10
+  <span class="k">END</span>
+  <span class="k">MESSAGE</span>(<span class="s">&#x27;MariaDB: consulta &#x27;</span> &amp; INT(L:SumM[1] / L:Rep) &amp; <span class="s">&#x27; ms, carga &#x27;</span> &amp; INT(L:SumM[2] / L:Rep) &amp; <span class="s">&#x27; ms&#x27;</span>)
+  SQLM.Kill()</pre>
+<h2>Para medir bien</h2>
+<ul><li><b>Una corrida de calentamiento</b>: la primera consulta lee del disco y tarda más; si se cuenta, perjudica al motor que va primero.</li><li><b>Alternar el orden</b> de los motores en cada corrida.</li><li><b>Verificar que traen lo mismo</b>: la demo suma los importes y compara la cantidad de filas de los dos.</li><li><code>CLOCK()</code> tiene resolución de 10 ms: medir varias corridas y promediar.</li></ul>
+<p>Los resultados están en <a href="rendimiento.html">Rendimiento</a>. <code>TCWMariaDemo.exe comparar</code> corre la comparación sin ventana y deja el resultado en <code>comparacion.txt</code>.</p>
+<h2>Ver también</h2><p class="vt"><a href="rendimiento.html">Rendimiento</a> <a href="ej-comprobantes.html">Comprobantes con filtros</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

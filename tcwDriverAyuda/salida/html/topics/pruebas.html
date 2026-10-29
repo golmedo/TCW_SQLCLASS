@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pruebas - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="pruebas.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Pruebas</h1>
+<table><thead><tr><th>Prueba</th><th>Qué cubre</th><th>Resultado 29/10/2026</th></tr></thead><tbody><tr><td><code>tcwDriverMSSQL\build-test.ps1</code> (TestMsSQL)</td><td>tabla y procedimiento <code>#temporales</code>: InsertId, parámetros con comillas y NULL, 10.000 caracteres, fechas, transacción, dos resultados, procedimiento con conteos, <code>{CALL}</code>, GROUP BY, errores 208 y 2627, Prepare, Insertar con <code>'</code> y <code>"</code>, lote de 1.235 filas, resultado pendiente</td><td>TODO OK</td></tr><tr><td><code>tcwDriverMariaDB\build-test.ps1</code> (TestMaria)</td><td>tabla TEMPORARY: lo mismo, más barra invertida, <code>?</code> entre comillas, <code>UPDATE; SELECT</code>, texto de 20.000</td><td>TODO OK</td></tr><tr><td><code>TCWxxxDemo.exe paginas</code></td><td>5.069 filas por páginas contra una sola consulta</td><td>0 diferencias</td></tr><tr><td><code>TCWxxxDemo.exe ejemplos</code></td><td>las 7 pestañas de Ejemplos de uso</td><td>todas bien</td></tr></tbody></table><p>Las pruebas no dejan nada en la base (tablas y procedimientos temporales).</p>
+</article>
+<footer class="pager"><a class="prev" href="trampas.html">&larr; Diferencias y trampas</a><span></span></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

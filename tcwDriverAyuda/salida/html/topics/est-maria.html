@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MariaDB / MySQL - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="est-maria.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>MariaDB / MySQL</h1>
+<h3 id="lectura-sqlmariaclass-contra-sqlclass6-odbc-5-1">Lectura: SQLMariaClass contra SQLClass6 + ODBC 5.1</h3><table><thead><tr><th>Escenario</th><th>Filas</th><th>Consulta</th><th>MariaDB directo</th><th>ODBC</th><th>ODBC / Maria</th></tr></thead><tbody><tr><td>Sin filtro (últimas 30.000)</td><td>30.000</td><td>60 ms</td><td>430 ms</td><td>644 ms</td><td>1,50</td></tr><tr><td>Fecha: 1er semestre (índice)</td><td>22.579</td><td>46 ms</td><td>326 ms</td><td>494 ms</td><td>1,52</td></tr><tr><td>Tipo FC del año</td><td>10.166</td><td>1.180 ms</td><td>1.310 ms</td><td>1.384 ms</td><td>1,06</td></tr><tr><td>Razón social LIKE '%SRL%'</td><td>17.716</td><td>1.530 ms</td><td>1.770 ms</td><td>1.866 ms</td><td>1,05</td></tr><tr><td>Un cliente (índice)</td><td>2.325</td><td>10 ms</td><td>40 ms</td><td>54 ms</td><td>1,35</td></tr><tr><td>Mes actual</td><td>460</td><td>0–2 ms</td><td>8 ms</td><td>12 ms</td><td>~1,5</td></tr></tbody></table><ul><li>La consulta tarda lo mismo con los dos (es el servidor); la diferencia está en traer las filas: el directo es ~1,5 veces más rápido por fila.</li><li>ODBC perdió 4.045 caracteres de razón social en 30.000 filas (la tabla <code>sqlclass</code> corta a 49).</li><li><em>Tipo FC</em> tarda 1,2 s porque MySQL elige el índice <code>PorTipoCbte</code>: con <code>FORCE INDEX (PorFecha)</code> baja a 168 ms. El índice pesa mucho más que el motor.</li><li>Con la barra de avance la carga tarda lo mismo (370 ms para 30.000 filas).</li></ul><h3 id="escritura-2-000-filas-pantalla-ejemplos-de-uso">Escritura (2.000 filas, pantalla Ejemplos de uso)</h3><table><thead><tr><th>Forma</th><th>Filas/s</th></tr></thead><tbody><tr><td><code>INSERT</code> armado como texto (como <code>PROP:SQL</code>)</td><td>401</td></tr><tr><td><code>Insertar</code> (una fila por viaje)</td><td>426</td></tr><tr><td><strong><code>InsertarLote</code></strong> (<code>INSERT</code> de 500 filas)</td><td><strong>40.000</strong> (100 veces)</td></tr></tbody></table>
+</article>
+<footer class="pager"><a class="prev" href="est-mssql-escritura.html">&larr; SQL Server: escritura</a><a class="next" href="est-paginas.html">P&#225;ginas y conexi&#243;n &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

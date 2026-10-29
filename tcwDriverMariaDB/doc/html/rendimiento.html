@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Rendimiento</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">Guía</div><h1>Rendimiento</h1></div>
+<div class="content">
+<p>Medido el 28/10/2026 con la aplicación de ejemplo, MySQL 5.0.67 local, tabla <code>cbtes</code> (503.952 filas), 9 columnas, <code>ExecEx</code> + <code>Col_Format</code> + <code>LoadQueue</code>. ODBC = SQLClass6 + driver ODBC de Clarion + MySQL ODBC 5.1.</p>
+<h2>Sin filtro: 30.000 filas</h2>
+<table><tr><th>Motor</th><th>Consulta</th><th>Carga a la cola</th><th>Total</th></tr><tr><td>SQLMariaClass directo</td><td>60 ms</td><td>370 ms</td><td><b>430 ms</b></td></tr><tr><td>SQLClass6 + ODBC</td><td>60 ms</td><td>576 ms</td><td><b>636 ms</b></td></tr></table>
+<p>Las dos traen las mismas filas y el mismo total de importes, pero por ODBC <b>4.045 razones sociales llegaron cortadas</b> a 49 caracteres (el campo de la tabla de trabajo); por MariaDB llegan completas (hasta 70).</p>
+<h2>Con filtros (promedio de 5 corridas, después de una de calentamiento; total en ms)</h2>
+<table><tr><th>Escenario</th><th>Filas</th><th>Consulta</th><th>MariaDB</th><th>ODBC</th><th>ODBC / MariaDB</th></tr><tr><td>Sin filtro (últimas 30.000)</td><td class="n">30.000</td><td class="n">60</td><td class="n">430</td><td class="n">644</td><td class="n">1,50</td></tr><tr><td>Fecha: 1er semestre (índice)</td><td class="n">22.579</td><td class="n">46</td><td class="n">326</td><td class="n">494</td><td class="n">1,52</td></tr><tr><td>Tipo FC del año</td><td class="n">10.166</td><td class="n">1.180</td><td class="n">1.310</td><td class="n">1.384</td><td class="n">1,06</td></tr><tr><td>Razón social LIKE %SRL%</td><td class="n">17.716</td><td class="n">1.530</td><td class="n">1.770</td><td class="n">1.866</td><td class="n">1,05</td></tr><tr><td>Razón social LIKE %GARCIA%</td><td class="n">3.848</td><td class="n">1.490</td><td class="n">1.532</td><td class="n">1.576</td><td class="n">1,03</td></tr><tr><td>Un cliente (índice)</td><td class="n">2.325</td><td class="n">10</td><td class="n">40</td><td class="n">54</td><td class="n">1,35</td></tr><tr><td>Mes actual</td><td class="n">460</td><td class="n">0-2</td><td class="n">8</td><td class="n">12</td><td class="n">~1,5</td></tr><tr><td>Un comprobante por Id</td><td class="n">1</td><td class="n">0-2</td><td class="n">2</td><td class="n">2</td><td class="n">-</td></tr></table>
+<h2>Conclusiones</h2>
+<ul><li><b>La consulta tarda lo mismo</b> con los dos motores: ese trabajo lo hace el servidor.</li><li><b>MariaDB directo trae las filas ~1,5 veces más rápido.</b> Cuantas más filas, más se nota.</li><li>Cuando el servidor tarda (un <code>LIKE '%texto%'</code> recorre toda la tabla), la diferencia queda en 3-6 %.</li><li><b>El índice pesa más que el motor</b>: <i>Tipo FC del año</i> tarda 1,2 s porque MySQL elige el índice <code>PorTipoCbte</code> y ordena 46.200 filas; con <code>FORCE INDEX (PorFecha)</code> baja a 168 ms.</li></ul>
+<h2>Ver también</h2><p class="vt"><a href="diferencias.html">Diferencias con SQLClass6</a> <a href="ej-comparar.html">Ejemplo: comparar motores</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

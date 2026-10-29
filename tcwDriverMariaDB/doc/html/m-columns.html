@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Columns</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Leer resultados</div><h1>SQLMariaClass.Columns</h1></div>
+<div class="content">
+<pre class="sig">Columns(),SHORT</pre><p>Cantidad de columnas del último resultado. Con <code>SQLMariaClass</code> es el número exacto que manda el servidor.</p><h2>Devuelve</h2><p>Cantidad de columnas.</p><h2>Ejemplo</h2><pre class="code">  <span class="k">LOOP</span> L:I = 1 <span class="k">TO</span> SQLM.Columns()
+    L:Titulos = <span class="k">CLIP</span>(L:Titulos) &amp; <span class="s">&#x27; &#x27;</span> &amp; SQLM.Field(L:I)
+  <span class="k">END</span></pre><h2>Respecto de SQLClass6</h2><div class="dif">Exacto: no depende del analizador del SELECT.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-field.html">Field</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

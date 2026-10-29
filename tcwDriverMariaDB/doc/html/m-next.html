@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Next</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Leer resultados</div><h1>SQLMariaClass.Next</h1></div>
+<div class="content">
+<pre class="sig">Next(),BYTE,PROC</pre><p>Avanza a la siguiente fila del resultado. Después se leen las columnas con <code>Col</code> o <code>ColByName</code>. Por cada fila llama al método virtual <code>TakeRecord</code>.</p><h2>Devuelve</h2><p>Level:Benign (0) si trajo una fila; Level:Notify (1) si no hay más filas (o no hay resultado).</p><h2>Ejemplo</h2><pre class="code">  <span class="k">LOOP</span> <span class="k">UNTIL</span> SQLM.Next()
+    Q:Codigo = SQLM.Col(1)
+    Q:Nombre = SQLM.Col(2)
+    <span class="k">ADD</span>(Q)
+  <span class="k">END</span></pre><h2>Observaciones</h2><p>Suma 1 a <code>Records_Done</code> por cada fila. Para una sola fila: <code>IF SQLM.Exec(...) = Level:Benign AND SQLM.Next() = Level:Benign</code>.</p><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-col.html">Col</a> <a href="m-loadqueue.html">LoadQueue</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

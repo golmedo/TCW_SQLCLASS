@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQL Server: lectura - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="est-mssql-lectura.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>SQL Server: lectura</h1>
+<table><thead><tr><th>Escenario</th><th>Filas</th><th>SQLMsClass (driver MSSQL)</th><th>VIEW sin BUFFER</th><th>VIEW con BUFFER(500)</th><th>FILE+PROP:SQL con BUFFER(500)</th><th><strong>SQLMsDirectClass</strong></th></tr></thead><tbody><tr><td>Toda la tabla</td><td>101.798</td><td>26,2 s</td><td>27,4 s</td><td>4,4 s</td><td>5,1 s</td><td><strong>1,7 s</strong></td></tr><tr><td>Últimos 30.000</td><td>30.000</td><td>9,7 s</td><td>4,3 s</td><td>1,3 s</td><td>1,4 s</td><td><strong>0,41–0,60 s</strong></td></tr><tr><td>Año 2025</td><td>25.820</td><td>16,8 s</td><td>7,0 s</td><td>1,0 s</td><td>1,7 s</td><td><strong>0,47 s</strong></td></tr><tr><td>LIKE '%SRL%'</td><td>893</td><td>0,66 s</td><td>1,7 s</td><td>1,7 s</td><td>0,18 s</td><td><strong>0,18–0,20 s</strong></td></tr><tr><td>Un cliente</td><td>551</td><td>394 ms</td><td>80 ms</td><td>20 ms</td><td>26 ms</td><td><strong>16–40 ms</strong></td></tr><tr><td>Un comprobante</td><td>1</td><td>14,5 ms</td><td>4,4 ms</td><td>4,1 ms</td><td>1,2 ms</td><td><strong>1,2–6 ms</strong></td></tr></tbody></table><ul><li>El driver MSSQL de Clarion 11 se conecta con <strong>TDS 7.1</strong> (el driver <code>SQL Server</code> de Windows, de SQL Server 2000); el directo con TDS 7.4 (ODBC Driver 17).</li><li>Sin <code>BUFFER</code> el driver espera al servidor fila por fila: 56 s de reloj con 15 s de CPU.</li><li><strong>Con <code>BUFFER(500)</code></strong> el driver queda 2 a 3 veces más lento que la clase directa (sin BUFFER, 15 a 50).</li><li><code>SQLMsClass</code> no puede aprovechar <code>BUFFER</code> sin cambiar SQLClass6: <code>ServerExecEx</code> hace <code>CLOSE</code> + <code>OPEN</code> de su archivo en cada consulta.</li><li>Leer por bloques de 500 o de a una fila con el ODBC Driver 17 da casi lo mismo: el driver ya junta las filas por paquete de red.</li></ul>
+</article>
+<footer class="pager"><a class="prev" href="estadisticas.html">&larr; Estad&#237;sticas de velocidad</a><a class="next" href="est-mssql-escritura.html">SQL Server: escritura &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML><HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+</HEAD><BODY>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Inicio">
+<param name="Local" value="index.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Guía">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Instalación y requisitos">
+<param name="Local" value="instalacion.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Cadena de conexión">
+<param name="Local" value="conexion.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Primeros pasos">
+<param name="Local" value="primeros-pasos.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Template SQLClass (Motor MariaDB)">
+<param name="Local" value="template.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Diferencias con SQLClass6">
+<param name="Local" value="diferencias.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Rendimiento">
+<param name="Local" value="rendimiento.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Problemas frecuentes">
+<param name="Local" value="problemas.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Ejemplos">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Comprobantes con filtros">
+<param name="Local" value="ej-comprobantes.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="La misma pantalla con ODBC">
+<param name="Local" value="ej-odbc.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Comparar motores">
+<param name="Local" value="ej-comparar.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Insertar, actualizar y transacciones">
+<param name="Local" value="ej-grabar.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Log y ventana de proceso">
+<param name="Local" value="ej-log.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="TCWMariaDB sola">
+<param name="Local" value="ej-tcwmariadb.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Referencia">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="SQLMariaClass">
+<param name="Local" value="sqlmariaclass.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Propiedades">
+<param name="Local" value="propiedades.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Propiedad Db">
+<param name="Local" value="m-db.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Conexión">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Init">
+<param name="Local" value="m-init.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="InitMaria">
+<param name="Local" value="m-initmaria.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Kill">
+<param name="Local" value="m-kill.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="ServerVersion">
+<param name="Local" value="m-serverversion.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Ejecutar consultas">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Exec">
+<param name="Local" value="m-exec.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="ExecEx">
+<param name="Local" value="m-execex.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="ExecSP">
+<param name="Local" value="m-execsp.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="SP">
+<param name="Local" value="m-sp.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Fetch">
+<param name="Local" value="m-fetch.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Parse">
+<param name="Local" value="m-parse.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="ServerExec / ServerExecEx">
+<param name="Local" value="m-serverexec.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Leer resultados">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Next">
+<param name="Local" value="m-next.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Col">
+<param name="Local" value="m-col.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="ColByName">
+<param name="Local" value="m-colbyname.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="IsNull">
+<param name="Local" value="m-isnull.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Columns">
+<param name="Local" value="m-columns.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Field">
+<param name="Local" value="m-field.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Records">
+<param name="Local" value="m-records.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="LoadQueue">
+<param name="Local" value="m-loadqueue.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Col_Format">
+<param name="Local" value="m-col-format.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Grabar datos">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Escape">
+<param name="Local" value="m-escape.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Quote">
+<param name="Local" value="m-quote.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="InsertId">
+<param name="Local" value="m-insertid.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="AffectedRows">
+<param name="Local" value="m-affectedrows.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Transacciones">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BeginTransaction / Commit / Rollback">
+<param name="Local" value="m-begintransaction.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Errores y diagnóstico">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="ErrorText / ErrorCode">
+<param name="Local" value="m-errortext.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="WriteLog">
+<param name="Local" value="m-writelog.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Otros (heredados)">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="TakeRecord y Take*">
+<param name="Local" value="m-take.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="RegisterUpdate / UpdateBuffer">
+<param name="Local" value="m-registerupdate.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="TCWMariaDB">
+<param name="Local" value="tcwmariadb.html">
+</OBJECT>
+</UL>
+</UL>
+</BODY></HTML>

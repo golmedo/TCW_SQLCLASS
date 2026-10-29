@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gu&#237;a r&#225;pida - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="guia.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Gu&#237;a r&#225;pida</h1>
+<h2 id="leer">Leer</h2><pre><code>  SQL.AddParam(Cliente)                                    ! parametros '?': sin comillas ni escape
+  IF SQL.ExecEx('SELECT IdTransaccion, Fecha, Descripcion FROM cbtes WHERE IdCliente = ?',1)
+    MESSAGE(SQL.ErrorText()) ; RETURN
+  END
+  LOOP UNTIL SQL.Next()
+    Q:Id = SQL.Col(1) ; Q:Nombre = SQL.ColByName('Descripcion') ; ADD(Q)
+  END
+  ! o de una: SQL.Col_Format(2,'@d10-') ; SQL.LoadQueue(Q,0,0)</code></pre><h2 id="escribir">Escribir</h2><pre><code>  SQL.Campo('IdCliente',Cliente)
+  SQL.Campo('Descripcion',RazonSocial)                     ! una ' o una " adentro no rompe nada
+  SQL.CampoFecha('Fecha',Fecha)                            ! 0 = NULL
+  IF SQL.Insertar('cbtes') THEN MESSAGE(SQL.ErrorText()).</code></pre><h2 id="muchas-filas">Muchas filas</h2><pre><code>  LOOP ...
+    SQL.Campo(...) ...
+    SQL.InsertarLote('cbtes')                              ! de a 500 filas por viaje
+  END
+  SQL.EnviarLote()                                         ! las que quedan</code></pre><p>Exec y ExecEx devuelven <code>Level:Benign</code> (0) si anduvo; <code>Next()</code> devuelve 0 mientras trae filas. Los temas de <a href="leer.html">Leer datos</a> y <a href="escribir.html">Escribir datos</a> tienen el detalle.</p>
+</article>
+<footer class="pager"><a class="prev" href="conexion.html">&larr; Cadena de conexi&#243;n</a><a class="next" href="leer.html">Leer datos &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

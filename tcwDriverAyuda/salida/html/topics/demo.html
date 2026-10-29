@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aplicaciones de ejemplo - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="demo.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Aplicaciones de ejemplo</h1>
+<table><thead><tr><th>Pantalla</th><th>TCWMariaDemo (MySQL)</th><th>TCWMsSQLDemo (SQL Server)</th></tr></thead><tbody><tr><td>Comprobantes directo, con barra de avance</td><td>sí</td><td>sí</td></tr><tr><td>Por páginas (carga al bajar)</td><td>sí</td><td>sí</td></tr><tr><td>El driver de Clarion (ODBC / MSSQL)</td><td>SQLClass6 + ODBC 5.1</td><td>SQLMsClass + driver MSSQL</td></tr><tr><td>Comparar tiempos (8 escenarios, % más rápido, barra)</td><td>sí</td><td>sí (por defecto 5.000 filas, 2 corridas)</td></tr><tr><td>Ejemplos de uso (7 pestañas)</td><td>sí</td><td>sí</td></tr></tbody></table><h2 id="ejemplos-de-uso">Ejemplos de uso</h2><table><thead><tr><th>Pestaña</th><th>Muestra</th></tr></thead><tbody><tr><td>1. Parámetros ?</td><td>comprobantes de un cliente desde una fecha</td></tr><tr><td>2. Insertar</td><td>Campo / CampoFecha / CampoFechaHora / CampoNulo con <code>O'Brien "el de las comillas"</code></td></tr><tr><td>3. InsertarLote</td><td>las mismas filas de tres formas, con barra; filas/s y veces más rápido</td></tr><tr><td>4. Prepare</td><td>un UPDATE preparado dos veces con otros valores</td></tr><tr><td>5. Transacción</td><td>BeginTransaction + DELETE + Rollback</td></tr><tr><td>6. Varios resultados</td><td>dos SELECT leídos con NextResult</td></tr><tr><td>7. Texto largo</td><td>20.000 caracteres grabados y leídos</td></tr></tbody></table><p>Cada pestaña muestra el código Clarion que ejecuta. Las escrituras van a <code>tempdb</code> (SQL Server) o a tablas <code>TEMPORARY</code> (MySQL): no se toca la base.</p><h2 id="armar-y-probar">Armar y probar</h2><pre><code>  demo\build-demo.ps1 -Conexion 'PC\INSTANCIA,base,usuario,clave' -Run      (SQL Server)
+  demo\build-demo.ps1 -Conexion 'Server=127.0.0.1;Database=...;User=...;Password=...' -Run   (MariaDB)
+  TCWMsSQLDemo.exe directo | paginas | comparar | ejemplos
+  TCWMariaDemo.exe maria   | paginas | comparar | ejemplos</code></pre><p><code>paginas</code>, <code>comparar</code> y <code>ejemplos</code> corren solos y dejan el resultado en <code>paginas.txt</code>, <code>comparacion.txt</code> y <code>ejemplos.txt</code>.</p>
+</article>
+<footer class="pager"><a class="prev" href="ref-conexion.html">&larr; TCWMsSQL / TCWMariaDB (conexi&#243;n)</a><a class="next" href="trampas.html">Diferencias y trampas &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

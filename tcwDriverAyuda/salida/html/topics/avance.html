@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barra de avance en la ventana - SQLClass directo</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-topic="avance.html">
+<div class="layout">
+<aside id="side">
+<div class="brand"><a href="introduccion.html">SQLClass directo</a><span class="ver">1.0</span></div>
+<div class="searchbox"><input id="q" type="search" placeholder="Buscar..." autocomplete="off"><div id="results" hidden></div></div>
+<nav id="toc"></nav>
+</aside>
+<div class="main">
+<header class="top"><button id="menu" aria-label="Menú">&#9776;</button><div class="crumbs" id="crumbs"></div><button id="theme" title="Claro / oscuro">&#9680;</button></header>
+<article>
+<h1>Barra de avance en la ventana</h1>
+<pre><code>  SQL.ProgressFeq     = ?SQLBarra       ! PROGRESS,RANGE(0,100)
+  SQL.ProgressTextFeq = ?SQLTexto       ! STRING
+  SQL.ProgressDelay   = 10              ! centesimas entre refrescos (por defecto 10)</code></pre><p>El texto va diciendo <em>Conectando al servidor...</em>, <em>Ejecutando consulta...</em>, <em>Consulta lista: n filas en x ms</em>, <em>Cargando 8018 de 30000 filas (26%)</em> y al final <em>30000 filas - consulta 70 ms + carga 370 ms</em>.</p><ul><li>Con los dos en 0 (por defecto) todo queda como antes.</li><li>Repinta con <code>DISPLAY(control)</code> + <code>YIELD()</code> como mucho cada 100 ms: la carga tarda lo mismo con y sin barra (370 ms para 30.000 filas).</li><li>Asignarlos <em>antes</em> de <code>Init</code> para ver también <em>Conectando...</em>.</li></ul><div class="callout" data-kind="aviso"><p><strong>Cuidado:</strong> mientras el servidor procesa la consulta la ventana no responde: se ve el texto pero la barra no se mueve.</p></div>
+</article>
+<footer class="pager"><a class="prev" href="paginas.html">&larr; Carga por p&#225;ginas</a><a class="next" href="escribir.html">Escribir datos &rarr;</a></footer>
+</div>
+</div>
+<script src="../assets/toc-data.js"></script>
+<script src="../assets/search-data.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>

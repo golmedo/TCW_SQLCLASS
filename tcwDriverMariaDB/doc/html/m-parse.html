@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.Parse</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Ejecutar consultas</div><h1>SQLMariaClass.Parse</h1></div>
+<div class="content">
+<pre class="sig">Parse(),BYTE</pre><p>Uso interno de <code>Exec</code> / <code>ExecEx</code>. Separa las cláusulas de <code>Query</code> en <code>SQL_Select</code>, <code>SQL_From</code>, <code>SQL_Where</code>, <code>SQL_GroupBy</code> y <code>SQL_OrderBy</code> (las usa <code>Records()</code> cuando no hay resultado) y llama a los métodos virtuales <code>TakeSelect</code>, <code>TakeInsert</code>, <code>TakeUpdate</code>, <code>TakeDelete</code>, <code>TakeDrop</code>.</p>
+<p>Además de lo que aceptaba la SQLClass6, reconoce SHOW, DESCRIBE, EXPLAIN, REPLACE, USE, WITH, LOCK / UNLOCK, RENAME, GRANT, ANALYZE, OPTIMIZE, FLUSH y otras sentencias de MariaDB, y un SELECT sin FROM (<code>SELECT NOW()</code>). Una sentencia desconocida avisa (si <code>SilentMode = False</code>) y se envía igual.</p><h2>Devuelve</h2><p>Level:Benign, o Level:Notify si un Take* lo pidió.</p><h2>Respecto de SQLClass6</h2><div class="dif">Igual que en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-exec.html">Exec</a> <a href="m-take.html">Métodos Take*</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>SQLMariaClass.AffectedRows</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="top"><div class="crumb">SQLMariaClass &gt; Grabar datos</div><h1>SQLMariaClass.AffectedRows</h1></div>
+<div class="content">
+<span class="tag nuevo">nuevo</span><pre class="sig">AffectedRows(),LONG</pre><p>Cantidad de filas afectadas por el último INSERT, UPDATE o DELETE. Después de un SELECT es la cantidad de filas del resultado.</p><h2>Devuelve</h2><p>Cantidad de filas.</p><h2>Ejemplo</h2><pre class="code">  SQLM.ExecEx(<span class="s">&#x27;DELETE FROM temporales WHERE Fecha &lt; CURDATE()&#x27;</span>,1)
+  <span class="k">MESSAGE</span>(SQLM.AffectedRows() &amp; <span class="s">&#x27; registros borrados&#x27;</span>)</pre><h2>Observaciones</h2><p>En un UPDATE, MySQL cuenta solo las filas que cambiaron de valor.</p><h2>Respecto de SQLClass6</h2><div class="dif">Método nuevo: no existe en la SQLClass6.</div>
+<h2>Ver también</h2><p class="vt"><a href="m-insertid.html">InsertId</a></p>
+<div class="pie">tcwDriverMariaDB - Templates Clarion - documentación generada el 28/10/2026</div>
+</div></body></html>
