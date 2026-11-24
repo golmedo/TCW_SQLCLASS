@@ -1,4 +1,4 @@
-#TEMPLATE (SqlClass, 'SqlClass para Clarion6'),FAMILY('ABC')
+#TEMPLATE (SqlClass, 'SqlClass - SQL Server, MariaDB y ODBC - v6.4 (11/11/2026)'),FAMILY('ABC')
 #SYSTEM
   #TAB('SQLClass')
   #BOXED('ODBC Override')
@@ -28,7 +28,12 @@
   #ENDBOXED
   #ENDTAB
 #!õõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõ
-#EXTENSION (SQLClass, 'Utilizacion de SQL class para Clarion6'), APPLICATION
+#!  SQLClass - HISTORIAL (sumar una linea en cada cambio y cambiar el numero en #TEMPLATE, #EXTENSION y el #DISPLAY)
+#!    6.3  30/10/2026  Motores por objeto: driver de la app, MariaDB directo y SQL Server directo
+#!    6.4  11/11/2026  El objeto llamado SQL usa SIEMPRE el driver de la app (lo importan todas las DLL como $SQL);
+#!                     aunque tenga guardado otro motor, se genera &<clase del driver>, se exporta $SQL y se conecta
+#!                     con .Init (regla en %QMotorEfectivo). Ayuda nueva en el prompt Conexion.
+#EXTENSION (SQLClass, 'SQLClass - objetos SQL globales - v6.4 (11/11/2026)'), APPLICATION
 #PREPARE
    #DECLARE(%SQLcontador,0)
    #FOR(%QTodosLosSQL)
@@ -41,7 +46,7 @@
 #ENDPREPARE
 #SHEET
   #TAB('General')
-      #DISPLAY
+      #DISPLAY('SQLClass v6.4 - 11/11/2026. Motores: driver de la app, MariaDB directo y SQL Server directo.')
       #DISPLAY
       #BOXED(''),WHERE(%False),HIDE,AT(0,0,0,0)
       #PROMPT('Base de Datos :',DROP('ODBC|Informix|MsSQL|Oracle')),%QDriver,AT(0,0,0,0),PROMPTAT(0,0,0,0)
@@ -55,6 +60,7 @@
         #PROMPT('Cant.Máxima de Campos:',@n3),%QMaxFields,DEFAULT(20),REQ
         #PROMPT('Tamaño Máximo de Campos:',@N3),%QFieldSize,DEFAULT(50),REQ
         #PROMPT('Usar StringTheory (log de la SQLClass)',CHECK),%QUsaStringTheory,DEFAULT(1),AT(10)
+        #PROMPT('Incluir SQLMsDirectClass (objetos locales SQL Server directo)',CHECK),%QIncluyeMsDirect,DEFAULT(0),AT(10)
       #ENDBOXED
       #DISPLAY
       #BOXED('Opciones Run-Time')
@@ -65,13 +71,20 @@
       #ENDBOXED
       #BUTTON ('Objetos SQL Globales'), MULTI(%QTodosLosSQL, %QMiSQL), INLINE
          #PROMPT('Nombre del Objeto SQL:',@s30),%QMiSQL,UNIQUE
+         #BOXED(''),WHERE(UPPER(CLIP(%QMiSQL)) <> 'SQL')
          #PROMPT('Motor:',DROP('Driver de la app|MariaDB directo|SQL Server directo')),%QMiSQLMotor,DEFAULT('Driver de la app')
          #DISPLAY('MariaDB directo: SQLMariaClass (libmariadb.dll), mismo Init y mismos metodos.')
          #DISPLAY('SQL Server directo: SQLMsDirectClass (API ODBC + ODBC Driver 17/18), mismo Init.')
+         #ENDBOXED
+         #BOXED(''),WHERE(UPPER(CLIP(%QMiSQL)) = 'SQL')
+         #DISPLAY('El objeto SQL siempre usa el driver de la app (lo importan todas')
+         #DISPLAY('las DLL como $SQL). Para conexion directa agregar otro objeto, ej. SQLD')
+         #ENDBOXED
          #DISPLAY('Owner de siempre: servidor,base,usuario,clave')
          #PROMPT('Conexion:',EXPR),%QMiSQLConexion
-         #DISPLAY('Variable o texto entre comillas. Con valor, el objeto se conecta solo al')
-         #DISPLAY('iniciar el programa (despues del codigo de Program Setup). Vacio = Init a mano.')
+         #DISPLAY('Vacio = la conecta el programa (SQL.Init / SQLD.InitDirect desde el menu).')
+         #DISPLAY('Si se completa, se conecta al cargar la DLL, ANTES del menu:')
+         #DISPLAY('usar solo una constante, no una variable que el menu carga despues.')
       #ENDBUTTON
   #ENDTAB
 #ENDSHEET
@@ -98,12 +111,12 @@
    #SET(%QParentDriver,%QParentSQL)
    #DECLARE(%QHayMaria)
    #SET(%QHayMaria,%False)
-   #FOR(%QTodosLosSQL),WHERE(%QMiSQLMotor='MariaDB directo')
+   #FOR(%QTodosLosSQL),WHERE(%QMotorEfectivo()='MariaDB directo')
      #SET(%QHayMaria,%True)
    #ENDFOR
    #DECLARE(%QHayMsDirect)
    #SET(%QHayMsDirect,%False)
-   #FOR(%QTodosLosSQL),WHERE(%QMiSQLMotor='SQL Server directo')
+   #FOR(%QTodosLosSQL),WHERE(%QMotorEfectivo()='SQL Server directo')
      #SET(%QHayMsDirect,%True)
    #ENDFOR
    #DECLARE (%QpClassMethod),UNIQUE,MULTI
@@ -114,6 +127,7 @@
    #DECLARE (%QpClassMethodReturnType,%QpClassMethodPrototype)
    #DECLARE (%QExportedObject)
    #DECLARE (%QValorAExportar)
+   #DECLARE (%QNombreExt)
    #DECLARE (%MiValor)
    #DECLARE (%QModuleL)
    #SET(%QModuleL,CLIP(LEFT(%Program,LEN(CLIP(%Program))-4)))
@@ -146,7 +160,7 @@
    #IF(%QHayMaria)
    INCLUDE('SQLClass6Maria.inc'),ONCE
    #ENDIF
-   #IF(%QHayMsDirect)
+   #IF(%QHayMsDirect OR %QIncluyeMsDirect)
    INCLUDE('SQLClass6MsDirect.inc'),ONCE
    #ENDIF
   #ENDAT
@@ -180,7 +194,7 @@ END
 #ENDAT
 #AT(%ProgramSetup),PRIORITY(9000),WHERE(NOT %GlobalExternal)
   #FOR(%QTodosLosSQL),WHERE(%QMiSQLConexion)
-    #CASE(%QMiSQLMotor)
+    #CASE(%QMotorEfectivo())
     #OF('MariaDB directo')
  IF %QMiSQL.InitMaria(%QMiSQLConexion) <> Level:Benign  ! SQLClass: conexion del template global (el error ya lo mostro la clase)
     #OF('SQL Server directo')
@@ -232,9 +246,9 @@ ReturnValue %QRetorna
 #ENDIF
 #!****************************************************************
 #GROUP(%GrupoParentInstancia)
-#IF(%QMiSQLMotor='MariaDB directo')
+#IF(%QMotorEfectivo()='MariaDB directo')
   #SET(%QParentSQL,'SQLMariaClass')
-#ELSIF(%QMiSQLMotor='SQL Server directo')
+#ELSIF(%QMotorEfectivo()='SQL Server directo')
   #SET(%QParentSQL,'SQLMsDirectClass')
 #ELSE
   #SET(%QParentSQL,%QParentDriver)
@@ -256,11 +270,48 @@ f%Contador   CSTRING(%QFieldSize)
            END
 #!****************************************************************
 #GROUP(%GrupoGeneracionSQLClass,%QPSqlClass)
- #IF(NOT %GlobalExternal)
+ #DECLARE(%QMotorEf)
+ #SET(%QMotorEf,%QMotorEfectivo())
+ #CALL(%GrupoNombreExt)
+ #IF(%QNombreExt = '')
+  #IF(NOT %GlobalExternal)
 %[21]QPSqlClass        &%QParentSQL
- #ELSE
+  #ELSE
 %[21]QPSqlClass        &%QParentSQL,EXTERNAL,DLL(dll_mode)
+  #ENDIF
+ #ELSE
+! %QPSqlClass usa el motor %QMotorEf. Todas las apps tienen que usar el MISMO motor para este objeto:
+! si el enlazador dice "unresolved external %QNombreExt", la app duena del objeto (o esta) usa otro motor.
+  #IF(NOT %GlobalExternal)
+%[21]QPSqlClass        &%QParentSQL,NAME('%QNombreExt')
+  #ELSE
+%[21]QPSqlClass        &%QParentSQL,EXTERNAL,DLL(dll_mode),NAME('%QNombreExt')
+  #ENDIF
  #ENDIF
+#!****************************************************************
+#! Motor efectivo del objeto actual de %QTodosLosSQL (usar SIEMPRE esto, nunca %QMiSQLMotor directo):
+#! el objeto SQL usa siempre el driver de la app (lo importan todas las DLL como $SQL), aunque tenga
+#! guardado otro motor (apps hechas con la v6.3). TCW_Display.tpl repite esta regla.
+#GROUP(%QMotorEfectivo)
+#IF(UPPER(CLIP(%QMiSQL)) = 'SQL')
+  #RETURN('Driver de la app')
+#ENDIF
+#IF(%QMiSQLMotor = '')
+  #RETURN('Driver de la app')
+#ENDIF
+#RETURN(%QMiSQLMotor)
+#!****************************************************************
+#! Nombre externo del objeto: el de siempre ($SQL) con el driver de la app; con un motor directo lleva el motor,
+#! asi una app con otro motor no enlaza (antes enlazaba y fallaba en ejecucion: Access Violation en TCWMsSQL.Connected)
+#GROUP(%GrupoNombreExt)
+ #CASE(%QMotorEfectivo())
+ #OF('SQL Server directo')
+  #SET(%QNombreExt,UPPER(%QMiSQL) & '$MSDIRECT')
+ #OF('MariaDB directo')
+  #SET(%QNombreExt,UPPER(%QMiSQL) & '$MARIA')
+ #ELSE
+  #SET(%QNombreExt,'')
+ #ENDCASE
 #!****************************************************************
 #GROUP(%GrupoDeclaracionDeMetodos,%QClassMethod,%QClassMethodPrototype,%QClassMethodIsVirtual)
   #IF(%QClassMethodIsVirtual)
@@ -279,7 +330,12 @@ f%Contador   CSTRING(%QFieldSize)
 #!****************************************************************
 #GROUP(%GrupoDLLExportListClass)
     #FOR(%QTodosLosSQL)
+    #CALL(%GrupoNombreExt)
+    #IF(%QNombreExt = '')
     #SET(%QValorAExportar,'$'&UPPER(%QMiSQL))
+    #ELSE
+    #SET(%QValorAExportar,%QNombreExt)
+    #ENDIF
   %[55]QValorAExportar @?
     #ENDFOR
 #!****************************************************************
@@ -314,7 +370,7 @@ f%Contador   CSTRING(%QFieldSize)
 #IF(%QHayMaria)
    INCLUDE('SQLClass6Maria.inc'),ONCE
 #ENDIF
-#IF(%QHayMsDirect)
+#IF(%QHayMsDirect OR %QIncluyeMsDirect)
    INCLUDE('SQLClass6MsDirect.inc'),ONCE
 #ENDIF
 
